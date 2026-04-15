@@ -10270,3 +10270,671 @@ events:
         
       exitCode: 2
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_d8982/fast && /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_d8982.dir/build.make CMakeFiles/cmTC_d8982.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6'
+        Building C object CMakeFiles/cmTC_d8982.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -Xclang -fopenmp -v -std=gnu11 -arch arm64 -MD -MT CMakeFiles/cmTC_d8982.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_d8982.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_d8982.dir/OpenMPTryFlag.c.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6/OpenMPTryFlag.c
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6 -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6 -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_d8982.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_d8982.dir/OpenMPTryFlag.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=gnu11 -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_d8982.dir/OpenMPTryFlag.c.o -x c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6/OpenMPTryFlag.c
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_d8982.dir/build.make:79: CMakeFiles/cmTC_d8982.dir/OpenMPTryFlag.c.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-xuh7V6'
+        gmake: *** [Makefile:127: cmTC_d8982/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_c969c/fast && /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_c969c.dir/build.make CMakeFiles/cmTC_c969c.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5'
+        Building CXX object CMakeFiles/cmTC_c969c.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -Xclang -fopenmp -v -std=c++17 -arch arm64 -MD -MT CMakeFiles/cmTC_c969c.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_c969c.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_c969c.dir/OpenMPTryFlag.cpp.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5/OpenMPTryFlag.cpp
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5 -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5 -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_c969c.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_c969c.dir/OpenMPTryFlag.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=c++17 -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_c969c.dir/OpenMPTryFlag.cpp.o -x c++ /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5/OpenMPTryFlag.cpp
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_c969c.dir/build.make:79: CMakeFiles/cmTC_c969c.dir/OpenMPTryFlag.cpp.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-mM32w5'
+        gmake: *** [Makefile:127: cmTC_c969c/fast] Error 2
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_2a176/fast && /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_2a176.dir/build.make CMakeFiles/cmTC_2a176.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S'
+        Building C object CMakeFiles/cmTC_2a176.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -Xclang -fopenmp -v -std=gnu11 -arch arm64 -MD -MT CMakeFiles/cmTC_2a176.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_2a176.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_2a176.dir/OpenMPTryFlag.c.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S/OpenMPTryFlag.c
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_2a176.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_2a176.dir/OpenMPTryFlag.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=gnu11 -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_2a176.dir/OpenMPTryFlag.c.o -x c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S/OpenMPTryFlag.c
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_2a176.dir/build.make:79: CMakeFiles/cmTC_2a176.dir/OpenMPTryFlag.c.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-zbWz8S'
+        gmake: *** [Makefile:127: cmTC_2a176/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_36a34/fast && /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_36a34.dir/build.make CMakeFiles/cmTC_36a34.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy'
+        Building CXX object CMakeFiles/cmTC_36a34.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -Xclang -fopenmp -v -std=c++17 -arch arm64 -MD -MT CMakeFiles/cmTC_36a34.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_36a34.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_36a34.dir/OpenMPTryFlag.cpp.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy/OpenMPTryFlag.cpp
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_36a34.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_36a34.dir/OpenMPTryFlag.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=c++17 -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_36a34.dir/OpenMPTryFlag.cpp.o -x c++ /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy/OpenMPTryFlag.cpp
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_36a34.dir/build.make:79: CMakeFiles/cmTC_36a34.dir/OpenMPTryFlag.cpp.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-3Nodoy'
+        gmake: *** [Makefile:127: cmTC_36a34/fast] Error 2
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_e4a12/fast && gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ'
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_e4a12.dir/build.make CMakeFiles/cmTC_e4a12.dir/build
+        gmake[2]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ'
+        Building C object CMakeFiles/cmTC_e4a12.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -Xclang -fopenmp -v -std=gnu11 -arch arm64 -MD -MT CMakeFiles/cmTC_e4a12.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_e4a12.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_e4a12.dir/OpenMPTryFlag.c.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ/OpenMPTryFlag.c
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_e4a12.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_e4a12.dir/OpenMPTryFlag.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=gnu11 -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_e4a12.dir/OpenMPTryFlag.c.o -x c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ/OpenMPTryFlag.c
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[2]: *** [CMakeFiles/cmTC_e4a12.dir/build.make:79: CMakeFiles/cmTC_e4a12.dir/OpenMPTryFlag.c.o] Error 1
+        gmake[2]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ'
+        gmake[1]: *** [Makefile:127: cmTC_e4a12/fast] Error 2
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-IZ9sxQ'
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_c202a/fast && gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z'
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_c202a.dir/build.make CMakeFiles/cmTC_c202a.dir/build
+        gmake[2]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z'
+        Building CXX object CMakeFiles/cmTC_c202a.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -Xclang -fopenmp -v -std=c++17 -arch arm64 -MD -MT CMakeFiles/cmTC_c202a.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_c202a.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_c202a.dir/OpenMPTryFlag.cpp.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z/OpenMPTryFlag.cpp
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_c202a.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_c202a.dir/OpenMPTryFlag.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=c++17 -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_c202a.dir/OpenMPTryFlag.cpp.o -x c++ /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z/OpenMPTryFlag.cpp
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[2]: *** [CMakeFiles/cmTC_c202a.dir/build.make:79: CMakeFiles/cmTC_c202a.dir/OpenMPTryFlag.cpp.o] Error 1
+        gmake[2]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z'
+        gmake[1]: *** [Makefile:127: cmTC_c202a/fast] Error 2
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-wzDe9z'
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:333 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-9q8V9N"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-9q8V9N"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-9q8V9N'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_61e03/fast
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_61e03.dir/build.make CMakeFiles/cmTC_61e03.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-9q8V9N'
+        Building C object CMakeFiles/cmTC_61e03.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -Xclang -fopenmp -std=gnu11 -arch arm64 -MD -MT CMakeFiles/cmTC_61e03.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_61e03.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_61e03.dir/OpenMPTryFlag.c.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-9q8V9N/OpenMPTryFlag.c
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-9q8V9N/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_61e03.dir/build.make:82: CMakeFiles/cmTC_61e03.dir/OpenMPTryFlag.c.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-9q8V9N'
+        gmake: *** [Makefile:134: cmTC_61e03/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:333 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-Ybcua0"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-Ybcua0"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-Ybcua0'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_bac22/fast
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_bac22.dir/build.make CMakeFiles/cmTC_bac22.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-Ybcua0'
+        Building CXX object CMakeFiles/cmTC_bac22.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -Xclang -fopenmp -std=c++17 -arch arm64 -MD -MT CMakeFiles/cmTC_bac22.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_bac22.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_bac22.dir/OpenMPTryFlag.cpp.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-Ybcua0/OpenMPTryFlag.cpp
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-Ybcua0/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_bac22.dir/build.make:82: CMakeFiles/cmTC_bac22.dir/OpenMPTryFlag.cpp.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-Ybcua0'
+        gmake: *** [Makefile:134: cmTC_bac22/fast] Error 2
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_d2c94/fast && /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_d2c94.dir/build.make CMakeFiles/cmTC_d2c94.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7'
+        Building C object CMakeFiles/cmTC_d2c94.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -Xclang -fopenmp -v -std=gnu11 -arch arm64 -MD -MT CMakeFiles/cmTC_d2c94.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_d2c94.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_d2c94.dir/OpenMPTryFlag.c.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7/OpenMPTryFlag.c
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7 -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7 -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_d2c94.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_d2c94.dir/OpenMPTryFlag.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=gnu11 -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_d2c94.dir/OpenMPTryFlag.c.o -x c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7/OpenMPTryFlag.c
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_d2c94.dir/build.make:79: CMakeFiles/cmTC_d2c94.dir/OpenMPTryFlag.c.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-6clKF7'
+        gmake: *** [Makefile:127: cmTC_d2c94/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_d7d96/fast && /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_d7d96.dir/build.make CMakeFiles/cmTC_d7d96.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H'
+        Building CXX object CMakeFiles/cmTC_d7d96.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -Xclang -fopenmp -v -std=c++17 -arch arm64 -MD -MT CMakeFiles/cmTC_d7d96.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_d7d96.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_d7d96.dir/OpenMPTryFlag.cpp.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H/OpenMPTryFlag.cpp
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_d7d96.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_d7d96.dir/OpenMPTryFlag.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=c++17 -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_d7d96.dir/OpenMPTryFlag.cpp.o -x c++ /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H/OpenMPTryFlag.cpp
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_d7d96.dir/build.make:79: CMakeFiles/cmTC_d7d96.dir/OpenMPTryFlag.cpp.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-rnss6H'
+        gmake: *** [Makefile:127: cmTC_d7d96/fast] Error 2
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_84a53/fast && /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_84a53.dir/build.make CMakeFiles/cmTC_84a53.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9'
+        Building C object CMakeFiles/cmTC_84a53.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -Xclang -fopenmp -v -std=gnu11 -arch arm64 -MD -MT CMakeFiles/cmTC_84a53.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_84a53.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_84a53.dir/OpenMPTryFlag.c.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9/OpenMPTryFlag.c
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9 -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9 -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_84a53.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_84a53.dir/OpenMPTryFlag.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=gnu11 -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_84a53.dir/OpenMPTryFlag.c.o -x c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9/OpenMPTryFlag.c
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_84a53.dir/build.make:79: CMakeFiles/cmTC_84a53.dir/OpenMPTryFlag.c.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-n6iTw9'
+        gmake: *** [Makefile:127: cmTC_84a53/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/macos/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS
+        
+        Run Build Command(s):/Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_bf32a/fast && /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_bf32a.dir/build.make CMakeFiles/cmTC_bf32a.dir/build
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS'
+        Building CXX object CMakeFiles/cmTC_bf32a.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -Xclang -fopenmp -v -std=c++17 -arch arm64 -MD -MT CMakeFiles/cmTC_bf32a.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_bf32a.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_bf32a.dir/OpenMPTryFlag.cpp.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS/OpenMPTryFlag.cpp
+        Apple clang version 17.0.0 (clang-1700.6.4.2)
+        Target: arm64-apple-darwin25.2.0
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=26.2 -fvisibility-inlines-hidden-static-local-var -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -target-cpu apple-m1 -target-feature +zcm -target-feature +zcz -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS -target-linker-version 1230.1 -v -fcoverage-compilation-dir=/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_bf32a.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_bf32a.dir/OpenMPTryFlag.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/17/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -std=c++17 -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fopenmp -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_bf32a.dir/OpenMPTryFlag.cpp.o -x c++ /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS/OpenMPTryFlag.cpp
+        clang -cc1 version 17.0.0 (clang-1700.6.4.2) default target arm64-apple-darwin25.2.0
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+         /Library/Developer/CommandLineTools/usr/include
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
+        End of search list.
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[1]: *** [CMakeFiles/cmTC_bf32a.dir/build.make:79: CMakeFiles/cmTC_bf32a.dir/OpenMPTryFlag.cpp.o] Error 1
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/CMakeFiles/CMakeScratch/TryCompile-1dTSKS'
+        gmake: *** [Makefile:127: cmTC_bf32a/fast] Error 2
+        
+      exitCode: 2
+...

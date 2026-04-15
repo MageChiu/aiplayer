@@ -22,6 +22,8 @@ private slots:
     void showError(const QString &message);
 
 private:
+    void tryAutoLoadFromArgs();
+
     MpvWidget *m_playerWidget = nullptr;
     QPushButton *m_playButton = nullptr;
     QPushButton *m_pauseButton = nullptr;

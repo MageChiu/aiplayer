@@ -1,0 +1,16 @@
+(lldb) target create "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/aiplayer.app/Contents/MacOS/aiplayer"
+Current executable set to '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/aiplayer.app/Contents/MacOS/aiplayer' (arm64).
+(lldb) run
+2026-04-15 11:25:52.145274+0800 aiplayer[73576:37157777] [mpv] AppHub initialised
+2026-04-15 11:25:52.145302+0800 aiplayer[73576:37157777] [mpv] Initialising Input
+2026-04-15 11:25:52.153483+0800 aiplayer[73576:37157777] [mpv] AppHub functionality initialised
+Process 73576 launched: '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/aiplayer.app/Contents/MacOS/aiplayer' (arm64)
+Process 73576 stopped
+* thread #1, queue = 'com.apple.main-thread', stop reason = EXC_BAD_ACCESS (code=1, address=0x1)
+    frame #0: 0x000000010107f6c4 libmpv.2.dylib`mpv_render_context_create + 452
+libmpv.2.dylib`mpv_render_context_create:
+->  0x10107f6c4 <+452>: ldr    w8, [x8]
+    0x10107f6c8 <+456>: cbz    w8, 0x10107f6d4           ; <+468>
+    0x10107f6cc <+460>: mov    w8, #0x1                  ; =1 
+    0x10107f6d0 <+464>: strb   w8, [x19, #0x28]
+Target 0: (aiplayer) stopped.

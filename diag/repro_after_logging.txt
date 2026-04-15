@@ -1,0 +1,1 @@
+bash: line 1: 72721 Segmentation fault: 11  ./build/aiplayer.app/Contents/MacOS/aiplayer

@@ -10200,3 +10200,179 @@ events:
         
       exitCode: 2
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:333 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "build/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_8f80d/fast
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY'
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_8f80d.dir/build.make CMakeFiles/cmTC_8f80d.dir/build
+        gmake[2]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY'
+        Building C object CMakeFiles/cmTC_8f80d.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -Xclang -fopenmp -std=gnu11 -arch arm64 -MD -MT CMakeFiles/cmTC_8f80d.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_8f80d.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_8f80d.dir/OpenMPTryFlag.c.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY/OpenMPTryFlag.c
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[2]: *** [CMakeFiles/cmTC_8f80d.dir/build.make:82: CMakeFiles/cmTC_8f80d.dir/OpenMPTryFlag.c.o] Error 1
+        gmake[2]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY'
+        gmake[1]: *** [Makefile:134: cmTC_8f80d/fast] Error 2
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-g9v9CY'
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:333 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "build/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_e057d/fast
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx'
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_e057d.dir/build.make CMakeFiles/cmTC_e057d.dir/build
+        gmake[2]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx'
+        Building CXX object CMakeFiles/cmTC_e057d.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -Xclang -fopenmp -std=c++17 -arch arm64 -MD -MT CMakeFiles/cmTC_e057d.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_e057d.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_e057d.dir/OpenMPTryFlag.cpp.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx/OpenMPTryFlag.cpp
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[2]: *** [CMakeFiles/cmTC_e057d.dir/build.make:82: CMakeFiles/cmTC_e057d.dir/OpenMPTryFlag.cpp.o] Error 1
+        gmake[2]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx'
+        gmake[1]: *** [Makefile:134: cmTC_e057d/fast] Error 2
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-LEnZZx'
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:333 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "build/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_e5eb0/fast
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur'
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_e5eb0.dir/build.make CMakeFiles/cmTC_e5eb0.dir/build
+        gmake[2]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur'
+        Building C object CMakeFiles/cmTC_e5eb0.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -Xclang -fopenmp -std=gnu11 -arch arm64 -MD -MT CMakeFiles/cmTC_e5eb0.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_e5eb0.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_e5eb0.dir/OpenMPTryFlag.c.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur/OpenMPTryFlag.c
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[2]: *** [CMakeFiles/cmTC_e5eb0.dir/build.make:82: CMakeFiles/cmTC_e5eb0.dir/OpenMPTryFlag.c.o] Error 1
+        gmake[2]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur'
+        gmake[1]: *** [Makefile:134: cmTC_e5eb0/fast] Error 2
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-Kiz1ur'
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:333 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake:640 (_OPENMP_GET_FLAGS)"
+      - "build/_deps/whispercpp-src/ggml/src/ggml-cpu/CMakeLists.txt:76 (find_package)"
+      - "build/_deps/whispercpp-src/ggml/src/CMakeLists.txt:445 (ggml_add_cpu_backend_variant_impl)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq"
+      binary: "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/homebrew/lib/cmake/Qt6;/opt/homebrew/lib/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules;/opt/homebrew/lib/cmake/Qt6/3rdparty/kwin;/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/cmake/"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_5a8ec/fast
+        gmake[1]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq'
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_5a8ec.dir/build.make CMakeFiles/cmTC_5a8ec.dir/build
+        gmake[2]: Entering directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq'
+        Building CXX object CMakeFiles/cmTC_5a8ec.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -Xclang -fopenmp -std=c++17 -arch arm64 -MD -MT CMakeFiles/cmTC_5a8ec.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_5a8ec.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_5a8ec.dir/OpenMPTryFlag.cpp.o -c /Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq/OpenMPTryFlag.cpp
+        /Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+            2 | #include <omp.h>
+              |          ^~~~~~~
+        1 error generated.
+        gmake[2]: *** [CMakeFiles/cmTC_5a8ec.dir/build.make:82: CMakeFiles/cmTC_5a8ec.dir/OpenMPTryFlag.cpp.o] Error 1
+        gmake[2]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq'
+        gmake[1]: *** [Makefile:134: cmTC_5a8ec/fast] Error 2
+        gmake[1]: Leaving directory '/Users/zhaopeng.charles/code/magechiu/aiplayer/build/CMakeFiles/CMakeScratch/TryCompile-XVIzSq'
+        
+      exitCode: 2
+...

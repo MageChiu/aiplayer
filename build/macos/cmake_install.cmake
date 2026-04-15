@@ -52,7 +52,6 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
       -delete_rpath "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src"
       -delete_rpath "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-blas"
       -delete_rpath "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal"
-      -add_rpath "@executable_path/../Frameworks"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./aiplayer.app/Contents/MacOS/aiplayer")
   endif()
 endif()

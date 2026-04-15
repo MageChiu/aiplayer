@@ -1,6 +1,8 @@
 #include "mpvwidget.h"
 
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QDir>
 #include <QEvent>
 #include <QMetaObject>
 #include <QOpenGLContext>
@@ -9,6 +11,7 @@
 #include <QTimer>
 
 #include <chrono>
+#include <clocale>
 
 namespace {
 constexpr QEvent::Type kMpvUpdateEvent = static_cast<QEvent::Type>(QEvent::User + 1);
@@ -60,11 +63,6 @@ bool MpvWidget::initializePlayer() {
         return false;
     }
 
-    initializeRenderContext();
-    if (!m_renderContext) {
-        return false;
-    }
-
     m_eventTimer->start();
     m_initialized = true;
     return true;
@@ -104,10 +102,18 @@ bool MpvWidget::isPaused() const {
 }
 
 void MpvWidget::initializeGL() {
-    initializePlayer();
+    if (!initializePlayer()) {
+        return;
+    }
+
+    initializeRenderContext();
 }
 
 void MpvWidget::paintGL() {
+    if (!m_renderContext) {
+        initializeRenderContext();
+    }
+
     renderFrame();
 }
 
@@ -132,15 +138,18 @@ void MpvWidget::onMpvWakeup(void *ctx) {
 
 void MpvWidget::onUpdate(void *ctx) {
     auto *self = static_cast<MpvWidget *>(ctx);
-    self->requestUpdate();
+    QMetaObject::invokeMethod(self, [self]() { self->update(); }, Qt::QueuedConnection);
 }
 
 void *MpvWidget::getProcAddress(void *ctx, const char *name) {
-    Q_UNUSED(ctx);
-    if (auto *context = QOpenGLContext::currentContext()) {
-        return reinterpret_cast<void *>(context->getProcAddress(name));
+    auto *glContext = static_cast<QOpenGLContext *>(ctx);
+    if (!glContext) {
+        glContext = QOpenGLContext::currentContext();
     }
-    return nullptr;
+    if (!glContext) {
+        return nullptr;
+    }
+    return reinterpret_cast<void *>(glContext->getProcAddress(name));
 }
 
 void MpvWidget::createMpv() {
@@ -148,20 +157,31 @@ void MpvWidget::createMpv() {
         return;
     }
 
+    setlocale(LC_NUMERIC, "C");
+    appendMpvLog(QStringLiteral("createMpv: begin"));
     m_mpv = mpv_create();
     if (!m_mpv) {
+        appendMpvLog(QStringLiteral("createMpv: mpv_create() returned nullptr"));
         emit errorOccurred(QStringLiteral("无法创建 mpv 实例"));
         return;
     }
 
-    mpv_set_option_string(m_mpv, "terminal", "yes");
+    appendMpvLog(QStringLiteral("createMpv: mpv_create() succeeded"));
+    mpv_request_log_messages(m_mpv, "v");
+    mpv_set_option_string(m_mpv, "terminal", "no");
     mpv_set_option_string(m_mpv, "msg-level", "all=v");
     mpv_set_option_string(m_mpv, "vo", "libmpv");
-    mpv_set_option_string(m_mpv, "hwdec", "auto-safe");
+    mpv_set_option_string(m_mpv, "gpu-context", "auto");
+    mpv_set_option_string(m_mpv, "profile", "fast");
+    mpv_set_option_string(m_mpv, "hwdec", "no");
     mpv_set_wakeup_callback(m_mpv, &MpvWidget::onMpvWakeup, this);
 
-    if (mpv_initialize(m_mpv) < 0) {
-        emit errorOccurred(QStringLiteral("mpv 初始化失败"));
+    const int initResult = mpv_initialize(m_mpv);
+    appendMpvLog(QStringLiteral("createMpv: mpv_initialize() => %1 (%2)")
+                     .arg(initResult)
+                     .arg(mpvErrorString(initResult)));
+    if (initResult < 0) {
+        emit errorOccurred(QStringLiteral("mpv 初始化失败：%1").arg(mpvErrorString(initResult)));
         mpv_terminate_destroy(m_mpv);
         m_mpv = nullptr;
     }
@@ -172,31 +192,38 @@ void MpvWidget::initializeRenderContext() {
         return;
     }
 
-    if (!context()) {
+    QOpenGLContext *glContext = context();
+    if (!glContext || !QOpenGLContext::currentContext()) {
         emit errorOccurred(QStringLiteral("OpenGL 上下文尚未就绪"));
         return;
     }
 
-    makeCurrent();
+    appendMpvLog(QStringLiteral("initializeRenderContext: creating libmpv render context"));
 
     mpv_opengl_init_params glInitParams{};
     glInitParams.get_proc_address = &MpvWidget::getProcAddress;
-    glInitParams.get_proc_address_ctx = this;
+    glInitParams.get_proc_address_ctx = glContext;
 
+    int advancedControl = 1;
     mpv_render_param params[] = {
         {MPV_RENDER_PARAM_API_TYPE, const_cast<char *>(MPV_RENDER_API_TYPE_OPENGL)},
         {MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, &glInitParams},
-        {MPV_RENDER_PARAM_ADVANCED_CONTROL, reinterpret_cast<void *>(1)},
+        {MPV_RENDER_PARAM_ADVANCED_CONTROL, &advancedControl},
         {MPV_RENDER_PARAM_INVALID, nullptr},
     };
 
-    if (mpv_render_context_create(&m_renderContext, m_mpv, params) < 0) {
-        emit errorOccurred(QStringLiteral("无法创建 mpv 渲染上下文"));
+    const int result = mpv_render_context_create(&m_renderContext, m_mpv, params);
+    appendMpvLog(QStringLiteral("initializeRenderContext: mpv_render_context_create() => %1 (%2)")
+                     .arg(result)
+                     .arg(mpvErrorString(result)));
+    if (result < 0) {
+        emit errorOccurred(QStringLiteral("无法创建 mpv 渲染上下文：%1").arg(mpvErrorString(result)));
         m_renderContext = nullptr;
         return;
     }
 
     mpv_render_context_set_update_callback(m_renderContext, &MpvWidget::onUpdate, this);
+    update();
 }
 
 void MpvWidget::handleMpvEvents() {
@@ -217,6 +244,13 @@ void MpvWidget::handleMpvEvents() {
                 emit playbackStateChanged(m_paused);
             }
         } else if (event->event_id == MPV_EVENT_LOG_MESSAGE) {
+            auto *logMessage = static_cast<mpv_event_log_message *>(event->data);
+            if (logMessage) {
+                appendMpvLog(QStringLiteral("[%1][%2] %3")
+                                 .arg(QString::fromUtf8(logMessage->prefix ? logMessage->prefix : "mpv"))
+                                 .arg(QString::fromUtf8(logMessage->level ? logMessage->level : "unknown"))
+                                 .arg(QString::fromUtf8(logMessage->text ? logMessage->text : "" ).trimmed()));
+            }
             continue;
         }
     }
@@ -227,19 +261,21 @@ void MpvWidget::requestUpdate() {
 }
 
 void MpvWidget::renderFrame() {
-    if (!m_renderContext) {
+    if (!m_renderContext || !context()) {
         return;
     }
-
-    makeCurrent();
 
     const qreal dpr = devicePixelRatioF();
     const int width = static_cast<int>(this->width() * dpr);
     const int height = static_cast<int>(this->height() * dpr);
-    int flipY = 1;
+    if (width <= 0 || height <= 0) {
+        return;
+    }
 
+    int flipY = 0;
+    const GLuint defaultFbo = defaultFramebufferObject();
     mpv_opengl_fbo fbo{
-        .fbo = 0,
+        .fbo = static_cast<int>(defaultFbo),
         .w = width,
         .h = height,
         .internal_format = 0,
@@ -253,7 +289,6 @@ void MpvWidget::renderFrame() {
 
     mpv_render_context_render(m_renderContext, params);
     context()->functions()->glFlush();
-    doneCurrent();
 }
 
 void MpvWidget::setPaused(bool paused) {
@@ -269,4 +304,26 @@ void MpvWidget::setPaused(bool paused) {
 
     m_paused = paused;
     emit playbackStateChanged(m_paused);
+}
+
+void MpvWidget::appendMpvLog(const QString &message) {
+    std::lock_guard<std::mutex> lock(m_logMutex);
+    const QString logPath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QStringLiteral("../../../mpv.log"));
+    std::ofstream stream(logPath.toStdString(), std::ios::app);
+    if (!stream.is_open()) {
+        return;
+    }
+
+    stream << QDateTime::currentDateTime().toString(Qt::ISODateWithMs).toStdString()
+           << " "
+           << message.toStdString()
+           << std::endl;
+}
+
+QString MpvWidget::mpvErrorString(int errorCode) const {
+    const char *error = mpv_error_string(errorCode);
+    if (!error) {
+        return QStringLiteral("unknown");
+    }
+    return QString::fromUtf8(error);
 }

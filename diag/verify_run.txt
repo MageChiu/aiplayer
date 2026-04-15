@@ -1,0 +1,1 @@
+bash: line 1: 77776 Killed: 9               ./build/aiplayer.app/Contents/MacOS/aiplayer /Users/zhaopeng.charles/code/magechiu/aiplayer/diag/sample.wav

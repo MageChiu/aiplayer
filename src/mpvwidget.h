@@ -8,6 +8,7 @@
 #include "whisper.h"
 
 #include <atomic>
+#include <fstream>
 #include <mutex>
 #include <queue>
 #include <thread>
@@ -53,6 +54,8 @@ private:
     void requestUpdate();
     void renderFrame();
     void setPaused(bool paused);
+    void appendMpvLog(const QString &message);
+    QString mpvErrorString(int errorCode) const;
 
     // --- mpv 播放相关 ---
     mpv_handle *m_mpv = nullptr;
@@ -60,6 +63,7 @@ private:
     QTimer *m_eventTimer = nullptr;
     bool m_initialized = false;
     bool m_paused = true;
+    std::mutex m_logMutex;
 
     // --- ASR / Whisper 相关 ---
     // 简化版：先用一个后台线程周期性产出 mock 文本，打通 UI 链路

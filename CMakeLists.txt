@@ -48,9 +48,33 @@ target_link_libraries(aiplayer PRIVATE
 )
 
 if(APPLE)
+    execute_process(
+        COMMAND /opt/homebrew/bin/brew --prefix mpv
+        OUTPUT_VARIABLE MPV_PREFIX
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if(NOT MPV_PREFIX)
+        message(FATAL_ERROR "Failed to resolve Homebrew mpv prefix")
+    endif()
+
+    find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS /opt/homebrew/bin)
+    if(NOT MACDEPLOYQT_EXECUTABLE)
+        message(FATAL_ERROR "macdeployqt not found")
+    endif()
+
     set_target_properties(aiplayer PROPERTIES
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_BUNDLE_NAME "AIPlayer"
+        BUILD_RPATH "@executable_path/../Frameworks;@loader_path/../Frameworks"
+        INSTALL_RPATH "@executable_path/../Frameworks;@loader_path/../Frameworks"
+    )
+
+    add_custom_command(TARGET aiplayer POST_BUILD
+        COMMAND "${MACDEPLOYQT_EXECUTABLE}" "$<TARGET_BUNDLE_DIR:aiplayer>" -always-overwrite -verbose=1
+        COMMAND /bin/sh "${CMAKE_CURRENT_SOURCE_DIR}/scripts/fix_mpv_bundle.sh" "$<TARGET_BUNDLE_DIR:aiplayer>"
+        COMMAND /usr/bin/codesign --force --deep --sign - --timestamp=none "$<TARGET_BUNDLE_DIR:aiplayer>"
+        VERBATIM
     )
 endif()
 

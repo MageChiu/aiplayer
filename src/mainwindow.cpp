@@ -2,11 +2,14 @@
 
 #include "mpvwidget.h"
 
+#include <QCoreApplication>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -101,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     updatePlaybackState(true);
+    QTimer::singleShot(0, this, &MainWindow::tryAutoLoadFromArgs);
 }
 
 void MainWindow::openFile() {
@@ -111,6 +115,21 @@ void MainWindow::openFile() {
         QStringLiteral("视频文件 (*.mp4 *.mkv *.avi *.mov *.m4v);;所有文件 (*)"));
 
     if (filePath.isEmpty()) {
+        return;
+    }
+
+    m_playerWidget->loadFile(filePath);
+}
+
+void MainWindow::tryAutoLoadFromArgs() {
+    const QStringList args = QCoreApplication::arguments();
+    if (args.size() < 2) {
+        return;
+    }
+
+    const QString filePath = QFileInfo(args.at(1)).absoluteFilePath();
+    if (!QFileInfo::exists(filePath)) {
+        showError(QStringLiteral("命令行指定的视频文件不存在：%1").arg(filePath));
         return;
     }
 

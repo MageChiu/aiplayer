@@ -1,0 +1,15 @@
+[cplayer] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+[cplayer] libplacebo version: v7.360.1
+[cplayer] FFmpeg version: 8.1
+[cplayer] FFmpeg library versions:
+[cplayer]    libavcodec      62.28.100
+[cplayer]    libavdevice     62.3.100
+[cplayer]    libavfilter     11.14.100
+[cplayer]    libavformat     62.12.100
+[cplayer]    libavutil       60.26.100
+[cplayer]    libswresample   6.3.100
+[cplayer]    libswscale      9.5.100
+[cplayer] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+[cplayer] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+[clipboard] Initialized mac clipboard backend.
+bash: line 1: 71086 Segmentation fault: 11  ./build/aiplayer.app/Contents/MacOS/aiplayer

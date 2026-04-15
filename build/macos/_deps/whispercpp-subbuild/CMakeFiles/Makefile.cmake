@@ -7,10 +7,8 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/CMakeDetermineSystem.cmake"
   "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/CMakeGenericSystem.cmake"
   "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake"
-  "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/CMakeSystem.cmake.in"
   "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake"
   "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake"
   "/Applications/CMake.app/Contents/share/cmake-3.26/Modules/ExternalProject.cmake"
@@ -35,7 +33,6 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/3.26.6/CMakeSystem.cmake"
   "whispercpp-populate-prefix/tmp/whispercpp-populate-mkdirs.cmake"
   "whispercpp-populate-prefix/tmp/whispercpp-populate-gitclone.cmake"
   "whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-gitinfo.txt"
