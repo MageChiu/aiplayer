@@ -1,0 +1,114 @@
+{
+	"BUILD_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/src/whisper_autogen",
+	"CMAKE_BINARY_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/src",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/src",
+	"CMAKE_EXECUTABLE" : "/opt/homebrew/bin/cmake",
+	"CMAKE_LIST_FILES" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/src/CMakeLists.txt",
+		"/opt/homebrew/share/cmake/Modules/FindThreads.cmake",
+		"/opt/homebrew/share/cmake/Modules/CheckLibraryExists.cmake",
+		"/opt/homebrew/share/cmake/Modules/CheckIncludeFile.cmake",
+		"/opt/homebrew/share/cmake/Modules/CheckCSourceCompiles.cmake",
+		"/opt/homebrew/share/cmake/Modules/FindPackageHandleStandardArgs.cmake",
+		"/opt/homebrew/share/cmake/Modules/FindPackageMessage.cmake"
+	],
+	"CMAKE_SOURCE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer",
+	"CROSS_CONFIG" : false,
+	"DEP_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/src/whisper_autogen/deps",
+	"DEP_FILE_RULE_NAME" : "whisper_autogen/timestamp",
+	"HEADERS" : 
+	[
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/include/whisper.h",
+			"MU",
+			"M2GURMTJ7O/moc_whisper.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/src/whisper-arch.h",
+			"MU",
+			"EWIEGA46WW/moc_whisper-arch.cpp",
+			null
+		]
+	],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/src/whisper_autogen/include",
+	"MOC_COMPILATION_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/src/whisper_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
+	[
+		"GGML_BACKEND_SHARED",
+		"GGML_SHARED",
+		"GGML_USE_BLAS",
+		"GGML_USE_CPU",
+		"GGML_USE_METAL",
+		"WHISPER_BUILD",
+		"WHISPER_SHARED",
+		"WHISPER_VERSION=\"1.8.4\"",
+		"whisper_EXPORTS"
+	],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/src",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/include",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/include",
+		"/usr/local/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1",
+		"/Library/Developer/CommandLineTools/usr/lib/clang/17/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include",
+		"/Library/Developer/CommandLineTools/usr/include"
+	],
+	"MOC_MACRO_NAMES" : 
+	[
+		"Q_OBJECT",
+		"Q_GADGET",
+		"Q_NAMESPACE",
+		"Q_NAMESPACE_EXPORT",
+		"Q_GADGET_EXPORT",
+		"Q_ENUM_NS"
+	],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/bin/c++",
+		"-std=c++17",
+		"-w",
+		"-dM",
+		"-E",
+		"/opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/src/whisper_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : [],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 12,
+	"PARSE_CACHE_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/src/CMakeFiles/whisper_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/opt/homebrew/opt/qt/share/qt/libexec/moc",
+	"QT_UIC_EXECUTABLE" : "/opt/homebrew/opt/qt/share/qt/libexec/uic",
+	"QT_VERSION_MAJOR" : 6,
+	"QT_VERSION_MINOR" : 11,
+	"SETTINGS_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/src/CMakeFiles/whisper_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/src/whisper.cpp",
+			"MU",
+			null
+		]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : [],
+	"UIC_UI_FILES" : [],
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}

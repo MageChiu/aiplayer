@@ -1,0 +1,260 @@
+{
+	"BUILD_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml-cpu_autogen",
+	"CMAKE_BINARY_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src",
+	"CMAKE_EXECUTABLE" : "/opt/homebrew/bin/cmake",
+	"CMAKE_LIST_FILES" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/CMakeLists.txt",
+		"/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/cmake/common.cmake",
+		"/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake",
+		"/opt/homebrew/share/cmake/Modules/CMakeParseImplicitLinkInfo.cmake",
+		"/opt/homebrew/share/cmake/Modules/FindPackageHandleStandardArgs.cmake",
+		"/opt/homebrew/share/cmake/Modules/FindPackageMessage.cmake",
+		"/opt/homebrew/share/cmake/Modules/CheckCXXSourceRuns.cmake",
+		"/opt/homebrew/share/cmake/Modules/Internal/CheckSourceRuns.cmake",
+		"/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake"
+	],
+	"CMAKE_SOURCE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer",
+	"CROSS_CONFIG" : false,
+	"DEP_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml-cpu_autogen/deps",
+	"DEP_FILE_RULE_NAME" : "ggml-cpu_autogen/timestamp",
+	"HEADERS" : 
+	[
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/amx/amx.h",
+			"MU",
+			"WEWZQFVLXD/moc_amx.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/amx/mmq.h",
+			"MU",
+			"WEWZQFVLXD/moc_mmq.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/binary-ops.h",
+			"MU",
+			"W6W25MJKVW/moc_binary-ops.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/common.h",
+			"MU",
+			"W6W25MJKVW/moc_common.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/ggml-cpu-impl.h",
+			"MU",
+			"W6W25MJKVW/moc_ggml-cpu-impl.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/hbm.h",
+			"MU",
+			"W6W25MJKVW/moc_hbm.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/ops.h",
+			"MU",
+			"W6W25MJKVW/moc_ops.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/quants.h",
+			"MU",
+			"W6W25MJKVW/moc_quants.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/repack.h",
+			"MU",
+			"W6W25MJKVW/moc_repack.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/simd-mappings.h",
+			"MU",
+			"W6W25MJKVW/moc_simd-mappings.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/traits.h",
+			"MU",
+			"W6W25MJKVW/moc_traits.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/unary-ops.h",
+			"MU",
+			"W6W25MJKVW/moc_unary-ops.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/vec.h",
+			"MU",
+			"W6W25MJKVW/moc_vec.cpp",
+			null
+		]
+	],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml-cpu_autogen/include",
+	"MOC_COMPILATION_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml-cpu_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
+	[
+		"ACCELERATE_LAPACK_ILP64",
+		"ACCELERATE_NEW_LAPACK",
+		"GGML_BACKEND_BUILD",
+		"GGML_BACKEND_SHARED",
+		"GGML_SCHED_MAX_COPIES=4",
+		"GGML_SHARED",
+		"GGML_USE_ACCELERATE",
+		"GGML_USE_CPU_REPACK",
+		"_DARWIN_C_SOURCE",
+		"_XOPEN_SOURCE=600",
+		"ggml_cpu_EXPORTS"
+	],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework",
+		"/usr/local/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1",
+		"/Library/Developer/CommandLineTools/usr/lib/clang/17/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include",
+		"/Library/Developer/CommandLineTools/usr/include"
+	],
+	"MOC_MACRO_NAMES" : 
+	[
+		"Q_OBJECT",
+		"Q_GADGET",
+		"Q_NAMESPACE",
+		"Q_NAMESPACE_EXPORT",
+		"Q_GADGET_EXPORT",
+		"Q_ENUM_NS"
+	],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/bin/c++",
+		"-std=c++17",
+		"-w",
+		"-dM",
+		"-E",
+		"/opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml-cpu_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml-base_autogen/mocs_compilation.cpp",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml_autogen/mocs_compilation.cpp"
+	],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 12,
+	"PARSE_CACHE_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/CMakeFiles/ggml-cpu_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/opt/homebrew/opt/qt/share/qt/libexec/moc",
+	"QT_UIC_EXECUTABLE" : "/opt/homebrew/opt/qt/share/qt/libexec/uic",
+	"QT_VERSION_MAJOR" : 6,
+	"QT_VERSION_MINOR" : 11,
+	"SETTINGS_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/CMakeFiles/ggml-cpu_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/amx/amx.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/amx/mmq.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/arch/arm/quants.c",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/arch/arm/repack.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/binary-ops.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/ggml-cpu.c",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/ggml-cpu.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/hbm.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/ops.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/quants.c",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/repack.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/traits.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/unary-ops.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-cpu/vec.cpp",
+			"MU",
+			null
+		]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml-base_autogen/mocs_compilation.cpp",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-build/ggml/src/ggml_autogen/mocs_compilation.cpp"
+	],
+	"UIC_UI_FILES" : [],
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}

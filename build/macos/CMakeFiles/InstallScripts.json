@@ -1,0 +1,14 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/cmake_install.cmake",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/cmake_install.cmake",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/cmake_install.cmake",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/cmake_install.cmake",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-cpu/cmake_install.cmake",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-blas/cmake_install.cmake",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal/cmake_install.cmake",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

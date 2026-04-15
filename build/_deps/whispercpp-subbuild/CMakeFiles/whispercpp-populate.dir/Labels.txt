@@ -1,0 +1,14 @@
+# Target labels
+ whispercpp-populate
+# Source files and their labels
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/CMakeFiles/whispercpp-populate
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/CMakeFiles/whispercpp-populate.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/CMakeFiles/whispercpp-populate-complete.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-build.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-configure.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-download.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-install.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-mkdir.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-patch.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-test.rule
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-update.rule

@@ -1,0 +1,15 @@
+ggml_autogen/timestamp: \
+	/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/cmake/common.cmake \
+	/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/CMakeLists.txt \
+	/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-backend-dl.cpp \
+	/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-backend-dl.h \
+	/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-src/ggml/src/ggml-backend-reg.cpp \
+	/opt/homebrew/share/cmake/Modules/CMakeParseImplicitLinkInfo.cmake \
+	/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake \
+	/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake \
+	/opt/homebrew/share/cmake/Modules/CheckCXXSourceRuns.cmake \
+	/opt/homebrew/share/cmake/Modules/FindOpenMP.cmake \
+	/opt/homebrew/share/cmake/Modules/FindPackageHandleStandardArgs.cmake \
+	/opt/homebrew/share/cmake/Modules/FindPackageMessage.cmake \
+	/opt/homebrew/share/cmake/Modules/Internal/CheckSourceRuns.cmake \
+	/opt/homebrew/bin/cmake

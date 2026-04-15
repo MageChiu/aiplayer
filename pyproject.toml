@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aiplayer"
+version = "0.1.0"
+description = "跨平台 AI 视频播放器 MVP 骨架"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "PySide6>=6.7",
+  "python-mpv>=1.0.6",
+  "faster-whisper>=1.0.3",
+  "numpy>=1.26",
+  "ffmpeg-python>=0.2.0",
+  "ctranslate2>=4.4.0",
+  "transformers>=4.44",
+  "sentencepiece>=0.2.0",
+  "torch>=2.3",
+  "requests>=2.32",
+  "pydantic>=2.8",
+  "PyYAML>=6.0.2",
+  "webrtcvad>=2.0.10",
+  "soundfile>=0.12.1"
+]
+
+[project.scripts]
+aiplayer = "aiplayer.app.main:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["aiplayer*"]

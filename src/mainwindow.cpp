@@ -1,0 +1,139 @@
+#include "mainwindow.h"
+
+#include "mpvwidget.h"
+
+#include <QFileDialog>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QWidget>
+
+#include <QGraphicsDropShadowEffect>
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent) {
+    setWindowTitle(QStringLiteral("AIPlayer - Phase 1"));
+    resize(1100, 720);
+
+    auto *central = new QWidget(this);
+    auto *layout = new QVBoxLayout(central);
+    layout->setContentsMargins(16, 16, 16, 16);
+    layout->setSpacing(12);
+
+    m_playerWidget = new MpvWidget(central);
+
+    // 用容器承载播放器 + 字幕 overlay
+    auto *videoContainer = new QWidget(central);
+    videoContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    auto *videoLayout = new QVBoxLayout(videoContainer);
+    videoLayout->setContentsMargins(0, 0, 0, 0);
+    videoLayout->setSpacing(0);
+    videoLayout->addWidget(m_playerWidget, 1);
+
+    // 字幕 overlay（透明，置底部）
+    m_subtitleOverlay = new QWidget(videoContainer);
+    m_subtitleOverlay->setAttribute(Qt::WA_TransparentForMouseEvents);
+    m_subtitleOverlay->setStyleSheet("background: transparent;");
+
+    m_subtitleLabel = new QLabel(m_subtitleOverlay);
+    m_subtitleLabel->setWordWrap(true);
+    m_subtitleLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    m_subtitleLabel->setText(QStringLiteral("字幕：等待 ASR..."));
+    m_subtitleLabel->setStyleSheet(
+        "color: white;"
+        "font-size: 22px;"
+        "font-weight: 600;"
+        "background-color: rgba(0,0,0,140);"
+        "border-radius: 10px;"
+        "padding: 10px 14px;");
+
+    auto *shadow = new QGraphicsDropShadowEffect(m_subtitleLabel);
+    shadow->setBlurRadius(18);
+    shadow->setOffset(0, 2);
+    m_subtitleLabel->setGraphicsEffect(shadow);
+
+    layout->addWidget(videoContainer, 1);
+
+    auto *controls = new QHBoxLayout();
+    controls->setSpacing(8);
+
+    auto *openButton = new QPushButton(QStringLiteral("打开视频"), central);
+    m_playButton = new QPushButton(QStringLiteral("播放"), central);
+    m_pauseButton = new QPushButton(QStringLiteral("暂停"), central);
+    m_statusLabel = new QLabel(QStringLiteral("未加载文件"), central);
+    m_statusLabel->setMinimumWidth(320);
+
+    controls->addWidget(openButton);
+    controls->addWidget(m_playButton);
+    controls->addWidget(m_pauseButton);
+    controls->addStretch(1);
+    controls->addWidget(m_statusLabel);
+
+    layout->addLayout(controls);
+    setCentralWidget(central);
+
+    connect(openButton, &QPushButton::clicked, this, &MainWindow::openFile);
+    connect(m_playButton, &QPushButton::clicked, this, &MainWindow::play);
+    connect(m_pauseButton, &QPushButton::clicked, this, &MainWindow::pause);
+    connect(m_playerWidget, &MpvWidget::playbackStateChanged, this, &MainWindow::updatePlaybackState);
+    connect(m_playerWidget, &MpvWidget::fileLoaded, this, &MainWindow::updateLoadedFile);
+    connect(m_playerWidget, &MpvWidget::errorOccurred, this, &MainWindow::showError);
+
+    // 订阅 ASR 文本更新，更新字幕 overlay
+    connect(m_playerWidget, &MpvWidget::asrTextUpdated, this, [this](const QString &text) {
+        if (!m_subtitleLabel) {
+            return;
+        }
+        m_subtitleLabel->setText(text);
+
+        // 简单布局：始终放在底部居中
+        if (m_subtitleOverlay && m_playerWidget) {
+            const QRect videoRect = m_playerWidget->geometry();
+            const int marginBottom = 32;
+            const int overlayHeight = 80;
+            m_subtitleOverlay->setGeometry(videoRect.adjusted(0, videoRect.height() - overlayHeight - marginBottom, 0, -marginBottom));
+
+            m_subtitleLabel->setGeometry(10, 10, m_subtitleOverlay->width() - 20, m_subtitleOverlay->height() - 20);
+        }
+    });
+
+    updatePlaybackState(true);
+}
+
+void MainWindow::openFile() {
+    const QString filePath = QFileDialog::getOpenFileName(
+        this,
+        QStringLiteral("选择视频文件"),
+        QString(),
+        QStringLiteral("视频文件 (*.mp4 *.mkv *.avi *.mov *.m4v);;所有文件 (*)"));
+
+    if (filePath.isEmpty()) {
+        return;
+    }
+
+    m_playerWidget->loadFile(filePath);
+}
+
+void MainWindow::play() {
+    m_playerWidget->play();
+}
+
+void MainWindow::pause() {
+    m_playerWidget->pause();
+}
+
+void MainWindow::updatePlaybackState(bool paused) {
+    m_playButton->setEnabled(paused);
+    m_pauseButton->setEnabled(!paused);
+}
+
+void MainWindow::updateLoadedFile(const QString &filePath) {
+    m_statusLabel->setText(QStringLiteral("当前文件：%1").arg(filePath));
+}
+
+void MainWindow::showError(const QString &message) {
+    QMessageBox::critical(this, QStringLiteral("AIPlayer 错误"), message);
+}

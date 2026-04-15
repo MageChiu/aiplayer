@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/CMakeFiles/whispercpp-populate"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/CMakeFiles/whispercpp-populate.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/CMakeFiles/whispercpp-populate-complete.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-build.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-configure.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-download.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-install.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-mkdir.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-patch.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-test.rule"
+		},
+		{
+			"file" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-subbuild/whispercpp-populate-prefix/src/whispercpp-populate-stamp/whispercpp-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"whispercpp-populate"
+		],
+		"name" : "whispercpp-populate"
+	}
+}

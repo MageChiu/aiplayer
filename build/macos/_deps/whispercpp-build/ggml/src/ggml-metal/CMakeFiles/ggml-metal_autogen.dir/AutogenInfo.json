@@ -1,0 +1,145 @@
+{
+	"BUILD_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal/ggml-metal_autogen",
+	"CMAKE_BINARY_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos",
+	"CMAKE_CURRENT_BINARY_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal",
+	"CMAKE_EXECUTABLE" : "/Applications/CMake.app/Contents/bin/cmake",
+	"CMAKE_LIST_FILES" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/CMakeLists.txt",
+		"/Applications/CMake.app/Contents/share/cmake-3.26/Modules/CMakeASMInformation.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-3.26/Modules/Compiler/Clang-ASM.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-3.26/Modules/Compiler/Clang.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-3.26/Modules/Platform/Apple-Clang-ASM.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-3.26/Modules/Platform/Apple-Clang.cmake"
+	],
+	"CMAKE_SOURCE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer",
+	"DEP_FILE" : "",
+	"DEP_FILE_RULE_NAME" : "",
+	"HEADERS" : 
+	[
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-common.h",
+			"MU",
+			"EWIEGA46WW/moc_ggml-metal-common.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-context.h",
+			"MU",
+			"EWIEGA46WW/moc_ggml-metal-context.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-device.h",
+			"MU",
+			"EWIEGA46WW/moc_ggml-metal-device.cpp",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-ops.h",
+			"MU",
+			"EWIEGA46WW/moc_ggml-metal-ops.cpp",
+			null
+		]
+	],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal/ggml-metal_autogen/include",
+	"MOC_COMPILATION_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal/ggml-metal_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
+	[
+		"GGML_BACKEND_BUILD",
+		"GGML_BACKEND_SHARED",
+		"GGML_METAL_EMBED_LIBRARY",
+		"GGML_SCHED_MAX_COPIES=4",
+		"GGML_SHARED",
+		"_DARWIN_C_SOURCE",
+		"_XOPEN_SOURCE=600",
+		"ggml_metal_EXPORTS"
+	],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src",
+		"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/include",
+		"/usr/local/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1",
+		"/Library/Developer/CommandLineTools/usr/lib/clang/17/include",
+		"/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include",
+		"/Library/Developer/CommandLineTools/usr/include"
+	],
+	"MOC_MACRO_NAMES" : 
+	[
+		"Q_OBJECT",
+		"Q_GADGET",
+		"Q_NAMESPACE",
+		"Q_NAMESPACE_EXPORT",
+		"Q_GADGET_EXPORT",
+		"Q_ENUM_NS"
+	],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/bin/c++",
+		"-dM",
+		"-E",
+		"-c",
+		"/Applications/CMake.app/Contents/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal/ggml-metal_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : [],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 12,
+	"PARSE_CACHE_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal/CMakeFiles/ggml-metal_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/opt/homebrew/opt/qt/share/qt/libexec/moc",
+	"QT_UIC_EXECUTABLE" : "/opt/homebrew/opt/qt/share/qt/libexec/uic",
+	"QT_VERSION_MAJOR" : 6,
+	"QT_VERSION_MINOR" : 11,
+	"SETTINGS_FILE" : "/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-build/ggml/src/ggml-metal/CMakeFiles/ggml-metal_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-common.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-context.m",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-device.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-device.m",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal-ops.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-metal/ggml-metal.cpp",
+			"MU",
+			null
+		]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : [],
+	"UIC_UI_FILES" : [],
+	"VERBOSITY" : 0
+}
