@@ -19,6 +19,7 @@ public:
     ~SettingsDialog() override;
 
     QString getModelPath() const;
+    QString getSourceLanguage() const;
     bool isTranslationEnabled() const;
     QString getTargetLanguage() const;
 
@@ -38,6 +39,7 @@ private:
     QProgressBar *m_progressBar = nullptr;
     QLabel *m_statusLabel = nullptr;
 
+    QComboBox *m_sourceLangCombo = nullptr;
     QCheckBox *m_enableTranslationCheck = nullptr;
     QComboBox *m_targetLangCombo = nullptr;
     

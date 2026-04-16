@@ -21,18 +21,25 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QUrl>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QJsonDocument>
+#include <QJsonArray>
 
 namespace {
 constexpr QEvent::Type kMpvUpdateEvent = static_cast<QEvent::Type>(QEvent::User + 1);
 }
 
 MpvWidget::MpvWidget(QWidget *parent)
-    : QOpenGLWidget(parent), m_eventTimer(new QTimer(this)) {
+    : QOpenGLWidget(parent), m_eventTimer(new QTimer(this)), m_networkManager(new QNetworkAccessManager(this)) {
     setUpdateBehavior(QOpenGLWidget::PartialUpdate);
     setMinimumSize(640, 360);
 
     connect(m_eventTimer, &QTimer::timeout, this, &MpvWidget::handleMpvEvents);
     m_eventTimer->setInterval(16);
+
+    connect(this, &MpvWidget::segmentRecognized, this, &MpvWidget::translateSegment, Qt::QueuedConnection);
 }
 
 MpvWidget::~MpvWidget() {
@@ -369,11 +376,13 @@ void MpvWidget::handleMpvEvents() {
                     // Subtitle sync
                      qint64 posMs = static_cast<qint64>(pos * 1000);
                      QString currentText = "";
+                     QString currentTranslated = "";
                      {
                          std::lock_guard<std::mutex> lock(m_subtitleMutex);
                          for (const auto &seg : m_subtitles) {
                              if (posMs >= seg.startMs && posMs <= seg.endMs) {
                                  currentText = seg.text;
+                                 currentTranslated = seg.translatedText;
                                  break;
                              }
                          }
@@ -382,7 +391,7 @@ void MpvWidget::handleMpvEvents() {
                          }
                      }
                      
-                     emit asrTextUpdated(currentText);
+                     emit asrTextUpdated(currentText, currentTranslated);
                 } else if (name == "duration" && prop->format == MPV_FORMAT_DOUBLE && prop->data) {
                     emit durationChanged(*static_cast<double *>(prop->data));
                 }
@@ -476,7 +485,11 @@ void MpvWidget::runWhisper() {
     int modelIndex = settings.value("model_index", 0).toInt();
     
     // Determine the expected model name based on settings
-    QString expectedModelName = (modelIndex == 1) ? "ggml-base.bin" : "ggml-tiny.bin";
+    QString expectedModelName = "ggml-tiny.bin";
+    if (modelIndex == 1) expectedModelName = "ggml-base.bin";
+    else if (modelIndex == 2) expectedModelName = "ggml-small.bin";
+    else if (modelIndex == 3) expectedModelName = "ggml-medium.bin";
+    else if (modelIndex == 4) expectedModelName = "ggml-large-v3.bin";
 
     // Try finding the model file
     QString modelPath;
@@ -510,7 +523,9 @@ void MpvWidget::runWhisper() {
 
     updateAsrStatus(QStringLiteral("[ASR] 识别中..."));
 
-    if (!readWavAndProcess(m_wavPath, ctx)) {
+    QString sourceLang = settings.value("source_lang", "auto").toString();
+
+    if (!readWavAndProcess(m_wavPath, ctx, sourceLang.toStdString())) {
         updateAsrStatus(QStringLiteral("[ASR] 错误: 处理音频失败"));
     } else {
         updateAsrStatus(QStringLiteral(""));
@@ -520,7 +535,7 @@ void MpvWidget::runWhisper() {
     m_asrRunning.store(false);
 }
 
-bool MpvWidget::readWavAndProcess(const QString &wavPath, struct whisper_context *ctx) {
+bool MpvWidget::readWavAndProcess(const QString &wavPath, struct whisper_context *ctx, const std::string &language) {
     std::ifstream fin(wavPath.toStdString(), std::ios::binary);
     if (!fin.is_open()) return false;
 
@@ -545,7 +560,7 @@ bool MpvWidget::readWavAndProcess(const QString &wavPath, struct whisper_context
     wparams.print_special    = false;
     wparams.print_realtime   = false;
     wparams.print_timestamps = false;
-    wparams.language         = "auto";
+    wparams.language         = language.c_str();
     wparams.n_threads        = std::min(4, (int)std::thread::hardware_concurrency());
 
     // Whisper limits processing to chunks, but whisper_full handles it internally
@@ -572,13 +587,17 @@ bool MpvWidget::readWavAndProcess(const QString &wavPath, struct whisper_context
             seg.endMs = t1 * 10;
             seg.text = QString::fromUtf8(text);
             
+            int newIndex = 0;
             {
                 std::lock_guard<std::mutex> lock(self->m_subtitleMutex);
+                newIndex = self->m_subtitles.size();
                 self->m_subtitles.push_back(seg);
             }
             
             // Just for debugging/logging
             std::fprintf(stderr, "[ASR] Segment: [%d - %d] %s\n", (int)t0, (int)t1, text);
+            
+            emit self->segmentRecognized(newIndex, seg.text);
         }
     };
 
@@ -587,6 +606,41 @@ bool MpvWidget::readWavAndProcess(const QString &wavPath, struct whisper_context
     }
 
     return true;
+}
+
+void MpvWidget::translateSegment(int index, const QString &text) {
+    QSettings settings("AIPlayer", "Settings");
+    if (!settings.value("translation_enabled", false).toBool()) return;
+
+    QString targetLang = settings.value("target_lang", "zh-CN").toString();
+    QString sourceLang = settings.value("source_lang", "auto").toString();
+
+    QUrl url("https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + QUrl::toPercentEncoding(text));
+    QNetworkRequest request(url);
+    QNetworkReply *reply = m_networkManager->get(request);
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, index]() {
+        reply->deleteLater();
+        if (reply->error() == QNetworkReply::NoError) {
+            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+            QJsonArray arr = doc.array();
+            QString result;
+            if (!arr.isEmpty() && arr[0].isArray()) {
+                QJsonArray lines = arr[0].toArray();
+                for (int i = 0; i < lines.size(); ++i) {
+                    if (lines[i].isArray()) {
+                        result += lines[i].toArray()[0].toString();
+                    }
+                }
+            }
+            if (!result.isEmpty()) {
+                std::lock_guard<std::mutex> lock(m_subtitleMutex);
+                if (index >= 0 && index < static_cast<int>(m_subtitles.size())) {
+                    m_subtitles[index].translatedText = result;
+                }
+            }
+        }
+    });
 }
 
 void MpvWidget::appendMpvLog(const QString &message) {

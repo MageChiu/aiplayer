@@ -27,6 +27,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_modelCombo = new QComboBox();
     m_modelCombo->addItem(QStringLiteral("Tiny (ggml-tiny.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin");
     m_modelCombo->addItem(QStringLiteral("Base (ggml-base.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin");
+    m_modelCombo->addItem(QStringLiteral("Small (ggml-small.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin");
+    m_modelCombo->addItem(QStringLiteral("Medium (ggml-medium.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin");
+    m_modelCombo->addItem(QStringLiteral("Large V3 (ggml-large-v3.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3.bin");
 
     m_downloadButton = new QPushButton(QStringLiteral("下载模型"));
     connect(m_downloadButton, &QPushButton::clicked, this, &SettingsDialog::onDownloadClicked);
@@ -44,11 +47,34 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_statusLabel = new QLabel(QStringLiteral("状态: 未下载"));
 
     // Translation Group
+    auto *sourceLangLabel = new QLabel(QStringLiteral("原始语言:"));
+    m_sourceLangCombo = new QComboBox();
+    m_sourceLangCombo->addItem(QStringLiteral("自动检测 (Auto)"), "auto");
+    m_sourceLangCombo->addItem(QStringLiteral("英语 (English)"), "en");
+    m_sourceLangCombo->addItem(QStringLiteral("中文 (Chinese)"), "zh");
+    m_sourceLangCombo->addItem(QStringLiteral("日语 (Japanese)"), "ja");
+    m_sourceLangCombo->addItem(QStringLiteral("韩语 (Korean)"), "ko");
+    m_sourceLangCombo->addItem(QStringLiteral("法语 (French)"), "fr");
+    m_sourceLangCombo->addItem(QStringLiteral("德语 (German)"), "de");
+    m_sourceLangCombo->addItem(QStringLiteral("西班牙语 (Spanish)"), "es");
+    m_sourceLangCombo->addItem(QStringLiteral("俄语 (Russian)"), "ru");
+
+    auto *sourceLayout = new QHBoxLayout();
+    sourceLayout->addWidget(sourceLangLabel);
+    sourceLayout->addWidget(m_sourceLangCombo);
+    sourceLayout->addStretch();
+
     m_enableTranslationCheck = new QCheckBox(QStringLiteral("启用字幕翻译"));
     auto *targetLangLabel = new QLabel(QStringLiteral("目标语言:"));
     m_targetLangCombo = new QComboBox();
-    m_targetLangCombo->addItem(QStringLiteral("中文"), "zh");
-    m_targetLangCombo->addItem(QStringLiteral("English"), "en");
+    m_targetLangCombo->addItem(QStringLiteral("中文 (Chinese)"), "zh-CN");
+    m_targetLangCombo->addItem(QStringLiteral("英语 (English)"), "en");
+    m_targetLangCombo->addItem(QStringLiteral("日语 (Japanese)"), "ja");
+    m_targetLangCombo->addItem(QStringLiteral("韩语 (Korean)"), "ko");
+    m_targetLangCombo->addItem(QStringLiteral("法语 (French)"), "fr");
+    m_targetLangCombo->addItem(QStringLiteral("德语 (German)"), "de");
+    m_targetLangCombo->addItem(QStringLiteral("西班牙语 (Spanish)"), "es");
+    m_targetLangCombo->addItem(QStringLiteral("俄语 (Russian)"), "ru");
 
     auto *transLayout = new QHBoxLayout();
     transLayout->addWidget(m_enableTranslationCheck);
@@ -71,7 +97,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     layout->addWidget(m_progressBar);
     layout->addWidget(m_statusLabel);
     layout->addSpacing(10);
-    layout->addWidget(new QLabel(QStringLiteral("<b>翻译设置</b>")));
+    layout->addWidget(new QLabel(QStringLiteral("<b>语音及翻译设置</b>")));
+    layout->addLayout(sourceLayout);
     layout->addLayout(transLayout);
     layout->addSpacing(20);
     layout->addLayout(buttonLayout);
@@ -100,9 +127,15 @@ void SettingsDialog::loadSettings() {
         m_modelCombo->setCurrentIndex(modelIndex);
     }
 
+    QString sourceLang = settings.value("source_lang", "auto").toString();
+    int sourceIndex = m_sourceLangCombo->findData(sourceLang);
+    if (sourceIndex >= 0) {
+        m_sourceLangCombo->setCurrentIndex(sourceIndex);
+    }
+
     m_enableTranslationCheck->setChecked(settings.value("translation_enabled", false).toBool());
     
-    QString targetLang = settings.value("target_lang", "zh").toString();
+    QString targetLang = settings.value("target_lang", "zh-CN").toString();
     int langIndex = m_targetLangCombo->findData(targetLang);
     if (langIndex >= 0) {
         m_targetLangCombo->setCurrentIndex(langIndex);
@@ -112,6 +145,7 @@ void SettingsDialog::loadSettings() {
 void SettingsDialog::saveSettings() {
     QSettings settings("AIPlayer", "Settings");
     settings.setValue("model_index", m_modelCombo->currentIndex());
+    settings.setValue("source_lang", m_sourceLangCombo->currentData().toString());
     settings.setValue("translation_enabled", m_enableTranslationCheck->isChecked());
     settings.setValue("target_lang", m_targetLangCombo->currentData().toString());
     accept();
@@ -224,6 +258,10 @@ QString SettingsDialog::getModelPath() const {
     QString urlStr = m_modelCombo->currentData().toString();
     QString fileName = QUrl(urlStr).fileName();
     return QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(fileName);
+}
+
+QString SettingsDialog::getSourceLanguage() const {
+    return m_sourceLangCombo->currentData().toString();
 }
 
 bool SettingsDialog::isTranslationEnabled() const {

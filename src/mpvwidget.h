@@ -17,6 +17,7 @@
 
 class QOpenGLContext;
 class QTimer;
+class QNetworkAccessManager;
 
 class MpvWidget : public QOpenGLWidget {
     Q_OBJECT
@@ -41,7 +42,8 @@ signals:
     void fileLoaded(const QString &filePath);
     void errorOccurred(const QString &message);
     // 实时字幕文本更新信号（Phase 2/3）
-    void asrTextUpdated(const QString &text);
+    void asrTextUpdated(const QString &original, const QString &translated);
+    void segmentRecognized(int index, const QString &text);
 
 protected:
     void initializeGL() override;
@@ -78,6 +80,7 @@ private:
         qint64 startMs;
         qint64 endMs;
         QString text;
+        QString translatedText;
     };
     std::vector<SubtitleSegment> m_subtitles;
     
@@ -86,7 +89,10 @@ private:
     QString m_wavPath;
     QString m_asrStatus;
     std::mutex m_subtitleMutex;
+    QNetworkAccessManager *m_networkManager = nullptr;
+
     void updateAsrStatus(const QString &status);
     void runWhisper();
-    bool readWavAndProcess(const QString &wavPath, struct whisper_context *ctx);
+    bool readWavAndProcess(const QString &wavPath, struct whisper_context *ctx, const std::string &language);
+    void translateSegment(int index, const QString &text);
 };

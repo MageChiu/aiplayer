@@ -120,17 +120,31 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_settingsButton, &QPushButton::clicked, this, &MainWindow::openSettings);
 
     // 订阅 ASR 文本更新，更新字幕 overlay
-    connect(m_playerWidget, &MpvWidget::asrTextUpdated, this, [this](const QString &text) {
+    connect(m_playerWidget, &MpvWidget::asrTextUpdated, this, [this](const QString &original, const QString &translated) {
         if (!m_subtitleLabel) {
             return;
         }
-        m_subtitleLabel->setText(text);
+        
+        QString html;
+        if (!translated.isEmpty()) {
+            html = QStringLiteral("<div style='text-align:center;'>"
+                                  "<span style='color: white; font-size: 22px; font-weight: bold;'>%1</span>"
+                                  "<br/>"
+                                  "<span style='color: #ffffb4; font-size: 18px;'>%2</span>"
+                                  "</div>").arg(original, translated);
+        } else {
+            html = QStringLiteral("<div style='text-align:center;'>"
+                                  "<span style='color: white; font-size: 22px; font-weight: bold;'>%1</span>"
+                                  "</div>").arg(original);
+        }
+        
+        m_subtitleLabel->setText(html);
 
         // 简单布局：始终放在底部居中
         if (m_subtitleOverlay && m_playerWidget) {
             const QRect videoRect = m_playerWidget->geometry();
             const int marginBottom = 32;
-            const int overlayHeight = 80;
+            const int overlayHeight = 90; // slightly taller to fit two lines
             m_subtitleOverlay->setGeometry(videoRect.adjusted(0, videoRect.height() - overlayHeight - marginBottom, 0, -marginBottom));
 
             m_subtitleLabel->setGeometry(10, 10, m_subtitleOverlay->width() - 20, m_subtitleOverlay->height() - 20);
