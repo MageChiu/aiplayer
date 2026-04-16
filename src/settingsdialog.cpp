@@ -15,6 +15,7 @@
 #include <QCoreApplication>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog(parent), m_networkManager(new QNetworkAccessManager(this)) {
@@ -156,7 +157,11 @@ void SettingsDialog::saveSettings() {
 }
 
 QString SettingsDialog::modelDirectory() const {
-    return QCoreApplication::applicationDirPath();
+    const QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (baseDir.isEmpty()) {
+        return QDir::homePath() + QStringLiteral("/.aiplayer/models");
+    }
+    return QDir(baseDir).absoluteFilePath(QStringLiteral("models"));
 }
 
 void SettingsDialog::updateUIState() {

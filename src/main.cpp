@@ -8,13 +8,8 @@
 
 #include <clocale>
 #include <cstdio>
-#include <cstdlib>
 
 int main(int argc, char *argv[]) {
-    setenv("PATH", "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin", 1);
-    setenv("DYLD_LIBRARY_PATH", "/opt/homebrew/lib:/usr/local/lib", 1);
-    setenv("DYLD_FALLBACK_LIBRARY_PATH", "/opt/homebrew/lib:/usr/local/lib", 1);
-
     setlocale(LC_NUMERIC, "C");
     QFile::remove(QDir::current().absoluteFilePath(QStringLiteral("mpv.log")));
 

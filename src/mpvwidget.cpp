@@ -30,6 +30,34 @@
 
 namespace {
 constexpr QEvent::Type kMpvUpdateEvent = static_cast<QEvent::Type>(QEvent::User + 1);
+
+QString appDataModelDirectory() {
+    const QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (baseDir.isEmpty()) {
+        return QDir::homePath() + QStringLiteral("/.aiplayer/models");
+    }
+    return QDir(baseDir).absoluteFilePath(QStringLiteral("models"));
+}
+
+QString resolveFfmpegProgram() {
+    const QString appDir = QCoreApplication::applicationDirPath();
+    const QStringList candidates = {
+        QDir(appDir).absoluteFilePath(QStringLiteral("ffmpeg")),
+        QDir(appDir).absoluteFilePath(QStringLiteral("ffmpeg.exe")),
+        QDir(appDir).absoluteFilePath(QStringLiteral("../Resources/bin/ffmpeg")),
+        QDir(appDir).absoluteFilePath(QStringLiteral("../Resources/bin/ffmpeg.exe")),
+        QDir(appDir).absoluteFilePath(QStringLiteral("../MacOS/ffmpeg")),
+        QDir(appDir).absoluteFilePath(QStringLiteral("../MacOS/ffmpeg.exe"))
+    };
+
+    for (const QString &candidate : candidates) {
+        if (QFileInfo::exists(candidate) && QFileInfo(candidate).isFile()) {
+            return QDir::cleanPath(candidate);
+        }
+    }
+
+    return QStandardPaths::findExecutable(QStringLiteral("ffmpeg"));
+}
 }
 
 MpvWidget::MpvWidget(QWidget *parent)
@@ -287,6 +315,12 @@ void MpvWidget::createMpv() {
 
 void MpvWidget::extractAudioWithFFmpeg(const QString &videoPath) {
     const QString outputPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/aiplayer_audio.wav";
+    const QString ffmpegProgram = resolveFfmpegProgram();
+
+    if (ffmpegProgram.isEmpty()) {
+        emit errorOccurred(QStringLiteral("未找到 FFmpeg 可执行文件。请将 ffmpeg 放入系统 PATH，或放到应用目录/Resources/bin 下。"));
+        return;
+    }
 
     if (m_ffmpegProcess) {
         m_ffmpegProcess->kill();
@@ -300,7 +334,7 @@ void MpvWidget::extractAudioWithFFmpeg(const QString &videoPath) {
     }
 
     m_ffmpegProcess = new QProcess(this);
-    m_ffmpegProcess->setProgram(QStringLiteral("ffmpeg"));
+    m_ffmpegProcess->setProgram(ffmpegProgram);
     m_ffmpegProcess->setArguments({
         QStringLiteral("-y"),
         QStringLiteral("-i"),
@@ -591,6 +625,7 @@ void MpvWidget::runWhisper() {
     // Try finding the model file
     QString modelPath;
     QStringList searchPaths = {
+        QDir(appDataModelDirectory()).absoluteFilePath(expectedModelName),
         QCoreApplication::applicationDirPath() + "/" + expectedModelName,
         QDir::currentPath() + "/" + expectedModelName,
         QDir::homePath() + "/" + expectedModelName
