@@ -8,12 +8,16 @@ class QSlider;
 class QComboBox;
 class MpvWidget;
 class QWidget;
+class QKeyEvent;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void openFile();
@@ -27,6 +31,10 @@ private slots:
     void onSeekSliderMoved(int value);
     void onSpeedChanged(int index);
     void openSettings();
+    void toggleMute();
+    void toggleFullscreen();
+    void onVolumeChanged(int volume);
+    void onMuteStateChanged(bool mute);
 
 private:
     void tryAutoLoadFromArgs();
@@ -42,7 +50,12 @@ private:
     QComboBox *m_speedComboBox = nullptr;
     QPushButton *m_settingsButton = nullptr;
 
+    QPushButton *m_muteButton = nullptr;
+    QSlider *m_volumeSlider = nullptr;
+    QPushButton *m_fullscreenButton = nullptr;
+
     bool m_isSeeking = false;
+    bool m_isMuted = false;
     double m_duration = 0.0;
 
     // Phase 2/3：字幕 Overlay

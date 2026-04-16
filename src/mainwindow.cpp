@@ -16,6 +16,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QKeyEvent>
 
 #include <QGraphicsDropShadowEffect>
 
@@ -88,6 +89,20 @@ MainWindow::MainWindow(QWidget *parent)
     m_speedComboBox->setCurrentIndex(1); // Default 1.0x
     
     m_settingsButton = new QPushButton(QStringLiteral("⚙ 设置"), central);
+    m_settingsButton->setFocusPolicy(Qt::NoFocus);
+
+    m_muteButton = new QPushButton(QStringLiteral("🔊"), central);
+    m_muteButton->setFixedWidth(40);
+    m_muteButton->setFocusPolicy(Qt::NoFocus);
+
+    m_volumeSlider = new QSlider(Qt::Horizontal, central);
+    m_volumeSlider->setRange(0, 100);
+    m_volumeSlider->setValue(100);
+    m_volumeSlider->setFixedWidth(100);
+    m_volumeSlider->setFocusPolicy(Qt::NoFocus);
+
+    m_fullscreenButton = new QPushButton(QStringLiteral("⛶ 全屏"), central);
+    m_fullscreenButton->setFocusPolicy(Qt::NoFocus);
 
     m_statusLabel = new QLabel(QStringLiteral("未加载文件"), central);
     m_statusLabel->setMinimumWidth(320);
@@ -97,11 +112,19 @@ MainWindow::MainWindow(QWidget *parent)
     controls->addWidget(m_pauseButton);
     controls->addWidget(new QLabel(QStringLiteral("倍速:")));
     controls->addWidget(m_speedComboBox);
-    controls->addWidget(m_settingsButton);
+    
     controls->addStretch(1);
-    controls->addWidget(m_statusLabel);
+    
+    controls->addWidget(m_muteButton);
+    controls->addWidget(m_volumeSlider);
+    controls->addWidget(m_fullscreenButton);
+    controls->addWidget(m_settingsButton);
 
+    auto *bottomLayout = new QHBoxLayout();
+    bottomLayout->addWidget(m_statusLabel);
+    
     layout->addLayout(controls);
+    layout->addLayout(bottomLayout);
     setCentralWidget(central);
 
     connect(openButton, &QPushButton::clicked, this, &MainWindow::openFile);
@@ -110,6 +133,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_playerWidget, &MpvWidget::playbackStateChanged, this, &MainWindow::updatePlaybackState);
     connect(m_playerWidget, &MpvWidget::timePosChanged, this, &MainWindow::onTimePosChanged);
     connect(m_playerWidget, &MpvWidget::durationChanged, this, &MainWindow::onDurationChanged);
+    connect(m_playerWidget, &MpvWidget::volumeChanged, this, &MainWindow::onVolumeChanged);
+    connect(m_playerWidget, &MpvWidget::muteStateChanged, this, &MainWindow::onMuteStateChanged);
     connect(m_playerWidget, &MpvWidget::fileLoaded, this, &MainWindow::updateLoadedFile);
     connect(m_playerWidget, &MpvWidget::errorOccurred, this, &MainWindow::showError);
 
@@ -118,6 +143,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_seekSlider, &QSlider::sliderMoved, this, &MainWindow::onSeekSliderMoved);
     connect(m_speedComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::onSpeedChanged);
     connect(m_settingsButton, &QPushButton::clicked, this, &MainWindow::openSettings);
+    connect(m_muteButton, &QPushButton::clicked, this, &MainWindow::toggleMute);
+    connect(m_volumeSlider, &QSlider::valueChanged, m_playerWidget, &MpvWidget::setVolume);
+    connect(m_fullscreenButton, &QPushButton::clicked, this, &MainWindow::toggleFullscreen);
+
+    // Prevent focus stealing for spacebar playback toggling
+    openButton->setFocusPolicy(Qt::NoFocus);
+    m_playButton->setFocusPolicy(Qt::NoFocus);
+    m_pauseButton->setFocusPolicy(Qt::NoFocus);
+    m_seekSlider->setFocusPolicy(Qt::NoFocus);
+    m_speedComboBox->setFocusPolicy(Qt::NoFocus);
 
     // 订阅 ASR 文本更新，更新字幕 overlay
     connect(m_playerWidget, &MpvWidget::asrTextUpdated, this, [this](const QString &original, const QString &translated) {
@@ -236,6 +271,58 @@ void MainWindow::onSeekSliderMoved(int value) {
 void MainWindow::onSpeedChanged(int index) {
     double speed = m_speedComboBox->itemData(index).toDouble();
     m_playerWidget->setPlaybackSpeed(speed);
+}
+
+void MainWindow::toggleMute() {
+    m_playerWidget->setMute(!m_isMuted);
+}
+
+void MainWindow::toggleFullscreen() {
+    if (isFullScreen()) {
+        showNormal();
+        m_fullscreenButton->setText(QStringLiteral("⛶ 全屏"));
+    } else {
+        showFullScreen();
+        m_fullscreenButton->setText(QStringLiteral("⛶ 退出"));
+    }
+}
+
+void MainWindow::onVolumeChanged(int volume) {
+    m_volumeSlider->blockSignals(true);
+    m_volumeSlider->setValue(volume);
+    m_volumeSlider->blockSignals(false);
+}
+
+void MainWindow::onMuteStateChanged(bool mute) {
+    m_isMuted = mute;
+    m_muteButton->setText(mute ? QStringLiteral("🔇") : QStringLiteral("🔊"));
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    if (!m_playerWidget) {
+        QMainWindow::keyPressEvent(event);
+        return;
+    }
+
+    if (event->key() == Qt::Key_Space) {
+        m_playerWidget->togglePause();
+    } else if (event->key() == Qt::Key_Left) {
+        m_playerWidget->seekRelative(-5.0);
+    } else if (event->key() == Qt::Key_Right) {
+        m_playerWidget->seekRelative(5.0);
+    } else if (event->key() == Qt::Key_Up) {
+        int newVol = std::min(100, m_volumeSlider->value() + 5);
+        m_playerWidget->setVolume(newVol);
+    } else if (event->key() == Qt::Key_Down) {
+        int newVol = std::max(0, m_volumeSlider->value() - 5);
+        m_playerWidget->setVolume(newVol);
+    } else if (event->key() == Qt::Key_F) {
+        toggleFullscreen();
+    } else if (event->key() == Qt::Key_Escape && isFullScreen()) {
+        toggleFullscreen();
+    } else {
+        QMainWindow::keyPressEvent(event);
+    }
 }
 
 void MainWindow::openSettings() {

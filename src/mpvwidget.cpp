@@ -197,6 +197,8 @@ void MpvWidget::createMpv() {
     mpv_observe_property(m_mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
     mpv_observe_property(m_mpv, 0, "duration", MPV_FORMAT_DOUBLE);
     mpv_observe_property(m_mpv, 0, "pause", MPV_FORMAT_FLAG);
+    mpv_observe_property(m_mpv, 0, "volume", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(m_mpv, 0, "mute", MPV_FORMAT_FLAG);
 
     const int initResult = mpv_initialize(m_mpv);
     appendMpvLog(QStringLiteral("createMpv: mpv_initialize() => %1 (%2)")
@@ -393,8 +395,12 @@ void MpvWidget::handleMpvEvents() {
                      
                      emit asrTextUpdated(currentText, currentTranslated);
                 } else if (name == "duration" && prop->format == MPV_FORMAT_DOUBLE && prop->data) {
-                    emit durationChanged(*static_cast<double *>(prop->data));
-                }
+                     emit durationChanged(*static_cast<double *>(prop->data));
+                 } else if (name == "volume" && prop->format == MPV_FORMAT_DOUBLE && prop->data) {
+                     emit volumeChanged(static_cast<int>(*static_cast<double *>(prop->data)));
+                 } else if (name == "mute" && prop->format == MPV_FORMAT_FLAG && prop->data) {
+                     emit muteStateChanged(*static_cast<int *>(prop->data) != 0);
+                 }
             }
         } else if (event->event_id == MPV_EVENT_LOG_MESSAGE) {
             auto *logMessage = static_cast<mpv_event_log_message *>(event->data);
@@ -468,9 +474,27 @@ void MpvWidget::seek(double pos) {
     mpv_command(m_mpv, args);
 }
 
+void MpvWidget::seekRelative(double pos) {
+    if (!m_mpv) return;
+    const char *args[] = {"seek", QByteArray::number(pos).constData(), "relative", nullptr};
+    mpv_command(m_mpv, args);
+}
+
 void MpvWidget::setPlaybackSpeed(double speed) {
     if (!m_mpv) return;
     mpv_set_property(m_mpv, "speed", MPV_FORMAT_DOUBLE, &speed);
+}
+
+void MpvWidget::setVolume(int volume) {
+    if (!m_mpv) return;
+    double vol = volume;
+    mpv_set_property(m_mpv, "volume", MPV_FORMAT_DOUBLE, &vol);
+}
+
+void MpvWidget::setMute(bool mute) {
+    if (!m_mpv) return;
+    int val = mute ? 1 : 0;
+    mpv_set_property(m_mpv, "mute", MPV_FORMAT_FLAG, &val);
 }
 
 void MpvWidget::updateAsrStatus(const QString &status) {

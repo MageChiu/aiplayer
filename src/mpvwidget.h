@@ -33,13 +33,18 @@ public:
     void togglePause();
     bool isPaused() const;
     void seek(double pos);
+    void seekRelative(double pos);
     void setPlaybackSpeed(double speed);
+    void setVolume(int volume);
+    void setMute(bool mute);
     void reTranslateAll();
 
 signals:
     void playbackStateChanged(bool paused);
     void timePosChanged(double pos);
     void durationChanged(double duration);
+    void volumeChanged(int volume);
+    void muteStateChanged(bool mute);
     void fileLoaded(const QString &filePath);
     void errorOccurred(const QString &message);
     // 实时字幕文本更新信号（Phase 2/3）
