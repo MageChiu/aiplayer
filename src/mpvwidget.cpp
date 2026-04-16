@@ -540,12 +540,11 @@ void MpvWidget::renderFrame() {
 
     int flipY = 1;
     const GLuint defaultFbo = defaultFramebufferObject();
-    mpv_opengl_fbo fbo{
-        .fbo = static_cast<int>(defaultFbo),
-        .w = width,
-        .h = height,
-        .internal_format = 0,
-    };
+    mpv_opengl_fbo fbo{};
+    fbo.fbo = static_cast<int>(defaultFbo);
+    fbo.w = width;
+    fbo.h = height;
+    fbo.internal_format = 0;
 
     mpv_render_param params[] = {
         {MPV_RENDER_PARAM_OPENGL_FBO, &fbo},
