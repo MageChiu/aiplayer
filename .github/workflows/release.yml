@@ -11,7 +11,7 @@ jobs:
       matrix:
         include:
           - arch: x86_64
-            os: macos-13
+            os: macos-15-intel
             qt_arch: clang_64
           - arch: arm64
             os: macos-14
@@ -62,6 +62,9 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup MSVC Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -72,11 +75,21 @@ jobs:
 
       - name: Download and setup libmpv
         run: |
-          Invoke-WebRequest -Uri "https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/20231210/mpv-dev-x86_64-20231210-git-32fcb94.7z" -OutFile mpv-dev.7z
-          7z x mpv-dev.7z -o${{ github.workspace }}\mpv-dev
-          cd ${{ github.workspace }}\mpv-dev
-          # Generate MSVC import library from def file
-          cmd /c "call `"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat`" && lib /def:mpv.def /name:mpv-2.dll /out:mpv.lib /MACHINE:X64"
+          $release = Invoke-RestMethod -Uri "https://api.github.com/repos/shinchiro/mpv-winbuild-cmake/releases/latest"
+          $asset = $release.assets | Where-Object { $_.name -match '^mpv-dev-x86_64-.*\.7z$' } | Select-Object -First 1
+          if (-not $asset) {
+            throw "Cannot find mpv-dev-x86_64 asset in latest release."
+          }
+          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile mpv-dev.7z
+          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\mpv-dev" | Out-Null
+          7z x mpv-dev.7z "-o${{ github.workspace }}\mpv-dev" -y
+
+          $defFile = Get-ChildItem -Path "${{ github.workspace }}\mpv-dev" -Recurse -Filter "mpv.def" | Select-Object -First 1
+          if (-not $defFile) {
+            throw "mpv.def not found after extracting mpv-dev archive."
+          }
+
+          & lib.exe "/def:$($defFile.FullName)" "/name:mpv-2.dll" "/out:${{ github.workspace }}\mpv-dev\mpv.lib" "/machine:x64"
 
       - name: Build Windows Exe
         env:
@@ -90,7 +103,11 @@ jobs:
           & $windeployqt dist\windows\aiplayer.exe
           
           # 复制 mpv 的 dll
-          Copy-Item ${{ github.workspace }}\mpv-dev\mpv-2.dll dist\windows\ -Force
+          $mpvDll = Get-ChildItem -Path "${{ github.workspace }}\mpv-dev" -Recurse -Filter "mpv-2.dll" | Select-Object -First 1
+          if (-not $mpvDll) {
+            throw "mpv-2.dll not found after extracting mpv-dev archive."
+          }
+          Copy-Item $mpvDll.FullName dist\windows\ -Force
           
           # 打包成 zip
           Compress-Archive -Path dist\windows\* -DestinationPath dist\windows\AIPlayer-Windows.zip
