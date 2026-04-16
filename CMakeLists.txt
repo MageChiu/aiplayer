@@ -10,8 +10,26 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets OpenGLWidgets Network)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(MPV REQUIRED IMPORTED_TARGET mpv)
+
+if(WIN32)
+    # Windows 下优先尝试直接查找 mpv 头文件和库
+    find_path(MPV_INCLUDE_DIR NAMES mpv/client.h)
+    find_library(MPV_LIBRARY NAMES mpv libmpv mpv-2)
+    if(MPV_INCLUDE_DIR AND MPV_LIBRARY)
+        message(STATUS "Found mpv manually: ${MPV_LIBRARY}")
+        add_library(PkgConfig::MPV UNKNOWN IMPORTED)
+        set_target_properties(PkgConfig::MPV PROPERTIES
+            IMPORTED_LOCATION "${MPV_LIBRARY}"
+            INTERFACE_INCLUDE_DIRECTORIES "${MPV_INCLUDE_DIR}"
+        )
+    else()
+        find_package(PkgConfig REQUIRED)
+        pkg_check_modules(MPV REQUIRED IMPORTED_TARGET mpv)
+    endif()
+else()
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(MPV REQUIRED IMPORTED_TARGET mpv)
+endif()
 
 include(FetchContent)
 

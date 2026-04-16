@@ -62,28 +62,27 @@ jobs:
           target: 'desktop'
           arch: 'win64_msvc2019_64'
 
-      - name: Setup vcpkg and install libmpv
+      - name: Download and setup libmpv
         run: |
-          git clone https://github.com/Microsoft/vcpkg.git
-          .\vcpkg\bootstrap-vcpkg.bat
-          .\vcpkg\vcpkg install libmpv:x64-windows pkgconf:x64-windows
+          Invoke-WebRequest -Uri "https://sourceforge.net/projects/mpv-player-windows/files/libmpv/mpv-dev-x86_64-20231210-git-32fcb94.7z/download" -OutFile mpv-dev.7z
+          7z x mpv-dev.7z -o${{ github.workspace }}\mpv-dev
+          cd ${{ github.workspace }}\mpv-dev
+          # Generate MSVC import library from def file
+          cmd /c "call `"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat`" && lib /def:mpv.def /name:mpv-2.dll /out:mpv.lib /MACHINE:X64"
 
       - name: Build Windows Exe
         env:
-          VCPKG_ROOT: ${{ github.workspace }}\vcpkg
+          CMAKE_PREFIX_PATH: ${{ github.workspace }}\mpv-dev
         run: |
           .\scripts\build_windows.ps1 --release
 
       - name: Package Windows Build
         run: |
-          # 假设 build_windows.ps1 把 aiplayer.exe 放在了 dist/windows/aiplayer.exe
-          # 在 Windows 下，我们还需要打包 mpv 的 dll 和 Qt 的 dll。
-          # 简单的做法：先用 windeployqt 抓取 Qt 依赖
           $windeployqt = (Get-Command windeployqt.exe).Source
           & $windeployqt dist\windows\aiplayer.exe
           
           # 复制 mpv 的 dll
-          Copy-Item .\vcpkg\installed\x64-windows\bin\mpv-2.dll dist\windows\ -Force
+          Copy-Item ${{ github.workspace }}\mpv-dev\mpv-2.dll dist\windows\ -Force
           
           # 打包成 zip
           Compress-Archive -Path dist\windows\* -DestinationPath dist\windows\AIPlayer-Windows.zip
@@ -96,18 +95,21 @@ jobs:
 
   release:
     needs: [build-macos, build-windows]
+    if: always() && (needs.build-macos.result == 'success' || needs.build-windows.result == 'success')
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Download macOS Artifact
         uses: actions/download-artifact@v4
+        if: needs.build-macos.result == 'success'
         with:
           name: AIPlayer-macOS
           path: artifacts/macos
 
       - name: Download Windows Artifact
         uses: actions/download-artifact@v4
+        if: needs.build-windows.result == 'success'
         with:
           name: AIPlayer-Windows
           path: artifacts/windows
@@ -115,9 +117,7 @@ jobs:
       - name: Create GitHub Release and Upload Assets
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            artifacts/macos/AIPlayer-macOS.zip
-            artifacts/windows/AIPlayer-Windows.zip
+          files: artifacts/*/*.zip
           generate_release_notes: false
           draft: false
           prerelease: false
