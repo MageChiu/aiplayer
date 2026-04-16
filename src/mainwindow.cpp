@@ -220,7 +220,7 @@ void MainWindow::openUrl() {
     bool ok;
     QString url = QInputDialog::getText(this, 
                                         QStringLiteral("打开网络流"),
-                                        QStringLiteral("请输入视频链接 (支持 http, https, rtmp, rtsp, m3u8 等协议):"),
+                                        QStringLiteral("请输入视频链接 (支持 http, https, rtmp, rtsp, m3u8, magnet 等协议):"),
                                         QLineEdit::Normal,
                                         QString(),
                                         &ok);
