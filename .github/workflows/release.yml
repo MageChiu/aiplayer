@@ -7,7 +7,16 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - arch: x86_64
+            os: macos-13 # Intel macOS
+            qt_arch: clang_64
+          - arch: arm64
+            os: macos-14 # Apple Silicon macOS
+            qt_arch: clang_64
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,6 +35,7 @@ jobs:
           version: '6.6.2'
           host: 'mac'
           target: 'desktop'
+          arch: ${{ matrix.qt_arch }}
 
       - name: Build macOS App
         run: |
@@ -35,16 +45,14 @@ jobs:
       - name: Archive macOS Build
         run: |
           cd dist/macos
-          # 假设 build_macos.sh 把 app 放到了 dist/macos/AIPlayer.app
-          # 如果有 .dmg 最好，这里打包成 zip 方便上传
-          zip -r AIPlayer-macOS.zip AIPlayer.app
+          zip -r AIPlayer-macOS-${{ matrix.arch }}.zip AIPlayer.app
           cd ../..
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: AIPlayer-macOS
-          path: dist/macos/AIPlayer-macOS.zip
+          name: AIPlayer-macOS-${{ matrix.arch }}
+          path: dist/macos/AIPlayer-macOS-${{ matrix.arch }}.zip
 
   build-windows:
     runs-on: windows-latest
@@ -64,7 +72,7 @@ jobs:
 
       - name: Download and setup libmpv
         run: |
-          Invoke-WebRequest -Uri "https://sourceforge.net/projects/mpv-player-windows/files/libmpv/mpv-dev-x86_64-20231210-git-32fcb94.7z/download" -OutFile mpv-dev.7z
+          Invoke-WebRequest -Uri "https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/20231210/mpv-dev-x86_64-20231210-git-32fcb94.7z" -OutFile mpv-dev.7z
           7z x mpv-dev.7z -o${{ github.workspace }}\mpv-dev
           cd ${{ github.workspace }}\mpv-dev
           # Generate MSVC import library from def file
@@ -100,16 +108,26 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Download macOS Artifact
+      - name: Download macOS Intel Artifact
         uses: actions/download-artifact@v4
-        if: needs.build-macos.result == 'success'
+        if: always()
+        continue-on-error: true
         with:
-          name: AIPlayer-macOS
-          path: artifacts/macos
+          name: AIPlayer-macOS-x86_64
+          path: artifacts/macos-intel
+
+      - name: Download macOS Apple Silicon Artifact
+        uses: actions/download-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          name: AIPlayer-macOS-arm64
+          path: artifacts/macos-arm64
 
       - name: Download Windows Artifact
         uses: actions/download-artifact@v4
-        if: needs.build-windows.result == 'success'
+        if: always()
+        continue-on-error: true
         with:
           name: AIPlayer-Windows
           path: artifacts/windows
