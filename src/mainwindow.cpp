@@ -2,6 +2,8 @@
 
 #include "mpvwidget.h"
 
+#include "settingsdialog.h"
+
 #include <QCoreApplication>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -85,6 +87,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_speedComboBox->addItem("2.0x", 2.0);
     m_speedComboBox->setCurrentIndex(1); // Default 1.0x
     
+    m_settingsButton = new QPushButton(QStringLiteral("⚙ 设置"), central);
+
     m_statusLabel = new QLabel(QStringLiteral("未加载文件"), central);
     m_statusLabel->setMinimumWidth(320);
 
@@ -93,6 +97,7 @@ MainWindow::MainWindow(QWidget *parent)
     controls->addWidget(m_pauseButton);
     controls->addWidget(new QLabel(QStringLiteral("倍速:")));
     controls->addWidget(m_speedComboBox);
+    controls->addWidget(m_settingsButton);
     controls->addStretch(1);
     controls->addWidget(m_statusLabel);
 
@@ -112,6 +117,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_seekSlider, &QSlider::sliderReleased, this, [this]() { m_isSeeking = false; m_playerWidget->seek(m_seekSlider->value() / 1000.0 * m_duration); });
     connect(m_seekSlider, &QSlider::sliderMoved, this, &MainWindow::onSeekSliderMoved);
     connect(m_speedComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::onSpeedChanged);
+    connect(m_settingsButton, &QPushButton::clicked, this, &MainWindow::openSettings);
 
     // 订阅 ASR 文本更新，更新字幕 overlay
     connect(m_playerWidget, &MpvWidget::asrTextUpdated, this, [this](const QString &text) {
@@ -216,4 +222,13 @@ void MainWindow::onSeekSliderMoved(int value) {
 void MainWindow::onSpeedChanged(int index) {
     double speed = m_speedComboBox->itemData(index).toDouble();
     m_playerWidget->setPlaybackSpeed(speed);
+}
+
+void MainWindow::openSettings() {
+    SettingsDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        // Here we could trigger a reload or update settings in the player
+        // if needed. For now, SettingsDialog saves to QSettings and
+        // mpvwidget can read from it when it runs ASR.
+    }
 }

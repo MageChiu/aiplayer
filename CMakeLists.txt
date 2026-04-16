@@ -32,6 +32,7 @@ qt_add_executable(aiplayer
     src/main.cpp
     src/mainwindow.cpp
     src/mpvwidget.cpp
+    src/settingsdialog.cpp
 )
 
 # whisper.cpp 头文件路径

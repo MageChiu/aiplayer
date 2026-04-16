@@ -26,6 +26,7 @@ private slots:
     void onDurationChanged(double duration);
     void onSeekSliderMoved(int value);
     void onSpeedChanged(int index);
+    void openSettings();
 
 private:
     void tryAutoLoadFromArgs();
@@ -39,6 +40,7 @@ private:
     QSlider *m_seekSlider = nullptr;
     QLabel *m_timeLabel = nullptr;
     QComboBox *m_speedComboBox = nullptr;
+    QPushButton *m_settingsButton = nullptr;
 
     bool m_isSeeking = false;
     double m_duration = 0.0;

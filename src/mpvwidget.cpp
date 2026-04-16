@@ -19,6 +19,8 @@
 
 #include <QStandardPaths>
 #include <QMessageBox>
+#include <QSettings>
+#include <QUrl>
 
 namespace {
 constexpr QEvent::Type kMpvUpdateEvent = static_cast<QEvent::Type>(QEvent::User + 1);
@@ -470,14 +472,18 @@ void MpvWidget::updateAsrStatus(const QString &status) {
 void MpvWidget::runWhisper() {
     updateAsrStatus(QStringLiteral("[ASR] 准备加载模型..."));
 
+    QSettings settings("AIPlayer", "Settings");
+    int modelIndex = settings.value("model_index", 0).toInt();
+    
+    // Determine the expected model name based on settings
+    QString expectedModelName = (modelIndex == 1) ? "ggml-base.bin" : "ggml-tiny.bin";
+
     // Try finding the model file
     QString modelPath;
     QStringList searchPaths = {
-        QCoreApplication::applicationDirPath() + "/ggml-base.bin",
-        QCoreApplication::applicationDirPath() + "/ggml-tiny.bin",
-        QDir::currentPath() + "/ggml-base.bin",
-        QDir::currentPath() + "/ggml-tiny.bin",
-        QDir::homePath() + "/ggml-base.bin"
+        QCoreApplication::applicationDirPath() + "/" + expectedModelName,
+        QDir::currentPath() + "/" + expectedModelName,
+        QDir::homePath() + "/" + expectedModelName
     };
 
     for (const QString &path : searchPaths) {
@@ -488,7 +494,7 @@ void MpvWidget::runWhisper() {
     }
 
     if (modelPath.isEmpty()) {
-        updateAsrStatus(QStringLiteral("[ASR] 错误: 找不到 Whisper 模型 (ggml-base.bin/ggml-tiny.bin)")); 
+        updateAsrStatus(QStringLiteral("[ASR] 错误: 找不到 Whisper 模型 (%1)。请在设置中下载。").arg(expectedModelName)); 
         return;
     }
 
