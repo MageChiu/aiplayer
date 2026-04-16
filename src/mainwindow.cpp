@@ -3,6 +3,7 @@
 #include "mpvwidget.h"
 
 #include "settingsdialog.h"
+#include "helpdialog.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -17,6 +18,8 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QKeyEvent>
+
+#include <QInputDialog>
 
 #include <QGraphicsDropShadowEffect>
 
@@ -77,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
     controls->setSpacing(8);
 
     auto *openButton = new QPushButton(QStringLiteral("打开视频"), central);
+    auto *openUrlButton = new QPushButton(QStringLiteral("打开网络流"), central);
     m_playButton = new QPushButton(QStringLiteral("播放"), central);
     m_pauseButton = new QPushButton(QStringLiteral("暂停"), central);
     
@@ -90,6 +94,9 @@ MainWindow::MainWindow(QWidget *parent)
     
     m_settingsButton = new QPushButton(QStringLiteral("⚙ 设置"), central);
     m_settingsButton->setFocusPolicy(Qt::NoFocus);
+
+    m_helpButton = new QPushButton(QStringLiteral("❓ 帮助"), central);
+    m_helpButton->setFocusPolicy(Qt::NoFocus);
 
     m_muteButton = new QPushButton(QStringLiteral("🔊"), central);
     m_muteButton->setFixedWidth(40);
@@ -108,6 +115,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_statusLabel->setMinimumWidth(320);
 
     controls->addWidget(openButton);
+    controls->addWidget(openUrlButton);
     controls->addWidget(m_playButton);
     controls->addWidget(m_pauseButton);
     controls->addWidget(new QLabel(QStringLiteral("倍速:")));
@@ -119,6 +127,7 @@ MainWindow::MainWindow(QWidget *parent)
     controls->addWidget(m_volumeSlider);
     controls->addWidget(m_fullscreenButton);
     controls->addWidget(m_settingsButton);
+    controls->addWidget(m_helpButton);
 
     auto *bottomLayout = new QHBoxLayout();
     bottomLayout->addWidget(m_statusLabel);
@@ -128,6 +137,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(central);
 
     connect(openButton, &QPushButton::clicked, this, &MainWindow::openFile);
+    connect(openUrlButton, &QPushButton::clicked, this, &MainWindow::openUrl);
     connect(m_playButton, &QPushButton::clicked, this, &MainWindow::play);
     connect(m_pauseButton, &QPushButton::clicked, this, &MainWindow::pause);
     connect(m_playerWidget, &MpvWidget::playbackStateChanged, this, &MainWindow::updatePlaybackState);
@@ -143,12 +153,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_seekSlider, &QSlider::sliderMoved, this, &MainWindow::onSeekSliderMoved);
     connect(m_speedComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::onSpeedChanged);
     connect(m_settingsButton, &QPushButton::clicked, this, &MainWindow::openSettings);
+    connect(m_helpButton, &QPushButton::clicked, this, &MainWindow::openHelp);
     connect(m_muteButton, &QPushButton::clicked, this, &MainWindow::toggleMute);
     connect(m_volumeSlider, &QSlider::valueChanged, m_playerWidget, &MpvWidget::setVolume);
     connect(m_fullscreenButton, &QPushButton::clicked, this, &MainWindow::toggleFullscreen);
 
     // Prevent focus stealing for spacebar playback toggling
     openButton->setFocusPolicy(Qt::NoFocus);
+    openUrlButton->setFocusPolicy(Qt::NoFocus);
     m_playButton->setFocusPolicy(Qt::NoFocus);
     m_pauseButton->setFocusPolicy(Qt::NoFocus);
     m_seekSlider->setFocusPolicy(Qt::NoFocus);
@@ -202,6 +214,19 @@ void MainWindow::openFile() {
     }
 
     m_playerWidget->loadFile(filePath);
+}
+
+void MainWindow::openUrl() {
+    bool ok;
+    QString url = QInputDialog::getText(this, 
+                                        QStringLiteral("打开网络流"),
+                                        QStringLiteral("请输入视频链接 (支持 http, https, rtmp, rtsp, m3u8 等协议):"),
+                                        QLineEdit::Normal,
+                                        QString(),
+                                        &ok);
+    if (ok && !url.isEmpty()) {
+        m_playerWidget->loadFile(url);
+    }
 }
 
 void MainWindow::tryAutoLoadFromArgs() {
@@ -334,4 +359,9 @@ void MainWindow::openSettings() {
             m_playerWidget->reTranslateAll();
         }
     }
+}
+
+void MainWindow::openHelp() {
+    HelpDialog dialog(this);
+    dialog.exec();
 }
