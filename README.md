@@ -70,20 +70,41 @@ chmod +x scripts/build_macos.sh
 ```
 编译产物位于 `dist/macos/AIPlayer.app`。
 
-### Windows 编译 (PowerShell)
+### Windows 编译
 
 ```powershell
 # 1. 克隆项目 (包含子模块)
 git clone --recursive https://github.com/YourUsername/aiplayer.git
 cd aiplayer
 
-# 2. 准备 libmpv (下载编译好的 mpv-dev)
-# 下载 mpv-dev-x86_64-xxxx.7z 并解压到工程目录下的 mpv-dev 文件夹
-# 详见 .github/workflows/release.yml 中的下载流程
+# 2. 准备 libmpv 开发包
+# 将 mpv-dev-x86_64-*.7z 解压到工程根目录下的 mpv-dev 文件夹
+# 目录中应至少能找到:
+#   mpv-dev\include\mpv\client.h
+#   mpv-dev\*.lib 或 mpv-dev\mpv-2.dll
 
-# 3. 运行构建脚本 (需确保已安装 Qt 并在 CMake 前缀中)
+# 3. 运行 PowerShell 构建脚本
 .\scripts\build_windows.ps1 --release
 ```
+
+也可以在 `cmd` 中直接运行批处理包装脚本：
+
+```bat
+scripts\build_windows.bat --release
+```
+
+调试构建：
+
+```powershell
+.\scripts\build_windows.ps1 --debug
+```
+
+Windows 构建前请确保：
+- 已安装 Visual Studio 2022，并包含“使用 C++ 的桌面开发”
+- 已安装 Qt 6
+- `cmake`、`cl` 可在命令行中使用
+- 工程根目录下存在 `mpv-dev` 开发包目录
+
 编译产物位于 `dist/windows/aiplayer.exe`。
 
 ---

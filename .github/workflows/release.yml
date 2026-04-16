@@ -6,17 +6,8 @@ on:
       - 'release-*' # Trigger on tags starting with 'v', e.g., v1.0.0
 
 jobs:
-  build-macos:
-    strategy:
-      matrix:
-        include:
-          - arch: x86_64
-            os: macos-15-intel
-            qt_arch: clang_64
-          - arch: arm64
-            os: macos-14
-            qt_arch: clang_64
-    runs-on: ${{ matrix.os }}
+  build-macos-intel:
+    runs-on: macos-15-intel
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -35,7 +26,7 @@ jobs:
           version: '6.6.2'
           host: 'mac'
           target: 'desktop'
-          arch: ${{ matrix.qt_arch }}
+          arch: 'clang_64'
 
       - name: Build macOS App
         run: |
@@ -45,14 +36,53 @@ jobs:
       - name: Archive macOS Build
         run: |
           cd dist/macos
-          zip -r AIPlayer-macOS-${{ matrix.arch }}.zip AIPlayer.app
+          zip -r AIPlayer-macOS-x86_64.zip aiplayer.app
           cd ../..
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: AIPlayer-macOS-${{ matrix.arch }}
-          path: dist/macos/AIPlayer-macOS-${{ matrix.arch }}.zip
+          name: AIPlayer-macOS-x86_64
+          path: dist/macos/AIPlayer-macOS-x86_64.zip
+
+  build-macos-arm64:
+    runs-on: macos-14
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies (macOS)
+        run: |
+          brew install cmake ninja pkg-config
+          brew install mpv
+          brew install ffmpeg
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.6.2'
+          host: 'mac'
+          target: 'desktop'
+          arch: 'clang_64'
+
+      - name: Build macOS App
+        run: |
+          chmod +x scripts/build_macos.sh
+          ./scripts/build_macos.sh --release
+
+      - name: Archive macOS Build
+        run: |
+          cd dist/macos
+          zip -r AIPlayer-macOS-arm64.zip aiplayer.app
+          cd ../..
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AIPlayer-macOS-arm64
+          path: dist/macos/AIPlayer-macOS-arm64.zip
 
   build-windows:
     runs-on: windows-latest
@@ -83,13 +113,28 @@ jobs:
           Invoke-WebRequest -Uri $asset.browser_download_url -OutFile mpv-dev.7z
           New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\mpv-dev" | Out-Null
           7z x mpv-dev.7z "-o${{ github.workspace }}\mpv-dev" -y
+          $libFile = Get-ChildItem -Path "${{ github.workspace }}\mpv-dev" -Recurse -File -Include *.lib | `
+            Where-Object { $_.Name -match '^(mpv|libmpv|mpv-2)\.lib$' } | Select-Object -First 1
 
-          $defFile = Get-ChildItem -Path "${{ github.workspace }}\mpv-dev" -Recurse -Filter "mpv.def" | Select-Object -First 1
-          if (-not $defFile) {
-            throw "mpv.def not found after extracting mpv-dev archive."
+          if (-not $libFile) {
+            $dllFile = Get-ChildItem -Path "${{ github.workspace }}\mpv-dev" -Recurse -Filter "mpv-2.dll" | Select-Object -First 1
+            if (-not $dllFile) {
+              throw "Neither mpv import library nor mpv-2.dll was found after extracting mpv-dev archive."
+            }
+
+            $defPath = Join-Path "${{ github.workspace }}\mpv-dev" "mpv-2.def"
+            $exports = & dumpbin.exe /exports $dllFile.FullName
+            "LIBRARY mpv-2.dll" | Set-Content -Path $defPath -Encoding ascii
+            "EXPORTS" | Add-Content -Path $defPath -Encoding ascii
+            foreach ($line in $exports) {
+              if ($line -match '^\s+\d+\s+[0-9A-F]+\s+[0-9A-F]+\s+([A-Za-z0-9_@?$.]+)$') {
+                Add-Content -Path $defPath -Value $matches[1] -Encoding ascii
+              }
+            }
+
+            $generatedLib = Join-Path "${{ github.workspace }}\mpv-dev" "mpv.lib"
+            & lib.exe "/def:$defPath" "/name:mpv-2.dll" "/out:$generatedLib" "/machine:x64"
           }
-
-          & lib.exe "/def:$($defFile.FullName)" "/name:mpv-2.dll" "/out:${{ github.workspace }}\mpv-dev\mpv.lib" "/machine:x64"
 
       - name: Build Windows Exe
         env:
@@ -119,15 +164,15 @@ jobs:
           path: dist\windows\AIPlayer-Windows.zip
 
   release:
-    needs: [build-macos, build-windows]
-    if: always() && (needs.build-macos.result == 'success' || needs.build-windows.result == 'success')
+    needs: [build-macos-intel, build-macos-arm64, build-windows]
+    if: always() && (needs.build-macos-intel.result == 'success' || needs.build-macos-arm64.result == 'success' || needs.build-windows.result == 'success')
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Download macOS Intel Artifact
         uses: actions/download-artifact@v4
-        if: always()
+        if: needs.build-macos-intel.result == 'success'
         continue-on-error: true
         with:
           name: AIPlayer-macOS-x86_64
@@ -135,7 +180,7 @@ jobs:
 
       - name: Download macOS Apple Silicon Artifact
         uses: actions/download-artifact@v4
-        if: always()
+        if: needs.build-macos-arm64.result == 'success'
         continue-on-error: true
         with:
           name: AIPlayer-macOS-arm64
@@ -143,7 +188,7 @@ jobs:
 
       - name: Download Windows Artifact
         uses: actions/download-artifact@v4
-        if: always()
+        if: needs.build-windows.result == 'success'
         continue-on-error: true
         with:
           name: AIPlayer-Windows
