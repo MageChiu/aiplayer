@@ -34,6 +34,7 @@ public:
     bool isPaused() const;
     void seek(double pos);
     void setPlaybackSpeed(double speed);
+    void reTranslateAll();
 
 signals:
     void playbackStateChanged(bool paused);

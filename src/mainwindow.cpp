@@ -241,8 +241,10 @@ void MainWindow::onSpeedChanged(int index) {
 void MainWindow::openSettings() {
     SettingsDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
-        // Here we could trigger a reload or update settings in the player
-        // if needed. For now, SettingsDialog saves to QSettings and
-        // mpvwidget can read from it when it runs ASR.
+        // Settings are saved via QSettings inside the dialog
+        // Trigger re-translation for existing subtitles using the new config
+        if (m_playerWidget) {
+            m_playerWidget->reTranslateAll();
+        }
     }
 }

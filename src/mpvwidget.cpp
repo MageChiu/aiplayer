@@ -608,6 +608,23 @@ bool MpvWidget::readWavAndProcess(const QString &wavPath, struct whisper_context
     return true;
 }
 
+void MpvWidget::reTranslateAll() {
+    std::vector<std::pair<int, QString>> segmentsToTranslate;
+
+    {
+        std::lock_guard<std::mutex> lock(m_subtitleMutex);
+        for (size_t i = 0; i < m_subtitles.size(); ++i) {
+            m_subtitles[i].translatedText.clear();
+            segmentsToTranslate.push_back({static_cast<int>(i), m_subtitles[i].text});
+        }
+    }
+
+    // Fire off translation requests for all existing segments based on the new settings
+    for (const auto &pair : segmentsToTranslate) {
+        emit segmentRecognized(pair.first, pair.second);
+    }
+}
+
 void MpvWidget::translateSegment(int index, const QString &text) {
     QSettings settings("AIPlayer", "Settings");
     if (!settings.value("translation_enabled", false).toBool()) return;
