@@ -13,6 +13,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QCoreApplication>
+#include <QDesktopServices>
 #include <QMessageBox>
 
 SettingsDialog::SettingsDialog(QWidget *parent)
@@ -33,11 +34,14 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     m_downloadButton = new QPushButton(QStringLiteral("下载模型"));
     connect(m_downloadButton, &QPushButton::clicked, this, &SettingsDialog::onDownloadClicked);
+    m_openModelDirButton = new QPushButton(QStringLiteral("打开模型目录"));
+    connect(m_openModelDirButton, &QPushButton::clicked, this, &SettingsDialog::openModelDirectory);
 
     auto *modelLayout = new QHBoxLayout();
     modelLayout->addWidget(modelLabel);
     modelLayout->addWidget(m_modelCombo, 1);
     modelLayout->addWidget(m_downloadButton);
+    modelLayout->addWidget(m_openModelDirButton);
 
     m_progressBar = new QProgressBar();
     m_progressBar->setRange(0, 100);
@@ -151,16 +155,20 @@ void SettingsDialog::saveSettings() {
     accept();
 }
 
+QString SettingsDialog::modelDirectory() const {
+    return QCoreApplication::applicationDirPath();
+}
+
 void SettingsDialog::updateUIState() {
     QString urlStr = m_modelCombo->currentData().toString();
     QString fileName = QUrl(urlStr).fileName();
-    QString filePath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(fileName);
+    QString filePath = QDir(modelDirectory()).absoluteFilePath(fileName);
 
     if (QFile::exists(filePath)) {
-        m_statusLabel->setText(QStringLiteral("状态: 已存在 (可以重新下载)"));
+        m_statusLabel->setText(QStringLiteral("状态: 已存在 (目录: %1)").arg(modelDirectory()));
         m_downloadButton->setText(QStringLiteral("重新下载"));
     } else {
-        m_statusLabel->setText(QStringLiteral("状态: 未下载"));
+        m_statusLabel->setText(QStringLiteral("状态: 未下载 (目录: %1)").arg(modelDirectory()));
         m_downloadButton->setText(QStringLiteral("下载模型"));
     }
 }
@@ -174,7 +182,9 @@ void SettingsDialog::onDownloadClicked() {
     QString urlStr = m_modelCombo->currentData().toString();
     QUrl url(urlStr);
     QString fileName = url.fileName();
-    QString filePath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(fileName);
+    QString dirPath = modelDirectory();
+    QDir().mkpath(dirPath);
+    QString filePath = QDir(dirPath).absoluteFilePath(fileName);
 
     m_outputFile = new QFile(filePath, this);
     if (!m_outputFile->open(QIODevice::WriteOnly)) {
@@ -234,7 +244,7 @@ void SettingsDialog::onDownloadFinished() {
         QMessageBox::information(this, QStringLiteral("成功"), QStringLiteral("模型下载完成！"));
     } else {
         m_statusLabel->setText(QStringLiteral("状态: 下载失败/取消"));
-        QString filePath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QUrl(m_modelCombo->currentData().toString()).fileName());
+        QString filePath = QDir(modelDirectory()).absoluteFilePath(QUrl(m_modelCombo->currentData().toString()).fileName());
         QFile::remove(filePath); // Remove partial file
     }
 
@@ -254,10 +264,19 @@ void SettingsDialog::onDownloadError(QNetworkReply::NetworkError code) {
     QMessageBox::critical(this, QStringLiteral("下载错误"), m_currentReply->errorString());
 }
 
+void SettingsDialog::openModelDirectory() {
+    const QString dirPath = modelDirectory();
+    QDir().mkpath(dirPath);
+    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(dirPath))) {
+        QMessageBox::warning(this, QStringLiteral("打开目录失败"),
+                             QStringLiteral("无法打开模型目录：%1").arg(dirPath));
+    }
+}
+
 QString SettingsDialog::getModelPath() const {
     QString urlStr = m_modelCombo->currentData().toString();
     QString fileName = QUrl(urlStr).fileName();
-    return QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(fileName);
+    return QDir(modelDirectory()).absoluteFilePath(fileName);
 }
 
 QString SettingsDialog::getSourceLanguage() const {

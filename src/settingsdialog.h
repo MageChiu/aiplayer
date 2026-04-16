@@ -25,17 +25,20 @@ public:
 
 private slots:
     void onDownloadClicked();
+    void openModelDirectory();
     void onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
     void onDownloadFinished();
     void onDownloadError(QNetworkReply::NetworkError code);
     void saveSettings();
 
 private:
+    QString modelDirectory() const;
     void loadSettings();
     void updateUIState();
 
     QComboBox *m_modelCombo = nullptr;
     QPushButton *m_downloadButton = nullptr;
+    QPushButton *m_openModelDirButton = nullptr;
     QProgressBar *m_progressBar = nullptr;
     QLabel *m_statusLabel = nullptr;
 
