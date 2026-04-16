@@ -1,111 +1,93 @@
-# AIPlayer
+# AIPlayer (智能视频播放器)
 
-AIPlayer 是一个面向 macOS / Windows 的跨平台 AI 视频播放器工程骨架。当前版本为 MVP 第一版，已打通桌面应用入口、主窗口、基础播放器封装、本地视频打开与播放流程，并为字幕识别、翻译、配置管理预留了清晰接口。
+AIPlayer 是一款基于 C++ (Qt6) 和 `libmpv` 开发的跨平台现代化视频播放器。它不仅具备主流视频播放器的核心体验，还集成了本地部署的 **Whisper 离线语音识别**和**实时双语字幕翻译**能力，并支持网络流媒体与磁力链接的边下边播。
 
-## 当前能力
+## ✨ 核心功能
 
-- 基于 PySide6 的桌面主窗口
-- 基于 python-mpv / libmpv 的播放器封装
-- 支持打开本地视频文件并播放
-- 提供播放器状态栏与基础控制按钮
-- 预留字幕识别（ASR）接口与占位实现
-- 预留翻译接口与占位实现
-- 提供跨平台运行时适配点（macOS / Windows）
-- 提供 YAML 配置文件与应用配置加载逻辑
+### 🎬 强大的播放能力
+- **本地视频播放**: 基于强大的 `libmpv` 内核，支持绝大多数视频格式和编码的硬解播放。
+- **在线流媒体**: 支持直接输入 URL 播放 `HTTP/HTTPS`、`HLS (m3u8)`、`RTMP`、`RTSP` 等直播或点播流。
+- **磁力链接边下边播**: 粘贴 `magnet:?xt=...` 链接即可通过内置 WebTorrent 引擎实现 P2P 边下边播。
+- **在线视频网站解析**: 搭配 `yt-dlp`，可直接解析并播放 YouTube、Bilibili 等主流视频网站链接。
 
-## 目录结构
+### 🤖 AI 智能双语字幕
+- **内置离线 ASR**: 采用 `whisper.cpp`，完全在本地对视频进行音频提取与语音转文字，保护隐私。
+- **一键下载模型**: 在“设置”面板中可一键下载不同精度的 Whisper 模型（Tiny, Base, Small, Medium, Large V3）。
+- **实时字幕翻译**: 支持在本地识别出原始字幕后，调用 Google Translate API 进行实时翻译，并在画面上双层渲染“原始+目标”双语字幕。
+- **多语言配置**: 支持指定原视频的语音语言（中/英/日/韩/法/德/西/俄等）以提升识别准确率，并自由切换目标翻译语言。
 
-```text
-.
-├── ARCHITECTURE.md
-├── README.md
-├── pyproject.toml
-├── requirements.txt
-├── config
-│   └── default.yaml
-└── aiplayer
-    ├── __init__.py
-    ├── app
-    ├── asr
-    ├── config
-    ├── models
-    ├── player
-    ├── subtitle
-    ├── translate
-    ├── ui
-    └── utils
-```
+### 🎛️ 完善的播放体验
+- **播放控制**: 拖动进度条跳转、0.5x ~ 2.0x 动态倍速调节、音量调节与一键静音。
+- **全局快捷键**: 
+  - `空格键 (Space)`: 播放 / 暂停
+  - `← / → 方向键`: 快退 / 快进 5 秒
+  - `↑ / ↓ 方向键`: 音量增大 / 减小
+  - `F 键`: 进入 / 退出全屏
+  - `Esc 键`: 退出全屏
 
-## 环境要求
+---
 
-- Python 3.11+
-- 已安装 `libmpv`
-- macOS 或 Windows
+## 🚀 下载与安装 (免编译)
 
-### macOS 准备 libmpv
+请前往本项目的 [Releases 页面](../../releases) 下载最新版本的预编译包：
+- **macOS**: 提供 Intel (`x86_64`) 和 Apple Silicon (`arm64`) 双架构版本。
+- **Windows**: 提供免安装的 `.zip` 绿色压缩包，解压即用。
 
-可通过 Homebrew 安装：
+---
 
-```bash
-brew install mpv
-```
+## 🛠️ 运行依赖提示
 
-### Windows 准备 libmpv
+虽然播放器本身开箱即用，但部分高级功能依赖您系统中的环境变量：
+1. **自动字幕 (Whisper)**: 依赖 `ffmpeg` 提取音频。请确保您的系统安装了 `ffmpeg` 并已加入环境变量。
+2. **磁力链接边下边播**: 依赖 Node.js 和 `webtorrent-cli`。请在终端执行 `npm install -g webtorrent-cli` 进行全局安装。
+3. **网页视频解析**: 依赖 `yt-dlp` 或 `youtube-dl` 加入系统环境变量。
 
-建议：
+---
 
-1. 安装 mpv 或下载 `libmpv` 对应动态库。
-2. 将 `mpv-2.dll` 所在目录加入系统 PATH，或在应用配置中指定路径。
+## 💻 本地编译指南
 
-## 安装依赖
+如果您希望参与开发或自行编译本项目，请确保您的环境满足以下要求：
+- C++17 编译器 (Clang / MSVC)
+- CMake 3.16+
+- Qt 6.6+
+- `libmpv` (开发库)
+- `ffmpeg` (运行时需要)
 
-推荐使用虚拟环境：
+### macOS 编译
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+# 1. 安装依赖
+brew install cmake ninja pkg-config mpv ffmpeg
+brew install qt@6
+
+# 2. 克隆项目 (包含子模块)
+git clone --recursive https://github.com/YourUsername/aiplayer.git
+cd aiplayer
+
+# 3. 运行构建脚本
+chmod +x scripts/build_macos.sh
+./scripts/build_macos.sh --release
 ```
+编译产物位于 `dist/macos/AIPlayer.app`。
 
-或：
+### Windows 编译 (PowerShell)
 
-```bash
-pip install -e .
+```powershell
+# 1. 克隆项目 (包含子模块)
+git clone --recursive https://github.com/YourUsername/aiplayer.git
+cd aiplayer
+
+# 2. 准备 libmpv (下载编译好的 mpv-dev)
+# 下载 mpv-dev-x86_64-xxxx.7z 并解压到工程目录下的 mpv-dev 文件夹
+# 详见 .github/workflows/release.yml 中的下载流程
+
+# 3. 运行构建脚本 (需确保已安装 Qt 并在 CMake 前缀中)
+.\scripts\build_windows.ps1 --release
 ```
+编译产物位于 `dist/windows/aiplayer.exe`。
 
-## 启动方式
+---
 
-### 方式一：模块启动
+## 📜 许可证 (License)
 
-```bash
-python -m aiplayer.app.main
-```
-
-### 方式二：脚本启动
-
-```bash
-aiplayer
-```
-
-## MVP 使用说明
-
-1. 启动应用。
-2. 点击“打开视频”。
-3. 选择本地视频文件。
-4. 应用会加载并开始播放。
-5. 可使用“播放 / 暂停 / 停止”按钮进行基础控制。
-
-## 当前限制
-
-- 依赖本机已正确安装 `libmpv`
-- 当前 ASR / 翻译为占位实现，尚未接入真实模型推理
-- 当前未实现字幕生成与动态挂载，仅保留清晰接口
-- 当前未做安装包与分发配置
-
-## 下一步建议
-
-1. 接入真实的音频抽取与 ASR 流程。
-2. 实现字幕文件生成与播放器字幕挂载。
-3. 增加任务线程与后台处理队列，避免 AI 任务阻塞 UI。
-4. 增加设置面板，支持模型、翻译引擎、缓存目录配置。
-5. 补充 macOS / Windows 打包脚本。
+本项目采用 MIT 许可证。项目中包含的第三方子模块（如 `whisper.cpp`）遵循其各自的开源协议。
