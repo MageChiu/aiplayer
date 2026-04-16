@@ -85,7 +85,23 @@ void MpvWidget::loadFile(const QString &filePath) {
         return;
     }
 
-    extractAudioWithFFmpeg(filePath);
+    bool isNetworkStream = filePath.startsWith("http://", Qt::CaseInsensitive) ||
+                           filePath.startsWith("https://", Qt::CaseInsensitive) ||
+                           filePath.startsWith("rtmp://", Qt::CaseInsensitive) ||
+                           filePath.startsWith("rtsp://", Qt::CaseInsensitive);
+
+    if (isNetworkStream) {
+        // Clear subtitles and state since we can't easily extract audio with ffmpeg synchronously from a live stream
+        // without more complex piping. For now, disable ASR on live streams.
+        {
+            std::lock_guard<std::mutex> lock(m_subtitleMutex);
+            m_subtitles.clear();
+            m_asrStatus = QStringLiteral("[ASR] 网络流暂不支持自动字幕");
+        }
+        emit asrTextUpdated(m_asrStatus, "");
+    } else {
+        extractAudioWithFFmpeg(filePath);
+    }
 
     const QByteArray utf8 = filePath.toUtf8();
     const char *cmd[] = {"loadfile", utf8.constData(), nullptr};

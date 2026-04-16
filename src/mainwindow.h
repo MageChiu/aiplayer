@@ -21,6 +21,7 @@ protected:
 
 private slots:
     void openFile();
+    void openUrl();
     void play();
     void pause();
     void updatePlaybackState(bool paused);
@@ -35,6 +36,7 @@ private slots:
     void toggleFullscreen();
     void onVolumeChanged(int volume);
     void onMuteStateChanged(bool mute);
+    void openHelp();
 
 private:
     void tryAutoLoadFromArgs();
@@ -49,6 +51,7 @@ private:
     QLabel *m_timeLabel = nullptr;
     QComboBox *m_speedComboBox = nullptr;
     QPushButton *m_settingsButton = nullptr;
+    QPushButton *m_helpButton = nullptr;
 
     QPushButton *m_muteButton = nullptr;
     QSlider *m_volumeSlider = nullptr;
