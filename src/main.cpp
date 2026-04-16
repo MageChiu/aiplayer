@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QFile>
+#include <QIcon>
 #include <QSurfaceFormat>
 
 #include <clocale>
@@ -30,8 +31,10 @@ int main(int argc, char *argv[]) {
     setlocale(LC_NUMERIC, "C");
     app.setApplicationName(QStringLiteral("AIPlayer"));
     app.setOrganizationName(QStringLiteral("MageChiu"));
+    app.setWindowIcon(QIcon(QStringLiteral(":/icons/player.png")));
 
     MainWindow window;
+    window.setWindowIcon(app.windowIcon());
     window.show();
     return app.exec();
 }
