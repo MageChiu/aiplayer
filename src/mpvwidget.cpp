@@ -26,6 +26,7 @@
 #include <QNetworkRequest>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QRegularExpression>
 
 namespace {
 constexpr QEvent::Type kMpvUpdateEvent = static_cast<QEvent::Type>(QEvent::User + 1);
@@ -52,6 +53,11 @@ MpvWidget::~MpvWidget() {
         m_ffmpegProcess->kill();
         m_ffmpegProcess->waitForFinished(3000);
         m_ffmpegProcess = nullptr;
+    }
+
+    if (m_webtorrentProcess) {
+        m_webtorrentProcess->kill();
+        m_webtorrentProcess->waitForFinished();
     }
 
     if (m_renderContext) {
@@ -85,22 +91,73 @@ void MpvWidget::loadFile(const QString &filePath) {
         return;
     }
 
+    if (m_webtorrentProcess) {
+        m_webtorrentProcess->kill();
+        m_webtorrentProcess->waitForFinished();
+        m_webtorrentProcess->deleteLater();
+        m_webtorrentProcess = nullptr;
+    }
+
     bool isNetworkStream = filePath.startsWith("http://", Qt::CaseInsensitive) ||
                            filePath.startsWith("https://", Qt::CaseInsensitive) ||
                            filePath.startsWith("rtmp://", Qt::CaseInsensitive) ||
                            filePath.startsWith("rtsp://", Qt::CaseInsensitive);
 
-    if (isNetworkStream) {
+    bool isMagnet = filePath.startsWith("magnet:", Qt::CaseInsensitive);
+
+    if (isNetworkStream || isMagnet) {
         // Clear subtitles and state since we can't easily extract audio with ffmpeg synchronously from a live stream
         // without more complex piping. For now, disable ASR on live streams.
         {
             std::lock_guard<std::mutex> lock(m_subtitleMutex);
             m_subtitles.clear();
-            m_asrStatus = QStringLiteral("[ASR] 网络流暂不支持自动字幕");
+            m_asrStatus = QStringLiteral("[ASR] 网络流/磁力链接暂不支持自动字幕");
         }
         emit asrTextUpdated(m_asrStatus, "");
     } else {
         extractAudioWithFFmpeg(filePath);
+    }
+
+    if (isMagnet) {
+        m_webtorrentProcess = new QProcess(this);
+        connect(m_webtorrentProcess, &QProcess::readyReadStandardOutput, this, [this]() {
+            QString output = QString::fromUtf8(m_webtorrentProcess->readAllStandardOutput());
+            std::fprintf(stderr, "[WebTorrent] %s", output.toUtf8().constData());
+            
+            // Parse Server running at: http://localhost:8000/0
+            QRegularExpression re("Server running at: (http://[a-zA-Z0-9_.:]+/[0-9]+)");
+            QRegularExpressionMatch match = re.match(output);
+            if (match.hasMatch()) {
+                QString streamUrl = match.captured(1);
+                std::fprintf(stderr, "[WebTorrent] Found stream URL: %s\n", streamUrl.toUtf8().constData());
+                
+                const QByteArray utf8 = streamUrl.toUtf8();
+                const char *cmd[] = {"loadfile", utf8.constData(), nullptr};
+                mpv_command(m_mpv, cmd);
+                setPaused(false);
+                emit fileLoaded(QStringLiteral("磁力链接下载中..."));
+                
+                // Disconnect to avoid loading multiple times if it prints again
+                disconnect(m_webtorrentProcess, &QProcess::readyReadStandardOutput, this, nullptr);
+            }
+        });
+        
+        connect(m_webtorrentProcess, &QProcess::readyReadStandardError, this, [this]() {
+            std::fprintf(stderr, "[WebTorrent ERR] %s", m_webtorrentProcess->readAllStandardError().constData());
+        });
+        
+        connect(m_webtorrentProcess, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this, [this](int exitCode, QProcess::ExitStatus status) {
+            std::fprintf(stderr, "[WebTorrent] Process exited with code %d\n", exitCode);
+        });
+
+        // Use webtorrent cli tool (needs to be installed globally via npm install -g webtorrent-cli)
+        m_webtorrentProcess->start("webtorrent", QStringList() << filePath << "--keep-seeding");
+        if (!m_webtorrentProcess->waitForStarted(3000)) {
+            emit errorOccurred(QStringLiteral("无法启动 webtorrent 进程。请确保系统已安装 Node.js 并且通过 'npm install -g webtorrent-cli' 安装了依赖。"));
+            m_webtorrentProcess->deleteLater();
+            m_webtorrentProcess = nullptr;
+        }
+        return;
     }
 
     const QByteArray utf8 = filePath.toUtf8();

@@ -96,6 +96,7 @@ private:
     QString m_asrStatus;
     std::mutex m_subtitleMutex;
     QNetworkAccessManager *m_networkManager = nullptr;
+    QProcess *m_webtorrentProcess = nullptr;
 
     void updateAsrStatus(const QString &status);
     void runWhisper();
