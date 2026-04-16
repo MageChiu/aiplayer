@@ -103,28 +103,42 @@ jobs:
           target: 'desktop'
           arch: 'win64_msvc2019_64'
 
-      - name: Download and setup libmpv
+      - name: Download and detect libmpv
         run: |
           $release = Invoke-RestMethod -Uri "https://api.github.com/repos/shinchiro/mpv-winbuild-cmake/releases/latest"
           $asset = $release.assets | Where-Object { $_.name -match '^mpv-dev-x86_64-.*\.7z$' } | Select-Object -First 1
           if (-not $asset) {
             throw "Cannot find mpv-dev-x86_64 asset in latest release."
           }
-          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile mpv-dev.7z
-          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\mpv-dev" | Out-Null
-          7z x mpv-dev.7z "-o${{ github.workspace }}\mpv-dev" -y
-          $libFile = Get-ChildItem -Path "${{ github.workspace }}\mpv-dev" -Recurse -File -Include *.lib | `
-            Where-Object { $_.Name -match '^(mpv|libmpv|mpv-2)\.lib$' } | Select-Object -First 1
+          Write-Host "Using mpv asset: $($asset.name)"
+          $mpvRoot = Join-Path "${{ github.workspace }}" "mpv-dev"
+          New-Item -ItemType Directory -Force -Path $mpvRoot | Out-Null
+          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile (Join-Path "${{ github.workspace }}" "mpv-dev.7z")
+          7z x (Join-Path "${{ github.workspace }}" "mpv-dev.7z") "-o$mpvRoot" -y
 
-          if (-not $libFile) {
-            $dllFile = Get-ChildItem -Path "${{ github.workspace }}\mpv-dev" -Recurse -Filter "mpv-2.dll" | Select-Object -First 1
-            if (-not $dllFile) {
-              throw "Neither mpv import library nor mpv-2.dll was found after extracting mpv-dev archive."
-            }
+          Write-Host "Extracted mpv-dev tree:"
+          Get-ChildItem -Path $mpvRoot -Recurse | Select-Object FullName
 
-            $defPath = Join-Path "${{ github.workspace }}\mpv-dev" "mpv-2.def"
+          $clientHeader = Get-ChildItem -Path $mpvRoot -Recurse -File -Filter "client.h" |
+            Where-Object { $_.FullName -match '[\\/]mpv[\\/]client\.h$' } |
+            Select-Object -First 1
+          if (-not $clientHeader) {
+            throw "mpv/client.h was not found after extracting mpv-dev archive."
+          }
+
+          $includeDir = Split-Path (Split-Path $clientHeader.FullName -Parent) -Parent
+          $libFile = Get-ChildItem -Path $mpvRoot -Recurse -File -Include *.lib |
+            Where-Object { $_.Name -match '^(mpv|libmpv|mpv-2|libmpv-2)\.lib$' } |
+            Select-Object -First 1
+          $dllFile = Get-ChildItem -Path $mpvRoot -Recurse -File |
+            Where-Object { $_.Name -match '^(mpv-2|libmpv-2)\.dll$' } |
+            Select-Object -First 1
+
+          if (-not $libFile -and $dllFile) {
+            $dllName = $dllFile.Name
+            $defPath = Join-Path $mpvRoot "$([System.IO.Path]::GetFileNameWithoutExtension($dllName)).def"
             $exports = & dumpbin.exe /exports $dllFile.FullName
-            "LIBRARY mpv-2.dll" | Set-Content -Path $defPath -Encoding ascii
+            "LIBRARY $dllName" | Set-Content -Path $defPath -Encoding ascii
             "EXPORTS" | Add-Content -Path $defPath -Encoding ascii
             foreach ($line in $exports) {
               if ($line -match '^\s+\d+\s+[0-9A-F]+\s+[0-9A-F]+\s+([A-Za-z0-9_@?$.]+)$') {
@@ -132,13 +146,32 @@ jobs:
               }
             }
 
-            $generatedLib = Join-Path "${{ github.workspace }}\mpv-dev" "mpv.lib"
-            & lib.exe "/def:$defPath" "/name:mpv-2.dll" "/out:$generatedLib" "/machine:x64"
+            $generatedLib = Join-Path $mpvRoot "mpv.lib"
+            & lib.exe "/def:$defPath" "/name:$dllName" "/out:$generatedLib" "/machine:x64"
+            $libFile = Get-Item $generatedLib
           }
+
+          if (-not $libFile) {
+            throw "Neither mpv import library nor mpv/libmpv dll was found after extracting mpv-dev archive."
+          }
+          if (-not $dllFile) {
+            throw "Neither mpv-2.dll nor libmpv-2.dll was found after extracting mpv-dev archive."
+          }
+
+          "MPV_DEV_ROOT=$mpvRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "MPV_INCLUDE_DIR=$includeDir" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "MPV_LIBRARY=$($libFile.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "MPV_DLL_PATH=$($dllFile.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+          Write-Host "Resolved MPV include: $includeDir"
+          Write-Host "Resolved MPV library: $($libFile.FullName)"
+          Write-Host "Resolved MPV dll: $($dllFile.FullName)"
 
       - name: Build Windows Exe
         env:
-          CMAKE_PREFIX_PATH: ${{ github.workspace }}\mpv-dev
+          CMAKE_PREFIX_PATH: ${{ env.MPV_DEV_ROOT }}
+          MPV_INCLUDE_DIR: ${{ env.MPV_INCLUDE_DIR }}
+          MPV_LIBRARY: ${{ env.MPV_LIBRARY }}
         run: |
           .\scripts\build_windows.ps1 --release
 
@@ -147,12 +180,10 @@ jobs:
           $windeployqt = (Get-Command windeployqt.exe).Source
           & $windeployqt dist\windows\aiplayer.exe
           
-          # 复制 mpv 的 dll
-          $mpvDll = Get-ChildItem -Path "${{ github.workspace }}\mpv-dev" -Recurse -Filter "mpv-2.dll" | Select-Object -First 1
-          if (-not $mpvDll) {
-            throw "mpv-2.dll not found after extracting mpv-dev archive."
+          if (-not (Test-Path $env:MPV_DLL_PATH)) {
+            throw "Resolved MPV_DLL_PATH does not exist: $env:MPV_DLL_PATH"
           }
-          Copy-Item $mpvDll.FullName dist\windows\ -Force
+          Copy-Item $env:MPV_DLL_PATH dist\windows\ -Force
           
           # 打包成 zip
           Compress-Archive -Path dist\windows\* -DestinationPath dist\windows\AIPlayer-Windows.zip

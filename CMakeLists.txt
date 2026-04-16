@@ -14,7 +14,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets OpenGLWidgets Network)
 if(WIN32)
     # Windows 下优先尝试直接查找 mpv 头文件和库
     find_path(MPV_INCLUDE_DIR NAMES mpv/client.h)
-    find_library(MPV_LIBRARY NAMES mpv libmpv mpv-2)
+    find_library(MPV_LIBRARY NAMES mpv libmpv mpv-2 libmpv-2)
     if(MPV_INCLUDE_DIR AND MPV_LIBRARY)
         message(STATUS "Found mpv manually: ${MPV_LIBRARY}")
         add_library(PkgConfig::MPV UNKNOWN IMPORTED)

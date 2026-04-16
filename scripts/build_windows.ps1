@@ -34,6 +34,8 @@ $SrcDir = Resolve-Path (Join-Path $ScriptDir '..')
 $BuildDir = Join-Path $SrcDir 'build/windows'
 $DistDir = Join-Path $SrcDir 'dist/windows'
 $mpvDevRoot = Join-Path $SrcDir 'mpv-dev'
+$envMpvInclude = $env:MPV_INCLUDE_DIR
+$envMpvLibrary = $env:MPV_LIBRARY
 
 New-Item -ItemType Directory -Force -Path $BuildDir | Out-Null
 New-Item -ItemType Directory -Force -Path $DistDir | Out-Null
@@ -53,13 +55,23 @@ if ($vcpkgRoot -and (Test-Path $vcpkgRoot)) {
     }
 }
 
-if (Test-Path $mpvDevRoot) {
+if ($envMpvInclude -and (Test-Path $envMpvInclude)) {
+    Write-Host "[Windows] 使用环境变量 MPV_INCLUDE_DIR: $envMpvInclude" -ForegroundColor Green
+    $cmakeArgs += "-DMPV_INCLUDE_DIR=$envMpvInclude"
+}
+
+if ($envMpvLibrary -and (Test-Path $envMpvLibrary)) {
+    Write-Host "[Windows] 使用环境变量 MPV_LIBRARY: $envMpvLibrary" -ForegroundColor Green
+    $cmakeArgs += "-DMPV_LIBRARY=$envMpvLibrary"
+}
+
+if ((-not $envMpvInclude -or -not (Test-Path $envMpvInclude) -or -not $envMpvLibrary -or -not (Test-Path $envMpvLibrary)) -and (Test-Path $mpvDevRoot)) {
     Write-Host "[Windows] 检测到本地 mpv-dev: $mpvDevRoot" -ForegroundColor Green
     $mpvInclude = Get-ChildItem -Path $mpvDevRoot -Recurse -Directory -Filter mpv -ErrorAction SilentlyContinue |
         Where-Object { Test-Path (Join-Path $_.FullName 'client.h') } |
         Select-Object -First 1
     $mpvLib = Get-ChildItem -Path $mpvDevRoot -Recurse -File -Include *.lib -ErrorAction SilentlyContinue |
-        Where-Object { $_.Name -match '^(mpv|libmpv|mpv-2)\.lib$' } |
+        Where-Object { $_.Name -match '^(mpv|libmpv|mpv-2|libmpv-2)\.lib$' } |
         Select-Object -First 1
 
     if ($mpvInclude) {
@@ -70,6 +82,7 @@ if (Test-Path $mpvDevRoot) {
     }
 }
 
+Write-Host "[Windows] CMake 参数: $($cmakeArgs -join ' ')" -ForegroundColor DarkGray
 Write-Host "[Windows] 运行 CMake 配置 (配置: $Configuration)..." -ForegroundColor Cyan
 cmake @cmakeArgs
 
