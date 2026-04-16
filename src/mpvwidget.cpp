@@ -4,14 +4,21 @@
 #include <QDateTime>
 #include <QDir>
 #include <QEvent>
+#include <QFile>
 #include <QMetaObject>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#include <QProcess>
 #include <QSurfaceFormat>
 #include <QTimer>
 
 #include <chrono>
 #include <clocale>
+#include <cstdio>
+#include <cstring>
+
+#include <QStandardPaths>
+#include <QMessageBox>
 
 namespace {
 constexpr QEvent::Type kMpvUpdateEvent = static_cast<QEvent::Type>(QEvent::User + 1);
@@ -24,23 +31,18 @@ MpvWidget::MpvWidget(QWidget *parent)
 
     connect(m_eventTimer, &QTimer::timeout, this, &MpvWidget::handleMpvEvents);
     m_eventTimer->setInterval(16);
-
-    // Phase 2/3：先用 mock ASR 打通“识别->UI字幕”链路
-    m_asrRunning.store(true);
-    m_asrThread = std::thread([this]() {
-        int idx = 0;
-        while (m_asrRunning.load()) {
-            const QString text = QStringLiteral("[ASR-MOCK] 识别中... %1").arg(idx++);
-            QMetaObject::invokeMethod(this, [this, text]() { emit asrTextUpdated(text); }, Qt::QueuedConnection);
-            std::this_thread::sleep_for(std::chrono::milliseconds(800));
-        }
-    });
 }
 
 MpvWidget::~MpvWidget() {
     m_asrRunning.store(false);
     if (m_asrThread.joinable()) {
         m_asrThread.join();
+    }
+
+    if (m_ffmpegProcess) {
+        m_ffmpegProcess->kill();
+        m_ffmpegProcess->waitForFinished(3000);
+        m_ffmpegProcess = nullptr;
     }
 
     if (m_renderContext) {
@@ -73,6 +75,8 @@ void MpvWidget::loadFile(const QString &filePath) {
         emit errorOccurred(QStringLiteral("播放器初始化失败"));
         return;
     }
+
+    extractAudioWithFFmpeg(filePath);
 
     const QByteArray utf8 = filePath.toUtf8();
     const char *cmd[] = {"loadfile", utf8.constData(), nullptr};
@@ -171,10 +175,19 @@ void MpvWidget::createMpv() {
     mpv_set_option_string(m_mpv, "terminal", "no");
     mpv_set_option_string(m_mpv, "msg-level", "all=v");
     mpv_set_option_string(m_mpv, "vo", "libmpv");
-    mpv_set_option_string(m_mpv, "gpu-context", "auto");
-    mpv_set_option_string(m_mpv, "profile", "fast");
+#if defined(Q_OS_MAC)
+    mpv_set_option_string(m_mpv, "gpu-context", "cocoa");
+#elif defined(Q_OS_WIN)
+    mpv_set_option_string(m_mpv, "gpu-context", "d3d11");
+#endif
+    mpv_set_option_string(m_mpv, "profile", "sw-fast");
     mpv_set_option_string(m_mpv, "hwdec", "no");
+    mpv_set_option_string(m_mpv, "vd-lavc-dr", "no");
     mpv_set_wakeup_callback(m_mpv, &MpvWidget::onMpvWakeup, this);
+
+    mpv_observe_property(m_mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(m_mpv, 0, "duration", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(m_mpv, 0, "pause", MPV_FORMAT_FLAG);
 
     const int initResult = mpv_initialize(m_mpv);
     appendMpvLog(QStringLiteral("createMpv: mpv_initialize() => %1 (%2)")
@@ -184,8 +197,111 @@ void MpvWidget::createMpv() {
         emit errorOccurred(QStringLiteral("mpv 初始化失败：%1").arg(mpvErrorString(initResult)));
         mpv_terminate_destroy(m_mpv);
         m_mpv = nullptr;
+        return;
     }
 }
+
+void MpvWidget::extractAudioWithFFmpeg(const QString &videoPath) {
+    const QString outputPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/aiplayer_audio.wav";
+
+    if (m_ffmpegProcess) {
+        m_ffmpegProcess->kill();
+        m_ffmpegProcess->waitForFinished(3000);
+        m_ffmpegProcess->deleteLater();
+        m_ffmpegProcess = nullptr;
+    }
+
+    if (QFile::exists(outputPath)) {
+        QFile::remove(outputPath);
+    }
+
+    m_ffmpegProcess = new QProcess(this);
+    m_ffmpegProcess->setProgram(QStringLiteral("ffmpeg"));
+    m_ffmpegProcess->setArguments({
+        QStringLiteral("-y"),
+        QStringLiteral("-i"),
+        videoPath,
+        QStringLiteral("-ar"),
+        QStringLiteral("16000"),
+        QStringLiteral("-ac"),
+        QStringLiteral("1"),
+        QStringLiteral("-c:a"),
+        QStringLiteral("pcm_s16le"),
+        outputPath,
+    });
+
+    connect(m_ffmpegProcess, &QProcess::readyReadStandardOutput, this, [this]() {
+        if (!m_ffmpegProcess) {
+            return;
+        }
+        const QByteArray data = m_ffmpegProcess->readAllStandardOutput();
+        if (!data.isEmpty()) {
+            std::fprintf(stderr, "%s", data.constData());
+            std::fflush(stderr);
+        }
+    });
+
+    connect(m_ffmpegProcess, &QProcess::readyReadStandardError, this, [this]() {
+        if (!m_ffmpegProcess) {
+            return;
+        }
+        const QByteArray data = m_ffmpegProcess->readAllStandardError();
+        if (!data.isEmpty()) {
+            std::fprintf(stderr, "%s", data.constData());
+            std::fflush(stderr);
+        }
+    });
+
+    connect(m_ffmpegProcess,
+            qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+            this,
+            [this, outputPath](int exitCode, QProcess::ExitStatus exitStatus) {
+                std::fprintf(stderr,
+                             "[FFmpeg] Process finished with exitCode=%d, exitStatus=%d\n",
+                             exitCode,
+                             static_cast<int>(exitStatus));
+                if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
+                    std::fprintf(stderr,
+                                 "[FFmpeg] Audio extraction finished! %s is ready.\n",
+                                 outputPath.toUtf8().constData());
+                    
+                    m_wavPath = outputPath;
+                    {
+                        std::lock_guard<std::mutex> lock(m_subtitleMutex);
+                        m_subtitles.clear();
+                        m_asrStatus = QStringLiteral("[ASR] 准备处理...");
+                    }
+                    
+                    // Stop previous ASR thread if running
+                    m_asrRunning.store(false);
+                    if (m_asrThread.joinable()) m_asrThread.join();
+                    
+                    // Start new ASR thread
+                    m_asrRunning.store(true);
+                    m_asrThread = std::thread(&MpvWidget::runWhisper, this);
+                }
+                std::fflush(stderr);
+                m_ffmpegProcess->deleteLater();
+                m_ffmpegProcess = nullptr;
+            });
+
+    connect(m_ffmpegProcess,
+            &QProcess::errorOccurred,
+            this,
+            [this](QProcess::ProcessError error) {
+                emit errorOccurred(QStringLiteral("FFmpeg 音频提取失败：%1").arg(static_cast<int>(error)));
+                m_ffmpegProcess->deleteLater();
+                m_ffmpegProcess = nullptr;
+            });
+
+    std::fprintf(stderr,
+                 "[FFmpeg] Starting extraction: %s -> %s\n",
+                 videoPath.toUtf8().constData(),
+                 outputPath.toUtf8().constData());
+    std::fflush(stderr);
+    m_ffmpegProcess->start();
+}
+
 
 void MpvWidget::initializeRenderContext() {
     if (!m_mpv || m_renderContext) {
@@ -239,9 +355,35 @@ void MpvWidget::handleMpvEvents() {
 
         if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
             auto *prop = static_cast<mpv_event_property *>(event->data);
-            if (prop && QByteArray(prop->name) == "pause" && prop->format == MPV_FORMAT_FLAG && prop->data) {
-                m_paused = *static_cast<int *>(prop->data) != 0;
-                emit playbackStateChanged(m_paused);
+            if (prop) {
+                QByteArray name(prop->name);
+                if (name == "pause" && prop->format == MPV_FORMAT_FLAG && prop->data) {
+                    m_paused = *static_cast<int *>(prop->data) != 0;
+                    emit playbackStateChanged(m_paused);
+                } else if (name == "time-pos" && prop->format == MPV_FORMAT_DOUBLE && prop->data) {
+                    double pos = *static_cast<double *>(prop->data);
+                    emit timePosChanged(pos);
+                    
+                    // Subtitle sync
+                     qint64 posMs = static_cast<qint64>(pos * 1000);
+                     QString currentText = "";
+                     {
+                         std::lock_guard<std::mutex> lock(m_subtitleMutex);
+                         for (const auto &seg : m_subtitles) {
+                             if (posMs >= seg.startMs && posMs <= seg.endMs) {
+                                 currentText = seg.text;
+                                 break;
+                             }
+                         }
+                         if (currentText.isEmpty() && !m_asrStatus.isEmpty()) {
+                             currentText = m_asrStatus;
+                         }
+                     }
+                     
+                     emit asrTextUpdated(currentText);
+                } else if (name == "duration" && prop->format == MPV_FORMAT_DOUBLE && prop->data) {
+                    emit durationChanged(*static_cast<double *>(prop->data));
+                }
             }
         } else if (event->event_id == MPV_EVENT_LOG_MESSAGE) {
             auto *logMessage = static_cast<mpv_event_log_message *>(event->data);
@@ -249,7 +391,7 @@ void MpvWidget::handleMpvEvents() {
                 appendMpvLog(QStringLiteral("[%1][%2] %3")
                                  .arg(QString::fromUtf8(logMessage->prefix ? logMessage->prefix : "mpv"))
                                  .arg(QString::fromUtf8(logMessage->level ? logMessage->level : "unknown"))
-                                 .arg(QString::fromUtf8(logMessage->text ? logMessage->text : "" ).trimmed()));
+                                 .arg(QString::fromUtf8(logMessage->text ? logMessage->text : "").trimmed()));
             }
             continue;
         }
@@ -272,7 +414,7 @@ void MpvWidget::renderFrame() {
         return;
     }
 
-    int flipY = 0;
+    int flipY = 1;
     const GLuint defaultFbo = defaultFramebufferObject();
     mpv_opengl_fbo fbo{
         .fbo = static_cast<int>(defaultFbo),
@@ -287,8 +429,11 @@ void MpvWidget::renderFrame() {
         {MPV_RENDER_PARAM_INVALID, nullptr},
     };
 
+    QOpenGLFunctions *glFunctions = context()->functions();
+    glFunctions->glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebufferObject());
     mpv_render_context_render(m_renderContext, params);
-    context()->functions()->glFlush();
+    glFunctions->glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebufferObject());
+    glFunctions->glFlush();
 }
 
 void MpvWidget::setPaused(bool paused) {
@@ -306,9 +451,141 @@ void MpvWidget::setPaused(bool paused) {
     emit playbackStateChanged(m_paused);
 }
 
+void MpvWidget::seek(double pos) {
+    if (!m_mpv) return;
+    const char *args[] = {"seek", QByteArray::number(pos).constData(), "absolute", nullptr};
+    mpv_command(m_mpv, args);
+}
+
+void MpvWidget::setPlaybackSpeed(double speed) {
+    if (!m_mpv) return;
+    mpv_set_property(m_mpv, "speed", MPV_FORMAT_DOUBLE, &speed);
+}
+
+void MpvWidget::updateAsrStatus(const QString &status) {
+    std::lock_guard<std::mutex> lock(m_subtitleMutex);
+    m_asrStatus = status;
+}
+
+void MpvWidget::runWhisper() {
+    updateAsrStatus(QStringLiteral("[ASR] 准备加载模型..."));
+
+    // Try finding the model file
+    QString modelPath;
+    QStringList searchPaths = {
+        QCoreApplication::applicationDirPath() + "/ggml-base.bin",
+        QCoreApplication::applicationDirPath() + "/ggml-tiny.bin",
+        QDir::currentPath() + "/ggml-base.bin",
+        QDir::currentPath() + "/ggml-tiny.bin",
+        QDir::homePath() + "/ggml-base.bin"
+    };
+
+    for (const QString &path : searchPaths) {
+        if (QFile::exists(path)) {
+            modelPath = path;
+            break;
+        }
+    }
+
+    if (modelPath.isEmpty()) {
+        updateAsrStatus(QStringLiteral("[ASR] 错误: 找不到 Whisper 模型 (ggml-base.bin/ggml-tiny.bin)")); 
+        return;
+    }
+
+    updateAsrStatus(QStringLiteral("[ASR] 加载模型中..."));
+    
+    struct whisper_context_params cparams = whisper_context_default_params();
+    struct whisper_context *ctx = whisper_init_from_file_with_params(modelPath.toUtf8().constData(), cparams);
+
+    if (!ctx) {
+        updateAsrStatus(QStringLiteral("[ASR] 错误: 模型加载失败"));
+        return;
+    }
+
+    updateAsrStatus(QStringLiteral("[ASR] 识别中..."));
+
+    if (!readWavAndProcess(m_wavPath, ctx)) {
+        updateAsrStatus(QStringLiteral("[ASR] 错误: 处理音频失败"));
+    } else {
+        updateAsrStatus(QStringLiteral(""));
+    }
+
+    whisper_free(ctx);
+    m_asrRunning.store(false);
+}
+
+bool MpvWidget::readWavAndProcess(const QString &wavPath, struct whisper_context *ctx) {
+    std::ifstream fin(wavPath.toStdString(), std::ios::binary);
+    if (!fin.is_open()) return false;
+
+    // Skip WAV header (44 bytes for standard canonical WAV)
+    fin.seekg(44, std::ios::beg);
+
+    std::vector<int16_t> pcm16;
+    int16_t sample;
+    while (fin.read(reinterpret_cast<char *>(&sample), sizeof(int16_t))) {
+        pcm16.push_back(sample);
+    }
+
+    if (pcm16.empty()) return false;
+
+    std::vector<float> pcmf32(pcm16.size());
+    for (size_t i = 0; i < pcm16.size(); i++) {
+        pcmf32[i] = static_cast<float>(pcm16[i]) / 32768.0f;
+    }
+
+    whisper_full_params wparams = whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
+    wparams.print_progress   = false;
+    wparams.print_special    = false;
+    wparams.print_realtime   = false;
+    wparams.print_timestamps = false;
+    wparams.language         = "auto";
+    wparams.n_threads        = std::min(4, (int)std::thread::hardware_concurrency());
+
+    // Whisper limits processing to chunks, but whisper_full handles it internally
+    // To provide real-time feedback, we can use a callback or process in chunks.
+    // Let's use a callback for new segments
+    
+    // Pass 'this' as user data
+    wparams.new_segment_callback_user_data = this;
+    wparams.new_segment_callback = [](struct whisper_context *ctx, struct whisper_state *state, int n_new, void *user_data) {
+        auto *self = static_cast<MpvWidget *>(user_data);
+        if (!self->m_asrRunning.load()) return;
+        
+        const int n_segments = whisper_full_n_segments(ctx);
+        int s0 = n_segments - n_new;
+        if (s0 == 0) s0 = 0;
+        
+        for (int i = s0; i < n_segments; i++) {
+            const char *text = whisper_full_get_segment_text(ctx, i);
+            const int64_t t0 = whisper_full_get_segment_t0(ctx, i);
+            const int64_t t1 = whisper_full_get_segment_t1(ctx, i);
+            
+            SubtitleSegment seg;
+            seg.startMs = t0 * 10;
+            seg.endMs = t1 * 10;
+            seg.text = QString::fromUtf8(text);
+            
+            {
+                std::lock_guard<std::mutex> lock(self->m_subtitleMutex);
+                self->m_subtitles.push_back(seg);
+            }
+            
+            // Just for debugging/logging
+            std::fprintf(stderr, "[ASR] Segment: [%d - %d] %s\n", (int)t0, (int)t1, text);
+        }
+    };
+
+    if (whisper_full(ctx, wparams, pcmf32.data(), pcmf32.size()) != 0) {
+        return false;
+    }
+
+    return true;
+}
+
 void MpvWidget::appendMpvLog(const QString &message) {
     std::lock_guard<std::mutex> lock(m_logMutex);
-    const QString logPath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QStringLiteral("../../../mpv.log"));
+    const QString logPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/mpv.log";
     std::ofstream stream(logPath.toStdString(), std::ios::app);
     if (!stream.is_open()) {
         return;

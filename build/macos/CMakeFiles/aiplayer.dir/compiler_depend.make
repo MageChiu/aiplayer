@@ -4189,6 +4189,7 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qdatetime.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qcalendar.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qlocale.h \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QDebug \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QDir \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qdir.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qdirlisting.h \
@@ -4198,6 +4199,17 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qfileinfo.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qtimezone.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QEvent \
+  /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/QLocalServer \
+  /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qlocalserver.h \
+  /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetworkglobal.h \
+  /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetwork-config.h \
+  /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetworkexports.h \
+  /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qabstractsocket.h \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qproperty.h \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpropertyprivate.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/source_location \
+  /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/QLocalSocket \
+  /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qlocalsocket.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QMetaObject \
   /opt/homebrew/opt/qt/lib/QtGui.framework/Headers/QOpenGLContext \
   /opt/homebrew/opt/qt/lib/QtGui.framework/Headers/qopenglcontext.h \
@@ -4218,7 +4230,17 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QMetaObject:
 
+/opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpropertyprivate.h:
+
+/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qabstractsocket.h:
+
+/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetworkexports.h:
+
+/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/QLocalServer:
+
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QEvent:
+
+/opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QDebug:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QDateTime:
 
@@ -4397,6 +4419,8 @@ _deps/whispercpp-src/include/whisper.h:
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qsharedpointer.h:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qcontiguouscache.h:
+
+/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qlocalsocket.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl3.h:
 
@@ -4967,6 +4991,8 @@ aiplayer_autogen/UVLADIE3JM/moc_mainwindow.cpp:
 /opt/homebrew/opt/qt/lib/QtGui.framework/Headers/qwindowdefs.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/align.h:
+
+/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetwork-config.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/locale.h:
 
@@ -5668,6 +5694,8 @@ aiplayer_autogen/UVLADIE3JM/moc_mainwindow.cpp:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qtcoreexports.h:
 
+/opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qproperty.h:
+
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_empty.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/sift_down.h:
@@ -5786,6 +5814,8 @@ aiplayer_autogen/UVLADIE3JM/moc_mainwindow.cpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__atomic/atomic_init.h:
 
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/source_location:
+
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/swap_allocator.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_reference_wrapper.h:
@@ -5795,6 +5825,8 @@ aiplayer_autogen/UVLADIE3JM/moc_mainwindow.cpp:
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__math/trigonometric_functions.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/TargetConditionals.h:
+
+/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/QLocalSocket:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__math/rounding_functions.h:
 
@@ -6102,6 +6134,8 @@ aiplayer_autogen/mocs_compilation.cpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_trivial.h:
 
+/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qlocalserver.h:
+
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_wchar.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_key_t.h:
@@ -6347,6 +6381,8 @@ aiplayer_autogen/mocs_compilation.cpp:
 /opt/homebrew/opt/qt/lib/QtWidgets.framework/Headers/QPushButton:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qglobal.h:
+
+/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetworkglobal.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h:
 

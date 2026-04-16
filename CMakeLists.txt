@@ -9,7 +9,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets OpenGLWidgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets OpenGLWidgets Network)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(MPV REQUIRED IMPORTED_TARGET mpv)
 
@@ -43,6 +43,7 @@ target_include_directories(aiplayer PRIVATE
 target_link_libraries(aiplayer PRIVATE
     Qt6::Widgets
     Qt6::OpenGLWidgets
+    Qt6::Network
     PkgConfig::MPV
     whisper
 )
@@ -76,6 +77,9 @@ if(APPLE)
         COMMAND /usr/bin/codesign --force --deep --sign - --timestamp=none "$<TARGET_BUNDLE_DIR:aiplayer>"
         VERBATIM
     )
+elseif(WIN32)
+    set_target_properties(aiplayer PROPERTIES WIN32_EXECUTABLE TRUE)
+    # 可以在这里添加 windeployqt 或者 vcpkg 的处理
 endif()
 
 install(TARGETS aiplayer

@@ -39,3 +39,70 @@
 
 # debug information files
 *.dwo
+
+
+# =========================
+# macOS OS generated files
+# =========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# =========================
+# Build & Distribution
+# =========================
+build/
+build-*/
+dist/
+bin/
+out/
+
+# =========================
+# CMake
+# =========================
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# =========================
+# Qt Specific
+# =========================
+CMakeLists.txt.user
+*.user
+*.user.*
+*_autogen/
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+
+# =========================
+# IDEs / Editors
+# =========================
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# =========================
+# Logs & Test Media
+# =========================
+*.log
+mpv.log
+*.mp4
+*.mp3
+*.wav
+*.mkv
+
+# =========================
+# App Bundles & macOS specific
+# =========================
+*.app/
+*.dmg

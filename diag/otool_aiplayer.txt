@@ -1,5 +1,6 @@
 /Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/aiplayer.app/Contents/MacOS/aiplayer:
 	@executable_path/../Frameworks/QtOpenGLWidgets.framework/Versions/A/QtOpenGLWidgets (compatibility version 6.0.0, current version 6.11.0)
+	@executable_path/../Frameworks/QtNetwork.framework/Versions/A/QtNetwork (compatibility version 6.0.0, current version 6.11.0)
 	@rpath/libwhisper.1.dylib (compatibility version 1.0.0, current version 1.8.4)
 	@executable_path/../Frameworks/QtWidgets.framework/Versions/A/QtWidgets (compatibility version 6.0.0, current version 6.11.0)
 	@executable_path/../Frameworks/QtOpenGL.framework/Versions/A/QtOpenGL (compatibility version 6.0.0, current version 6.11.0)

@@ -7,6 +7,8 @@
 // whisper.cpp 头文件
 #include "whisper.h"
 
+#include <QProcess>
+
 #include <atomic>
 #include <fstream>
 #include <mutex>
@@ -29,9 +31,13 @@ public:
     void pause();
     void togglePause();
     bool isPaused() const;
+    void seek(double pos);
+    void setPlaybackSpeed(double speed);
 
 signals:
     void playbackStateChanged(bool paused);
+    void timePosChanged(double pos);
+    void durationChanged(double duration);
     void fileLoaded(const QString &filePath);
     void errorOccurred(const QString &message);
     // 实时字幕文本更新信号（Phase 2/3）
@@ -56,17 +62,31 @@ private:
     void setPaused(bool paused);
     void appendMpvLog(const QString &message);
     QString mpvErrorString(int errorCode) const;
+    void extractAudioWithFFmpeg(const QString &videoPath);
 
     // --- mpv 播放相关 ---
     mpv_handle *m_mpv = nullptr;
     mpv_render_context *m_renderContext = nullptr;
     QTimer *m_eventTimer = nullptr;
+    QProcess *m_ffmpegProcess = nullptr;
     bool m_initialized = false;
     bool m_paused = true;
     std::mutex m_logMutex;
 
     // --- ASR / Whisper 相关 ---
-    // 简化版：先用一个后台线程周期性产出 mock 文本，打通 UI 链路
+    struct SubtitleSegment {
+        qint64 startMs;
+        qint64 endMs;
+        QString text;
+    };
+    std::vector<SubtitleSegment> m_subtitles;
+    
     std::thread m_asrThread;
     std::atomic<bool> m_asrRunning{false};
+    QString m_wavPath;
+    QString m_asrStatus;
+    std::mutex m_subtitleMutex;
+    void updateAsrStatus(const QString &status);
+    void runWhisper();
+    bool readWavAndProcess(const QString &wavPath, struct whisper_context *ctx);
 };

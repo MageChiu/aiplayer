@@ -141,6 +141,7 @@ aiplayer.app/Contents/MacOS/aiplayer: CMakeFiles/aiplayer.dir/src/mainwindow.cpp
 aiplayer.app/Contents/MacOS/aiplayer: CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o
 aiplayer.app/Contents/MacOS/aiplayer: CMakeFiles/aiplayer.dir/build.make
 aiplayer.app/Contents/MacOS/aiplayer: /opt/homebrew/opt/qt/lib/QtOpenGLWidgets.framework/Versions/A/QtOpenGLWidgets
+aiplayer.app/Contents/MacOS/aiplayer: /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
 aiplayer.app/Contents/MacOS/aiplayer: _deps/whispercpp-build/src/libwhisper.1.8.4.dylib
 aiplayer.app/Contents/MacOS/aiplayer: /opt/homebrew/opt/qt/lib/QtWidgets.framework/Versions/A/QtWidgets
 aiplayer.app/Contents/MacOS/aiplayer: /opt/homebrew/opt/qt/lib/QtOpenGL.framework/Versions/A/QtOpenGL

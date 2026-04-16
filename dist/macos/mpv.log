@@ -815,3 +815,1531 @@
 2026-04-15T14:24:49.261 [libmpv_render][v] Loading failed.
 2026-04-15T14:24:49.261 [libmpv_render][v] Loading hwdec driver 'vulkan'
 2026-04-15T14:24:49.261 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T14:38:15.291 createMpv: begin
+2026-04-15T14:38:15.302 createMpv: mpv_create() succeeded
+2026-04-15T14:38:15.310 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T14:38:15.310 initializeRenderContext: creating libmpv render context
+2026-04-15T14:38:15.314 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T14:38:15.365 [cplayer][v] Applying profile 'fast'...
+2026-04-15T14:38:15.365 [cplayer][v] Setting option 'scale' = 'bilinear' (flags = 4)
+2026-04-15T14:38:15.365 [cplayer][v] Setting option 'dscale' = 'bilinear' (flags = 4)
+2026-04-15T14:38:15.366 [cplayer][v] Setting option 'dither' = 'no' (flags = 4)
+2026-04-15T14:38:15.366 [cplayer][v] Setting option 'correct-downscaling' = 'no' (flags = 4)
+2026-04-15T14:38:15.366 [cplayer][v] Setting option 'linear-downscaling' = 'no' (flags = 4)
+2026-04-15T14:38:15.366 [cplayer][v] Setting option 'sigmoid-upscaling' = 'no' (flags = 4)
+2026-04-15T14:38:15.367 [cplayer][v] Setting option 'hdr-compute-peak' = 'no' (flags = 4)
+2026-04-15T14:38:15.367 [cplayer][v] Setting option 'allow-delayed-peak-detect' = 'yes' (flags = 4)
+2026-04-15T14:38:15.367 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T14:38:15.368 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T14:38:15.368 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T14:38:15.368 [cplayer][v] FFmpeg library versions:
+2026-04-15T14:38:15.368 [cplayer][v] libavcodec      62.28.100
+2026-04-15T14:38:15.368 [cplayer][v] libavdevice     62.3.100
+2026-04-15T14:38:15.368 [cplayer][v] libavfilter     11.14.100
+2026-04-15T14:38:15.368 [cplayer][v] libavformat     62.12.100
+2026-04-15T14:38:15.369 [cplayer][v] libavutil       60.26.100
+2026-04-15T14:38:15.369 [cplayer][v] libswresample   6.3.100
+2026-04-15T14:38:15.369 [cplayer][v] libswscale      9.5.100
+2026-04-15T14:38:15.369 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T14:38:15.370 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T14:38:15.370 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T14:38:15.370 [libmpv_render][v] GL_VERSION='2.1 Metal - 90.5'
+2026-04-15T14:38:15.370 [libmpv_render][v] Detected desktop OpenGL 2.1.
+2026-04-15T14:38:15.370 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T14:38:15.371 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T14:38:15.371 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='1.20'
+2026-04-15T14:38:15.371 [libmpv_render][v] Loaded extension GL_ARB_framebuffer_object.
+2026-04-15T14:38:15.371 [libmpv_render][v] Loaded extension GL_ARB_texture_rg.
+2026-04-15T14:38:15.371 [libmpv_render][v] Loaded extension GL_ARB_texture_float.
+2026-04-15T14:38:15.371 [libmpv_render][v] Loaded extension GL_ARB_sync.
+2026-04-15T14:38:15.371 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T14:38:15.371 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T14:38:15.372 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T14:38:15.372 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T14:38:15.372 [libmpv_render][v] No advanced processing required. Enabling dumb mode.
+2026-04-15T14:38:15.372 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T14:38:15.372 [libmpv_render/videotoolbox][error] need >= OpenGL 3.0 for core rectangle texture support
+2026-04-15T14:38:15.372 [libmpv_render/videotoolbox][v] VT hwdec only works with OpenGL or Vulkan backends.
+2026-04-15T14:38:15.372 [libmpv_render][v] Loading failed.
+2026-04-15T14:38:15.372 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T14:38:15.373 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T14:38:23.015 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T14:38:23.015 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T14:38:23.015 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T14:38:23.016 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T14:38:23.016 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T14:38:23.016 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T14:38:23.016 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T14:38:23.016 [ytdl_hook][v] playlist hook
+2026-04-15T14:38:23.016 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T14:38:23.016 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T14:38:23.016 [demux][v] Trying demuxers for level=normal.
+2026-04-15T14:38:23.028 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T14:38:23.062 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T14:38:23.062 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T14:38:23.068 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T14:38:23.068 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T14:38:23.069 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T14:38:23.069 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T14:38:23.069 [lavf][v] select track 0
+2026-04-15T14:38:23.069 [lavf][v] select track 1
+2026-04-15T14:38:23.069 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T14:38:23.069 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T14:38:23.070 [display-tags][info] File tags:
+2026-04-15T14:38:23.070 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T14:38:23.070 [vd][v] Container reported FPS: 29.970031
+2026-04-15T14:38:23.071 [vd][v] Codec list:
+2026-04-15T14:38:23.071 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T14:38:23.071 [vd][v] Opening decoder h264
+2026-04-15T14:38:23.072 [vd][v] No hardware decoding requested.
+2026-04-15T14:38:23.072 [vd][v] Using software decoding.
+2026-04-15T14:38:23.072 [vd][v] Detected 12 logical cores.
+2026-04-15T14:38:23.072 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T14:38:23.074 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T14:38:23.074 [vf][v] User filter list:
+2026-04-15T14:38:23.074 [vf][v] (empty)
+2026-04-15T14:38:23.074 [ad][v] Codec list:
+2026-04-15T14:38:23.075 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T14:38:23.075 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T14:38:23.075 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T14:38:23.075 [ad][v] Opening decoder aac
+2026-04-15T14:38:23.075 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T14:38:23.076 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T14:38:23.076 [af][v] User filter list:
+2026-04-15T14:38:23.077 [af][v] (empty)
+2026-04-15T14:38:23.077 [cplayer][v] Starting playback...
+2026-04-15T14:38:23.078 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T14:38:23.079 [libmpv_render][v] Video source: 0x0 (0:0)
+2026-04-15T14:38:23.079 [libmpv_render][v] Video display: (0, 0) 1x1 -> (0, 643) 2136x1
+2026-04-15T14:38:23.079 [libmpv_render][v] Video scale: 2136.000000/1.000000
+2026-04-15T14:38:23.079 [libmpv_render][v] OSD borders: l=0 t=643 r=0 b=644
+2026-04-15T14:38:23.080 [libmpv_render][v] Video borders: l=0 t=643 r=0 b=644
+2026-04-15T14:54:44.238 createMpv: begin
+2026-04-15T14:54:44.247 createMpv: mpv_create() succeeded
+2026-04-15T14:54:44.254 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T14:54:44.254 initializeRenderContext: creating libmpv render context
+2026-04-15T14:54:44.259 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T14:54:44.323 [cplayer][v] Applying profile 'fast'...
+2026-04-15T14:54:44.323 [cplayer][v] Setting option 'scale' = 'bilinear' (flags = 4)
+2026-04-15T14:54:44.323 [cplayer][v] Setting option 'dscale' = 'bilinear' (flags = 4)
+2026-04-15T14:54:44.324 [cplayer][v] Setting option 'dither' = 'no' (flags = 4)
+2026-04-15T14:54:44.324 [cplayer][v] Setting option 'correct-downscaling' = 'no' (flags = 4)
+2026-04-15T14:54:44.324 [cplayer][v] Setting option 'linear-downscaling' = 'no' (flags = 4)
+2026-04-15T14:54:44.324 [cplayer][v] Setting option 'sigmoid-upscaling' = 'no' (flags = 4)
+2026-04-15T14:54:44.324 [cplayer][v] Setting option 'hdr-compute-peak' = 'no' (flags = 4)
+2026-04-15T14:54:44.324 [cplayer][v] Setting option 'allow-delayed-peak-detect' = 'yes' (flags = 4)
+2026-04-15T14:54:44.324 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T14:54:44.324 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T14:54:44.325 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T14:54:44.325 [cplayer][v] FFmpeg library versions:
+2026-04-15T14:54:44.325 [cplayer][v] libavcodec      62.28.100
+2026-04-15T14:54:44.325 [cplayer][v] libavdevice     62.3.100
+2026-04-15T14:54:44.325 [cplayer][v] libavfilter     11.14.100
+2026-04-15T14:54:44.326 [cplayer][v] libavformat     62.12.100
+2026-04-15T14:54:44.326 [cplayer][v] libavutil       60.26.100
+2026-04-15T14:54:44.326 [cplayer][v] libswresample   6.3.100
+2026-04-15T14:54:44.326 [cplayer][v] libswscale      9.5.100
+2026-04-15T14:54:44.327 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T14:54:44.327 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T14:54:44.327 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T14:54:44.327 [libmpv_render][v] GL_VERSION='2.1 Metal - 90.5'
+2026-04-15T14:54:44.327 [libmpv_render][v] Detected desktop OpenGL 2.1.
+2026-04-15T14:54:44.327 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T14:54:44.327 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T14:54:44.327 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='1.20'
+2026-04-15T14:54:44.327 [cplayer][v] Waiting for scripts...
+2026-04-15T14:54:44.327 [cplayer][v] Done loading scripts.
+2026-04-15T14:54:44.327 [libmpv_render][v] Loaded extension GL_ARB_framebuffer_object.
+2026-04-15T14:54:44.328 [libmpv_render][v] Loaded extension GL_ARB_texture_rg.
+2026-04-15T14:54:44.328 [libmpv_render][v] Loaded extension GL_ARB_texture_float.
+2026-04-15T14:54:44.328 [libmpv_render][v] Loaded extension GL_ARB_sync.
+2026-04-15T14:54:44.328 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T14:54:44.328 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T14:54:44.328 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T14:54:44.328 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T14:54:44.328 [libmpv_render][v] No advanced processing required. Enabling dumb mode.
+2026-04-15T14:54:44.329 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T14:54:44.329 [libmpv_render/videotoolbox][error] need >= OpenGL 3.0 for core rectangle texture support
+2026-04-15T14:54:44.329 [libmpv_render/videotoolbox][v] VT hwdec only works with OpenGL or Vulkan backends.
+2026-04-15T14:54:44.329 [libmpv_render][v] Loading failed.
+2026-04-15T14:54:44.329 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T14:54:44.330 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T14:54:51.580 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T14:54:51.581 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T14:54:51.581 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T14:54:51.581 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T14:54:51.581 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T14:54:51.581 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T14:54:51.581 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T14:54:51.581 [ytdl_hook][v] playlist hook
+2026-04-15T14:54:51.582 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T14:54:51.582 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T14:54:51.582 [demux][v] Trying demuxers for level=normal.
+2026-04-15T14:54:51.593 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T14:54:51.627 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T14:54:51.627 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T14:54:51.633 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T14:54:51.633 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T14:54:51.633 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T14:54:51.634 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T14:54:51.634 [lavf][v] select track 0
+2026-04-15T14:54:51.634 [lavf][v] select track 1
+2026-04-15T14:54:51.634 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T14:54:51.635 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T14:54:51.635 [display-tags][info] File tags:
+2026-04-15T14:54:51.635 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T14:54:51.635 [vd][v] Container reported FPS: 29.970031
+2026-04-15T14:54:51.636 [vd][v] Codec list:
+2026-04-15T14:54:51.636 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T14:54:51.637 [vd][v] Opening decoder h264
+2026-04-15T14:54:51.637 [vd][v] No hardware decoding requested.
+2026-04-15T14:54:51.637 [vd][v] Using software decoding.
+2026-04-15T14:54:51.638 [vd][v] Detected 12 logical cores.
+2026-04-15T14:54:51.638 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T14:54:51.639 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T14:54:51.639 [vf][v] User filter list:
+2026-04-15T14:54:51.639 [vf][v] (empty)
+2026-04-15T14:54:51.640 [ad][v] Codec list:
+2026-04-15T14:54:51.640 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T14:54:51.640 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T14:54:51.640 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T14:54:51.640 [ad][v] Opening decoder aac
+2026-04-15T14:54:51.640 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T14:54:51.643 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T14:54:51.643 [af][v] User filter list:
+2026-04-15T14:54:51.643 [af][v] (empty)
+2026-04-15T14:54:51.643 [cplayer][v] Starting playback...
+2026-04-15T14:54:51.645 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T14:54:51.646 [libmpv_render][v] Video source: 0x0 (0:0)
+2026-04-15T14:54:51.646 [libmpv_render][v] Video display: (0, 0) 1x1 -> (0, 643) 2136x1
+2026-04-15T14:54:51.646 [libmpv_render][v] Video scale: 2136.000000/1.000000
+2026-04-15T14:54:51.646 [libmpv_render][v] OSD borders: l=0 t=643 r=0 b=644
+2026-04-15T14:54:51.646 [libmpv_render][v] Video borders: l=0 t=643 r=0 b=644
+2026-04-15T15:01:41.951 createMpv: begin
+2026-04-15T15:01:41.955 createMpv: mpv_create() succeeded
+2026-04-15T15:01:41.960 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T15:01:41.961 initializeRenderContext: creating libmpv render context
+2026-04-15T15:01:41.965 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T15:01:42.064 [cplayer][v] Applying profile 'sw-fast'...
+2026-04-15T15:01:42.064 [cplayer][v] Setting option 'sws-scaler' = 'bilinear' (flags = 4)
+2026-04-15T15:01:42.064 [cplayer][v] Setting option 'sws-fast' = 'yes' (flags = 4)
+2026-04-15T15:01:42.065 [cplayer][v] Setting option 'zimg-scaler' = 'bilinear' (flags = 4)
+2026-04-15T15:01:42.065 [cplayer][v] Setting option 'zimg-dither' = 'no' (flags = 4)
+2026-04-15T15:01:42.065 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T15:01:42.065 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T15:01:42.065 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T15:01:42.065 [cplayer][v] FFmpeg library versions:
+2026-04-15T15:01:42.065 [cplayer][v] libavcodec      62.28.100
+2026-04-15T15:01:42.065 [cplayer][v] libavdevice     62.3.100
+2026-04-15T15:01:42.065 [cplayer][v] libavfilter     11.14.100
+2026-04-15T15:01:42.065 [cplayer][v] libavformat     62.12.100
+2026-04-15T15:01:42.065 [cplayer][v] libavutil       60.26.100
+2026-04-15T15:01:42.065 [cplayer][v] libswresample   6.3.100
+2026-04-15T15:01:42.066 [cplayer][v] libswscale      9.5.100
+2026-04-15T15:01:42.066 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T15:01:42.066 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T15:01:42.066 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T15:01:42.066 [libmpv_render][v] GL_VERSION='4.1 Metal - 90.5'
+2026-04-15T15:01:42.066 [libmpv_render][v] Detected desktop OpenGL 4.1.
+2026-04-15T15:01:42.066 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T15:01:42.066 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T15:01:42.066 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='4.10'
+2026-04-15T15:01:42.066 [cplayer][v] Waiting for scripts...
+2026-04-15T15:01:42.067 [cplayer][v] Done loading scripts.
+2026-04-15T15:01:42.068 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T15:01:42.068 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T15:01:42.068 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T15:01:42.068 [libmpv_render][error] after creating texture: OpenGL error INVALID_ENUM.
+2026-04-15T15:01:42.068 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T15:01:42.068 [libmpv_render][v] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+2026-04-15T15:01:42.068 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T15:01:42.068 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T15:01:42.068 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T15:01:49.917 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T15:01:49.918 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T15:01:49.918 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T15:01:49.918 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T15:01:49.919 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T15:01:49.919 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T15:01:49.919 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T15:01:49.920 [ytdl_hook][v] playlist hook
+2026-04-15T15:01:49.920 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:01:49.920 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:01:49.921 [demux][v] Trying demuxers for level=normal.
+2026-04-15T15:01:49.921 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T15:01:49.949 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T15:01:49.950 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:01:52.919 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T15:01:52.919 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T15:01:52.919 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T15:01:52.920 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T15:01:52.920 [lavf][v] select track 0
+2026-04-15T15:01:52.920 [lavf][v] select track 1
+2026-04-15T15:01:52.920 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T15:01:52.920 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T15:01:52.920 [display-tags][info] File tags:
+2026-04-15T15:01:52.920 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T15:01:52.921 [vd][v] Container reported FPS: 29.970031
+2026-04-15T15:01:52.921 [vd][v] Codec list:
+2026-04-15T15:01:52.921 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T15:01:52.921 [vd][v] Opening decoder h264
+2026-04-15T15:01:52.921 [vd][v] No hardware decoding requested.
+2026-04-15T15:01:52.921 [vd][v] Using software decoding.
+2026-04-15T15:01:52.921 [vd][v] Detected 12 logical cores.
+2026-04-15T15:01:52.922 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T15:01:52.922 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T15:01:52.922 [vf][v] User filter list:
+2026-04-15T15:01:52.922 [vf][v] (empty)
+2026-04-15T15:01:52.922 [ad][v] Codec list:
+2026-04-15T15:01:52.922 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T15:01:52.922 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T15:01:52.922 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T15:01:52.923 [ad][v] Opening decoder aac
+2026-04-15T15:01:52.923 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T15:01:52.923 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T15:01:52.923 [af][v] User filter list:
+2026-04-15T15:01:52.923 [af][v] (empty)
+2026-04-15T15:01:52.923 [cplayer][v] Starting playback...
+2026-04-15T15:01:52.930 [vd][v] Using software decoding.
+2026-04-15T15:01:52.930 [vd][v] Decoder format: 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/auto CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:01:52.931 [vd][v] Using container aspect ratio.
+2026-04-15T15:01:52.931 [vf][v] [in] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:01:52.931 [vf][v] [userdeint] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:01:52.931 [vf][v] [userdeint] (disabled)
+2026-04-15T15:01:52.931 [vf][v] [autovflip] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:01:52.931 [vf][v] [autovflip] (disabled)
+2026-04-15T15:01:52.932 [vf][v] [autorotate] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:01:52.932 [vf][v] [autorotate] (disabled)
+2026-04-15T15:01:52.933 [vf][v] [convert] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:01:52.933 [vf][v] [convert] (disabled)
+2026-04-15T15:01:52.933 [vf][v] [out] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:01:52.933 [af][v] [in] 48000Hz stereo 2ch floatp
+2026-04-15T15:01:52.933 [af][v] [userspeed] 48000Hz stereo 2ch floatp
+2026-04-15T15:01:52.933 [af][v] [userspeed] (disabled)
+2026-04-15T15:01:52.933 [af][v] [convert] 48000Hz stereo 2ch floatp
+2026-04-15T15:01:52.933 [ao][v] Trying audio driver 'coreaudio'
+2026-04-15T15:01:52.933 [ao/coreaudio][v] requested format: 48000 Hz, stereo channels, floatp
+2026-04-15T15:01:53.003 [ao/coreaudio][v] selected audio output device: WH-1000XM3 (150)
+2026-04-15T15:01:53.003 [ao/coreaudio][v] input channel layout:
+2026-04-15T15:01:53.003 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T15:01:53.003 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T15:01:53.004 [ao/coreaudio][v] - description 1: label <2, 1>,  flags: <0>
+2026-04-15T15:01:53.004 [ao/coreaudio][v] mp chmap: stereo
+2026-04-15T15:01:53.004 [ao/coreaudio][v] input channel layout:
+2026-04-15T15:01:53.004 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T15:01:53.004 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T15:01:53.004 [ao/coreaudio][v] - description 1: label <2, 1>,  flags: <0>
+2026-04-15T15:01:53.004 [ao/coreaudio][v] mp chmap: stereo
+2026-04-15T15:01:53.004 [ao/coreaudio][v] Channel layouts:
+2026-04-15T15:01:53.004 [ao/coreaudio][v] - stereo
+2026-04-15T15:01:53.004 [ao/coreaudio][v] - stereo
+2026-04-15T15:01:53.004 [ao/coreaudio][v] - mono
+2026-04-15T15:01:53.005 [ao/coreaudio][v] result: stereo
+2026-04-15T15:01:53.005 [ao/coreaudio][v] audio channel layout: tag: <6619138>
+2026-04-15T15:01:53.013 [ao/coreaudio][v] Latency property cntl: 8079 frames
+2026-04-15T15:01:53.013 [ao/coreaudio][v] Latency property zisf: 512 frames
+2026-04-15T15:01:53.013 [ao/coreaudio][v] Latency property tfas: 0 frames
+2026-04-15T15:01:53.013 [ao/coreaudio][v] Device sample rate: 44100.000000
+2026-04-15T15:01:53.013 [ao/coreaudio][v] audiounit latency [ns]: 354166
+2026-04-15T15:01:53.013 [ao/coreaudio][v] device latency [ns]: 194807256
+2026-04-15T15:01:53.013 [ao/coreaudio][v] device buffer: 18736 samples.
+2026-04-15T15:01:53.013 [ao/coreaudio][v] using soft-buffer of 18736 samples.
+2026-04-15T15:01:53.013 [cplayer][info] AO: [coreaudio] 48000Hz stereo 2ch floatp
+2026-04-15T15:01:53.013 [cplayer][v] AO: Description: CoreAudio AudioUnit
+2026-04-15T15:01:53.014 [af][v] [convert] (disabled)
+2026-04-15T15:01:53.014 [af][v] [out] 48000Hz stereo 2ch floatp
+2026-04-15T15:01:53.014 [cplayer][info] VO: [libmpv] 1920x1080 yuv420p
+2026-04-15T15:01:53.014 [cplayer][v] VO: Description: render API for libmpv
+2026-04-15T15:01:53.014 [vo/libmpv][v] reconfig to 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:01:53.261 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T15:01:53.262 [libmpv_render][v] Video source: 1920x1080 (1:1)
+2026-04-15T15:01:53.262 [libmpv_render][v] Video display: (0, 0) 1920x1080 -> (0, 43) 2136x1201
+2026-04-15T15:01:53.262 [libmpv_render][v] Video scale: 1.112500/1.112037
+2026-04-15T15:01:53.262 [libmpv_render][v] OSD borders: l=0 t=43 r=0 b=44
+2026-04-15T15:01:53.262 [libmpv_render][v] Video borders: l=0 t=43 r=0 b=44
+2026-04-15T15:01:53.262 [libmpv_render][v] Texture for plane 0: 1920x1080
+2026-04-15T15:01:53.262 [libmpv_render][v] Texture for plane 1: 960x540
+2026-04-15T15:01:53.262 [libmpv_render][v] Texture for plane 2: 960x540
+2026-04-15T15:01:53.263 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T15:01:53.263 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T15:01:53.263 [cplayer][v] first video frame after restart shown
+2026-04-15T15:01:53.263 [cplayer][v] audio ready
+2026-04-15T15:01:53.264 [cplayer][v] starting audio playback
+2026-04-15T15:01:53.264 [libmpv_render][v] Dither to 8.
+2026-04-15T15:01:53.264 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T15:01:53.264 [cplayer][v] playback restart complete @ 0.043000, audio=playing, video=playing
+2026-04-15T15:01:53.277 [osd/libass][v] libass API version: 0x1704000
+2026-04-15T15:01:53.277 [osd/libass][v] libass source: tarball: 0.17.4
+2026-04-15T15:01:53.277 [osd/libass][v] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 14.1.0 (COMPLEX)
+2026-04-15T15:01:53.278 [osd/libass][v] Setting up fonts...
+2026-04-15T15:01:53.278 [osd/libass][v] Using font provider coretext
+2026-04-15T15:01:53.278 [osd/libass][v] Done.
+2026-04-15T15:08:33.841 createMpv: begin
+2026-04-15T15:08:33.845 createMpv: mpv_create() succeeded
+2026-04-15T15:08:33.850 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T15:08:33.851 initializeRenderContext: creating libmpv render context
+2026-04-15T15:08:33.856 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T15:08:33.961 [cplayer][v] Applying profile 'sw-fast'...
+2026-04-15T15:08:33.961 [cplayer][v] Setting option 'sws-scaler' = 'bilinear' (flags = 4)
+2026-04-15T15:08:33.962 [cplayer][v] Setting option 'sws-fast' = 'yes' (flags = 4)
+2026-04-15T15:08:33.962 [cplayer][v] Setting option 'zimg-scaler' = 'bilinear' (flags = 4)
+2026-04-15T15:08:33.962 [cplayer][v] Setting option 'zimg-dither' = 'no' (flags = 4)
+2026-04-15T15:08:33.962 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T15:08:33.962 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T15:08:33.963 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T15:08:33.963 [cplayer][v] FFmpeg library versions:
+2026-04-15T15:08:33.963 [cplayer][v] libavcodec      62.28.100
+2026-04-15T15:08:33.963 [cplayer][v] libavdevice     62.3.100
+2026-04-15T15:08:33.963 [cplayer][v] libavfilter     11.14.100
+2026-04-15T15:08:33.963 [cplayer][v] libavformat     62.12.100
+2026-04-15T15:08:33.964 [cplayer][v] libavutil       60.26.100
+2026-04-15T15:08:33.964 [cplayer][v] libswresample   6.3.100
+2026-04-15T15:08:33.964 [cplayer][v] libswscale      9.5.100
+2026-04-15T15:08:33.964 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T15:08:33.964 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T15:08:33.965 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T15:08:33.965 [libmpv_render][v] GL_VERSION='4.1 Metal - 90.5'
+2026-04-15T15:08:33.965 [libmpv_render][v] Detected desktop OpenGL 4.1.
+2026-04-15T15:08:33.966 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T15:08:33.966 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T15:08:33.966 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='4.10'
+2026-04-15T15:08:33.966 [cplayer][v] Waiting for scripts...
+2026-04-15T15:08:33.966 [cplayer][v] Done loading scripts.
+2026-04-15T15:08:33.966 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T15:08:33.967 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T15:08:33.967 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T15:08:33.967 [libmpv_render][error] after creating texture: OpenGL error INVALID_ENUM.
+2026-04-15T15:08:33.967 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T15:08:33.967 [libmpv_render][v] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+2026-04-15T15:08:33.967 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T15:08:33.968 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T15:08:33.968 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T15:08:42.327 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T15:08:42.327 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T15:08:42.328 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T15:08:42.328 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T15:08:42.328 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T15:08:42.328 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T15:08:42.328 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T15:08:42.329 [ytdl_hook][v] playlist hook
+2026-04-15T15:08:42.329 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:08:42.329 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:08:42.329 [demux][v] Trying demuxers for level=normal.
+2026-04-15T15:08:42.347 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T15:08:42.374 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T15:08:42.374 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:08:42.380 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T15:08:42.380 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T15:08:42.380 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T15:08:42.380 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T15:08:42.381 [lavf][v] select track 0
+2026-04-15T15:08:42.381 [lavf][v] select track 1
+2026-04-15T15:08:42.381 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T15:08:42.381 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T15:08:42.381 [display-tags][info] File tags:
+2026-04-15T15:08:42.381 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T15:08:42.382 [vd][v] Container reported FPS: 29.970031
+2026-04-15T15:08:42.382 [vd][v] Codec list:
+2026-04-15T15:08:42.382 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T15:08:42.382 [vd][v] Opening decoder h264
+2026-04-15T15:08:42.382 [vd][v] No hardware decoding requested.
+2026-04-15T15:08:42.382 [vd][v] Using software decoding.
+2026-04-15T15:08:42.382 [vd][v] Detected 12 logical cores.
+2026-04-15T15:08:42.383 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T15:08:42.383 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T15:08:42.383 [vf][v] User filter list:
+2026-04-15T15:08:42.383 [vf][v] (empty)
+2026-04-15T15:08:42.383 [ad][v] Codec list:
+2026-04-15T15:08:42.383 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T15:08:42.384 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T15:08:42.384 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T15:08:42.384 [ad][v] Opening decoder aac
+2026-04-15T15:08:42.384 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T15:08:42.384 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T15:08:42.384 [af][v] User filter list:
+2026-04-15T15:08:42.384 [af][v] (empty)
+2026-04-15T15:08:42.384 [cplayer][v] Starting playback...
+2026-04-15T15:08:42.393 [vd][v] Using software decoding.
+2026-04-15T15:08:42.393 [vd][v] Decoder format: 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/auto CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:08:42.393 [vd][v] Using container aspect ratio.
+2026-04-15T15:08:42.393 [vf][v] [in] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:08:42.394 [vf][v] [userdeint] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:08:42.394 [vf][v] [userdeint] (disabled)
+2026-04-15T15:08:42.394 [vf][v] [autovflip] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:08:42.394 [vf][v] [autovflip] (disabled)
+2026-04-15T15:08:42.394 [vf][v] [autorotate] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:08:42.394 [vf][v] [autorotate] (disabled)
+2026-04-15T15:08:42.394 [vf][v] [convert] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:08:42.395 [vf][v] [convert] (disabled)
+2026-04-15T15:08:42.395 [vf][v] [out] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:08:42.395 [af][v] [in] 48000Hz stereo 2ch floatp
+2026-04-15T15:08:42.395 [af][v] [userspeed] 48000Hz stereo 2ch floatp
+2026-04-15T15:08:42.395 [af][v] [userspeed] (disabled)
+2026-04-15T15:08:42.395 [af][v] [convert] 48000Hz stereo 2ch floatp
+2026-04-15T15:08:42.395 [ao][v] Trying audio driver 'coreaudio'
+2026-04-15T15:08:42.395 [ao/coreaudio][v] requested format: 48000 Hz, stereo channels, floatp
+2026-04-15T15:08:42.472 [ao/coreaudio][v] selected audio output device: WH-1000XM3 (150)
+2026-04-15T15:08:42.472 [ao/coreaudio][v] input channel layout:
+2026-04-15T15:08:42.472 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <1>
+2026-04-15T15:08:42.473 [ao/coreaudio][v] - description 0: label <42, 4294967295>,  flags: <0>
+2026-04-15T15:08:42.473 [ao/coreaudio][v] channel label=42 unusable to build channel bitmap, skipping layout
+2026-04-15T15:08:42.473 [ao/coreaudio][v] converted input channel layout (failed):
+2026-04-15T15:08:42.473 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <1>
+2026-04-15T15:08:42.474 [ao/coreaudio][v] - description 0: label <42, 4294967295>,  flags: <0>
+2026-04-15T15:08:42.474 [ao/coreaudio][v] input channel layout:
+2026-04-15T15:08:42.474 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T15:08:42.475 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T15:08:42.475 [ao/coreaudio][v] - description 1: label <1, 0>,  flags: <0>
+2026-04-15T15:08:42.475 [ao/coreaudio][v] mp chmap: fl-fl
+2026-04-15T15:08:42.475 [ao/coreaudio][v] Channel layouts:
+2026-04-15T15:08:42.475 [ao/coreaudio][v] - stereo
+2026-04-15T15:08:42.475 [ao/coreaudio][v] - mono
+2026-04-15T15:08:42.476 [ao/coreaudio][v] result: stereo
+2026-04-15T15:08:42.476 [ao/coreaudio][v] audio channel layout: tag: <6619138>
+2026-04-15T15:08:42.484 [ao/coreaudio][v] Latency property cntl: 160 frames
+2026-04-15T15:08:42.484 [ao/coreaudio][v] Latency property zisf: 320 frames
+2026-04-15T15:08:42.485 [ao/coreaudio][v] Latency property tfas: 0 frames
+2026-04-15T15:08:42.485 [ao/coreaudio][v] Device sample rate: 16000.000000
+2026-04-15T15:08:42.485 [ao/coreaudio][v] audiounit latency [ns]: 375000
+2026-04-15T15:08:42.485 [ao/coreaudio][v] device latency [ns]: 30000000
+2026-04-15T15:08:42.485 [ao/coreaudio][v] device buffer: 2916 samples.
+2026-04-15T15:08:42.485 [ao/coreaudio][v] using soft-buffer of 9600 samples.
+2026-04-15T15:08:42.486 [cplayer][info] AO: [coreaudio] 48000Hz stereo 2ch floatp
+2026-04-15T15:08:42.486 [cplayer][v] AO: Description: CoreAudio AudioUnit
+2026-04-15T15:08:42.486 [af][v] [convert] (disabled)
+2026-04-15T15:08:42.486 [af][v] [out] 48000Hz stereo 2ch floatp
+2026-04-15T15:08:42.486 [cplayer][info] VO: [libmpv] 1920x1080 yuv420p
+2026-04-15T15:08:42.486 [cplayer][v] VO: Description: render API for libmpv
+2026-04-15T15:08:42.487 [vo/libmpv][v] reconfig to 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:08:42.535 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T15:08:42.535 [libmpv_render][v] Video source: 1920x1080 (1:1)
+2026-04-15T15:08:42.535 [libmpv_render][v] Video display: (0, 0) 1920x1080 -> (0, 43) 2136x1201
+2026-04-15T15:08:42.536 [libmpv_render][v] Video scale: 1.112500/1.112037
+2026-04-15T15:08:42.536 [libmpv_render][v] OSD borders: l=0 t=43 r=0 b=44
+2026-04-15T15:08:42.536 [libmpv_render][v] Video borders: l=0 t=43 r=0 b=44
+2026-04-15T15:08:42.536 [libmpv_render][v] Texture for plane 0: 1920x1080
+2026-04-15T15:08:42.536 [libmpv_render][v] Texture for plane 1: 960x540
+2026-04-15T15:08:42.536 [libmpv_render][v] Texture for plane 2: 960x540
+2026-04-15T15:08:42.537 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T15:08:42.537 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T15:08:42.537 [cplayer][v] first video frame after restart shown
+2026-04-15T15:08:42.537 [cplayer][v] audio ready
+2026-04-15T15:08:42.537 [cplayer][v] delaying audio start 0.043000 vs. 0.043000, diff=0.000000
+2026-04-15T15:08:42.537 [cplayer][v] playback restart complete @ 0.043000, audio=ready, video=playing
+2026-04-15T15:08:42.537 [cplayer][v] starting audio playback
+2026-04-15T15:08:42.538 [libmpv_render][v] Dither to 8.
+2026-04-15T15:08:42.551 [osd/libass][v] libass API version: 0x1704000
+2026-04-15T15:08:42.552 [osd/libass][v] libass source: tarball: 0.17.4
+2026-04-15T15:08:42.552 [osd/libass][v] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 14.1.0 (COMPLEX)
+2026-04-15T15:08:42.552 [osd/libass][v] Setting up fonts...
+2026-04-15T15:08:42.552 [osd/libass][v] Using font provider coretext
+2026-04-15T15:08:42.552 [osd/libass][v] Done.
+2026-04-15T15:29:11.642 createMpv: begin
+2026-04-15T15:29:11.647 createMpv: mpv_create() succeeded
+2026-04-15T15:29:11.651 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T15:29:11.651 initializeRenderContext: creating libmpv render context
+2026-04-15T15:29:11.656 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T15:29:11.769 [cplayer][v] Applying profile 'sw-fast'...
+2026-04-15T15:29:11.769 [cplayer][v] Setting option 'sws-scaler' = 'bilinear' (flags = 4)
+2026-04-15T15:29:11.770 [cplayer][v] Setting option 'sws-fast' = 'yes' (flags = 4)
+2026-04-15T15:29:11.770 [cplayer][v] Setting option 'zimg-scaler' = 'bilinear' (flags = 4)
+2026-04-15T15:29:11.770 [cplayer][v] Setting option 'zimg-dither' = 'no' (flags = 4)
+2026-04-15T15:29:11.771 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T15:29:11.771 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T15:29:11.771 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T15:29:11.771 [cplayer][v] FFmpeg library versions:
+2026-04-15T15:29:11.772 [cplayer][v] libavcodec      62.28.100
+2026-04-15T15:29:11.772 [cplayer][v] libavdevice     62.3.100
+2026-04-15T15:29:11.772 [cplayer][v] libavfilter     11.14.100
+2026-04-15T15:29:11.772 [cplayer][v] libavformat     62.12.100
+2026-04-15T15:29:11.772 [cplayer][v] libavutil       60.26.100
+2026-04-15T15:29:11.772 [cplayer][v] libswresample   6.3.100
+2026-04-15T15:29:11.772 [cplayer][v] libswscale      9.5.100
+2026-04-15T15:29:11.772 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T15:29:11.772 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T15:29:11.773 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T15:29:11.773 [cplayer][v] Waiting for scripts...
+2026-04-15T15:29:11.773 [libmpv_render][v] GL_VERSION='4.1 Metal - 90.5'
+2026-04-15T15:29:11.773 [libmpv_render][v] Detected desktop OpenGL 4.1.
+2026-04-15T15:29:11.773 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T15:29:11.773 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T15:29:11.773 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='4.10'
+2026-04-15T15:29:11.774 [cplayer][v] Done loading scripts.
+2026-04-15T15:29:11.774 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T15:29:11.774 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T15:29:11.774 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T15:29:11.774 [libmpv_render][error] after creating texture: OpenGL error INVALID_ENUM.
+2026-04-15T15:29:11.774 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T15:29:11.775 [libmpv_render][v] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+2026-04-15T15:29:11.775 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T15:29:11.775 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T15:29:11.775 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T15:29:18.676 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T15:29:18.677 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T15:29:18.677 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T15:29:18.677 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T15:29:18.677 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T15:29:18.677 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T15:29:18.677 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T15:29:18.677 [ytdl_hook][v] playlist hook
+2026-04-15T15:29:18.678 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:29:18.678 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:29:18.678 [demux][v] Trying demuxers for level=normal.
+2026-04-15T15:29:18.690 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T15:29:18.718 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T15:29:18.718 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T15:29:20.356 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T15:29:20.357 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T15:29:20.358 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T15:29:20.358 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T15:29:20.359 [lavf][v] select track 0
+2026-04-15T15:29:20.359 [lavf][v] select track 1
+2026-04-15T15:29:20.359 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T15:29:20.359 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T15:29:20.359 [display-tags][info] File tags:
+2026-04-15T15:29:20.359 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T15:29:20.359 [vd][v] Container reported FPS: 29.970031
+2026-04-15T15:29:20.360 [vd][v] Codec list:
+2026-04-15T15:29:20.360 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T15:29:20.360 [vd][v] Opening decoder h264
+2026-04-15T15:29:20.360 [vd][v] No hardware decoding requested.
+2026-04-15T15:29:20.360 [vd][v] Using software decoding.
+2026-04-15T15:29:20.360 [vd][v] Detected 12 logical cores.
+2026-04-15T15:29:20.361 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T15:29:20.361 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T15:29:20.361 [vf][v] User filter list:
+2026-04-15T15:29:20.361 [vf][v] (empty)
+2026-04-15T15:29:20.361 [ad][v] Codec list:
+2026-04-15T15:29:20.361 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T15:29:20.361 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T15:29:20.361 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T15:29:20.361 [ad][v] Opening decoder aac
+2026-04-15T15:29:20.361 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T15:29:20.362 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T15:29:20.362 [af][v] User filter list:
+2026-04-15T15:29:20.362 [af][v] (empty)
+2026-04-15T15:29:20.362 [cplayer][v] Starting playback...
+2026-04-15T15:29:20.362 [vd][v] Using software decoding.
+2026-04-15T15:29:20.362 [vd][v] Decoder format: 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/auto CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:29:20.362 [vd][v] Using container aspect ratio.
+2026-04-15T15:29:20.362 [vf][v] [in] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:29:20.362 [vf][v] [userdeint] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:29:20.363 [vf][v] [userdeint] (disabled)
+2026-04-15T15:29:20.363 [vf][v] [autovflip] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:29:20.363 [vf][v] [autovflip] (disabled)
+2026-04-15T15:29:20.363 [vf][v] [autorotate] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:29:20.363 [vf][v] [autorotate] (disabled)
+2026-04-15T15:29:20.363 [vf][v] [convert] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:29:20.363 [vf][v] [convert] (disabled)
+2026-04-15T15:29:20.363 [vf][v] [out] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:29:20.364 [af][v] [in] 48000Hz stereo 2ch floatp
+2026-04-15T15:29:20.364 [af][v] [userspeed] 48000Hz stereo 2ch floatp
+2026-04-15T15:29:20.364 [af][v] [userspeed] (disabled)
+2026-04-15T15:29:20.364 [af][v] [convert] 48000Hz stereo 2ch floatp
+2026-04-15T15:29:20.364 [ao][v] Trying audio driver 'coreaudio'
+2026-04-15T15:29:20.364 [ao/coreaudio][v] requested format: 48000 Hz, stereo channels, floatp
+2026-04-15T15:29:20.406 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T15:29:20.406 [libmpv_render][v] Video source: 0x0 (0:0)
+2026-04-15T15:29:20.407 [libmpv_render][v] Video display: (0, 0) 1x1 -> (0, 643) 2136x1
+2026-04-15T15:29:20.408 [libmpv_render][v] Video scale: 2136.000000/1.000000
+2026-04-15T15:29:20.408 [libmpv_render][v] OSD borders: l=0 t=643 r=0 b=644
+2026-04-15T15:29:20.409 [libmpv_render][v] Video borders: l=0 t=643 r=0 b=644
+2026-04-15T15:29:20.437 [ao/coreaudio][v] selected audio output device: WH-1000XM3 (146)
+2026-04-15T15:29:20.437 [ao/coreaudio][v] input channel layout:
+2026-04-15T15:29:20.437 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <1>
+2026-04-15T15:29:20.438 [ao/coreaudio][v] - description 0: label <42, 4294967295>,  flags: <0>
+2026-04-15T15:29:20.438 [ao/coreaudio][v] channel label=42 unusable to build channel bitmap, skipping layout
+2026-04-15T15:29:20.438 [ao/coreaudio][v] converted input channel layout (failed):
+2026-04-15T15:29:20.438 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <1>
+2026-04-15T15:29:20.438 [ao/coreaudio][v] - description 0: label <42, 4294967295>,  flags: <0>
+2026-04-15T15:29:20.438 [ao/coreaudio][v] input channel layout:
+2026-04-15T15:29:20.438 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T15:29:20.439 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T15:29:20.439 [ao/coreaudio][v] - description 1: label <1, 0>,  flags: <0>
+2026-04-15T15:29:20.439 [ao/coreaudio][v] mp chmap: fl-fl
+2026-04-15T15:29:20.439 [ao/coreaudio][v] Channel layouts:
+2026-04-15T15:29:20.439 [ao/coreaudio][v] - stereo
+2026-04-15T15:29:20.439 [ao/coreaudio][v] - mono
+2026-04-15T15:29:20.439 [ao/coreaudio][v] result: stereo
+2026-04-15T15:29:20.439 [ao/coreaudio][v] audio channel layout: tag: <6619138>
+2026-04-15T15:29:20.447 [ao/coreaudio][v] Latency property cntl: 160 frames
+2026-04-15T15:29:20.447 [ao/coreaudio][v] Latency property zisf: 320 frames
+2026-04-15T15:29:20.447 [ao/coreaudio][v] Latency property tfas: 0 frames
+2026-04-15T15:29:20.447 [ao/coreaudio][v] Device sample rate: 16000.000000
+2026-04-15T15:29:20.447 [ao/coreaudio][v] audiounit latency [ns]: 375000
+2026-04-15T15:29:20.447 [ao/coreaudio][v] device latency [ns]: 30000000
+2026-04-15T15:29:20.447 [ao/coreaudio][v] device buffer: 2916 samples.
+2026-04-15T15:29:20.447 [ao/coreaudio][v] using soft-buffer of 9600 samples.
+2026-04-15T15:29:20.448 [cplayer][info] AO: [coreaudio] 48000Hz stereo 2ch floatp
+2026-04-15T15:29:20.448 [cplayer][v] AO: Description: CoreAudio AudioUnit
+2026-04-15T15:29:20.448 [af][v] [convert] (disabled)
+2026-04-15T15:29:20.448 [af][v] [out] 48000Hz stereo 2ch floatp
+2026-04-15T15:29:20.448 [cplayer][info] VO: [libmpv] 1920x1080 yuv420p
+2026-04-15T15:29:20.448 [cplayer][v] VO: Description: render API for libmpv
+2026-04-15T15:29:20.448 [vo/libmpv][v] reconfig to 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T15:29:20.546 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T15:29:20.546 [libmpv_render][v] Video source: 1920x1080 (1:1)
+2026-04-15T15:29:20.547 [libmpv_render][v] Video display: (0, 0) 1920x1080 -> (0, 43) 2136x1201
+2026-04-15T15:29:20.547 [libmpv_render][v] Video scale: 1.112500/1.112037
+2026-04-15T15:29:20.547 [libmpv_render][v] OSD borders: l=0 t=43 r=0 b=44
+2026-04-15T15:29:20.547 [libmpv_render][v] Video borders: l=0 t=43 r=0 b=44
+2026-04-15T15:29:20.547 [libmpv_render][v] Texture for plane 0: 1920x1080
+2026-04-15T15:29:20.547 [libmpv_render][v] Texture for plane 1: 960x540
+2026-04-15T15:29:20.548 [libmpv_render][v] Texture for plane 2: 960x540
+2026-04-15T15:29:20.548 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T15:29:20.548 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T15:29:20.548 [cplayer][v] first video frame after restart shown
+2026-04-15T15:29:20.548 [libmpv_render][v] Dither to 8.
+2026-04-15T15:29:20.559 [osd/libass][v] libass API version: 0x1704000
+2026-04-15T15:29:20.559 [osd/libass][v] libass source: tarball: 0.17.4
+2026-04-15T15:29:20.559 [osd/libass][v] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 14.1.0 (COMPLEX)
+2026-04-15T15:29:20.559 [osd/libass][v] Setting up fonts...
+2026-04-15T15:29:20.560 [osd/libass][v] Using font provider coretext
+2026-04-15T15:29:20.560 [osd/libass][v] Done.
+2026-04-15T15:29:20.560 [cplayer][v] audio ready
+2026-04-15T15:29:20.560 [cplayer][v] delaying audio start 0.043000 vs. 0.043000, diff=0.000000
+2026-04-15T15:29:20.560 [cplayer][v] playback restart complete @ 0.043000, audio=ready, video=playing
+2026-04-15T15:29:20.561 [cplayer][v] starting audio playback
+2026-04-15T15:29:27.218 [cplayer][v] Set property: pause=true -> 1
+2026-04-15T16:12:51.587 createMpv: begin
+2026-04-15T16:12:51.598 createMpv: mpv_create() succeeded
+2026-04-15T16:12:51.613 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T16:12:51.613 initializeRenderContext: creating libmpv render context
+2026-04-15T16:12:51.619 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T16:12:51.693 [cplayer][v] Applying profile 'sw-fast'...
+2026-04-15T16:12:51.693 [cplayer][v] Setting option 'sws-scaler' = 'bilinear' (flags = 4)
+2026-04-15T16:12:51.693 [cplayer][v] Setting option 'sws-fast' = 'yes' (flags = 4)
+2026-04-15T16:12:51.693 [cplayer][v] Setting option 'zimg-scaler' = 'bilinear' (flags = 4)
+2026-04-15T16:12:51.693 [cplayer][v] Setting option 'zimg-dither' = 'no' (flags = 4)
+2026-04-15T16:12:51.693 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T16:12:51.693 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T16:12:51.693 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T16:12:51.694 [cplayer][v] FFmpeg library versions:
+2026-04-15T16:12:51.694 [cplayer][v] libavcodec      62.28.100
+2026-04-15T16:12:51.694 [cplayer][v] libavdevice     62.3.100
+2026-04-15T16:12:51.694 [cplayer][v] libavfilter     11.14.100
+2026-04-15T16:12:51.694 [cplayer][v] libavformat     62.12.100
+2026-04-15T16:12:51.694 [cplayer][v] libavutil       60.26.100
+2026-04-15T16:12:51.695 [cplayer][v] libswresample   6.3.100
+2026-04-15T16:12:51.695 [cplayer][v] libswscale      9.5.100
+2026-04-15T16:12:51.695 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T16:12:51.695 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T16:12:51.695 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T16:12:51.695 [cplayer][v] Waiting for scripts...
+2026-04-15T16:12:51.695 [cplayer][v] Done loading scripts.
+2026-04-15T16:12:51.696 [libmpv_render][v] GL_VERSION='4.1 Metal - 90.5'
+2026-04-15T16:12:51.696 [libmpv_render][v] Detected desktop OpenGL 4.1.
+2026-04-15T16:12:51.696 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T16:12:51.696 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T16:12:51.696 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='4.10'
+2026-04-15T16:12:51.696 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T16:12:51.696 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T16:12:51.696 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T16:12:51.697 [libmpv_render][error] after creating texture: OpenGL error INVALID_ENUM.
+2026-04-15T16:12:51.697 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T16:12:51.698 [libmpv_render][v] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+2026-04-15T16:12:51.698 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T16:12:51.698 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T16:12:51.698 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T16:13:03.682 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T16:13:03.682 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T16:13:03.682 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T16:13:03.682 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T16:13:03.683 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T16:13:03.683 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T16:13:03.683 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T16:13:03.683 [ytdl_hook][v] playlist hook
+2026-04-15T16:13:03.683 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:13:03.684 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:13:03.684 [demux][v] Trying demuxers for level=normal.
+2026-04-15T16:13:03.701 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T16:13:03.738 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T16:13:03.738 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:13:03.743 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T16:13:03.743 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T16:13:03.744 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T16:13:03.744 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T16:13:03.744 [lavf][v] select track 0
+2026-04-15T16:13:03.744 [lavf][v] select track 1
+2026-04-15T16:13:03.744 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T16:13:03.745 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T16:13:03.745 [display-tags][info] File tags:
+2026-04-15T16:13:03.745 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T16:13:03.745 [vd][v] Container reported FPS: 29.970031
+2026-04-15T16:13:03.748 [vd][v] Codec list:
+2026-04-15T16:13:03.749 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T16:13:03.749 [vd][v] Opening decoder h264
+2026-04-15T16:13:03.749 [vd][v] No hardware decoding requested.
+2026-04-15T16:13:03.750 [vd][v] Using software decoding.
+2026-04-15T16:13:03.750 [vd][v] Detected 12 logical cores.
+2026-04-15T16:13:03.750 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T16:13:03.752 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T16:13:03.752 [vf][v] User filter list:
+2026-04-15T16:13:03.752 [vf][v] (empty)
+2026-04-15T16:13:03.752 [ad][v] Codec list:
+2026-04-15T16:13:03.752 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T16:13:03.753 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T16:13:03.753 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T16:13:03.753 [ad][v] Opening decoder aac
+2026-04-15T16:13:03.753 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T16:13:03.755 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T16:13:03.755 [af][v] User filter list:
+2026-04-15T16:13:03.755 [af][v] (empty)
+2026-04-15T16:13:03.755 [cplayer][v] Starting playback...
+2026-04-15T16:13:03.766 [vd][v] Using software decoding.
+2026-04-15T16:13:03.766 [vd][v] Decoder format: 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/auto CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:13:03.766 [vd][v] Using container aspect ratio.
+2026-04-15T16:13:03.766 [vf][v] [in] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:13:03.766 [vf][v] [userdeint] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:13:03.767 [vf][v] [userdeint] (disabled)
+2026-04-15T16:13:03.767 [vf][v] [autovflip] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:13:03.767 [vf][v] [autovflip] (disabled)
+2026-04-15T16:13:03.767 [vf][v] [autorotate] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:13:03.767 [vf][v] [autorotate] (disabled)
+2026-04-15T16:13:03.767 [vf][v] [convert] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:13:03.767 [vf][v] [convert] (disabled)
+2026-04-15T16:13:03.767 [vf][v] [out] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:13:03.767 [af][v] [in] 48000Hz stereo 2ch floatp
+2026-04-15T16:13:03.768 [af][v] [userspeed] 48000Hz stereo 2ch floatp
+2026-04-15T16:13:03.768 [af][v] [userspeed] (disabled)
+2026-04-15T16:13:03.768 [af][v] [convert] 48000Hz stereo 2ch floatp
+2026-04-15T16:13:03.768 [ao][v] Trying audio driver 'coreaudio'
+2026-04-15T16:13:03.768 [ao/coreaudio][v] requested format: 48000 Hz, stereo channels, floatp
+2026-04-15T16:13:03.832 [ao/coreaudio][v] selected audio output device: WH-1000XM3 (146)
+2026-04-15T16:13:03.832 [ao/coreaudio][v] input channel layout:
+2026-04-15T16:13:03.832 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T16:13:03.832 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T16:13:03.833 [ao/coreaudio][v] - description 1: label <2, 1>,  flags: <0>
+2026-04-15T16:13:03.833 [ao/coreaudio][v] mp chmap: stereo
+2026-04-15T16:13:03.833 [ao/coreaudio][v] input channel layout:
+2026-04-15T16:13:03.833 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T16:13:03.833 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T16:13:03.834 [ao/coreaudio][v] - description 1: label <2, 1>,  flags: <0>
+2026-04-15T16:13:03.834 [ao/coreaudio][v] mp chmap: stereo
+2026-04-15T16:13:03.834 [ao/coreaudio][v] Channel layouts:
+2026-04-15T16:13:03.834 [ao/coreaudio][v] - stereo
+2026-04-15T16:13:03.834 [ao/coreaudio][v] - stereo
+2026-04-15T16:13:03.834 [ao/coreaudio][v] - mono
+2026-04-15T16:13:03.834 [ao/coreaudio][v] result: stereo
+2026-04-15T16:13:03.834 [ao/coreaudio][v] audio channel layout: tag: <6619138>
+2026-04-15T16:13:03.842 [ao/coreaudio][v] Latency property cntl: 8079 frames
+2026-04-15T16:13:03.842 [ao/coreaudio][v] Latency property zisf: 512 frames
+2026-04-15T16:13:03.842 [ao/coreaudio][v] Latency property tfas: 0 frames
+2026-04-15T16:13:03.842 [ao/coreaudio][v] Device sample rate: 44100.000000
+2026-04-15T16:13:03.842 [ao/coreaudio][v] audiounit latency [ns]: 354166
+2026-04-15T16:13:03.842 [ao/coreaudio][v] device latency [ns]: 194807256
+2026-04-15T16:13:03.842 [ao/coreaudio][v] device buffer: 18736 samples.
+2026-04-15T16:13:03.842 [ao/coreaudio][v] using soft-buffer of 18736 samples.
+2026-04-15T16:13:03.842 [cplayer][info] AO: [coreaudio] 48000Hz stereo 2ch floatp
+2026-04-15T16:13:03.843 [cplayer][v] AO: Description: CoreAudio AudioUnit
+2026-04-15T16:13:03.843 [af][v] [convert] (disabled)
+2026-04-15T16:13:03.843 [af][v] [out] 48000Hz stereo 2ch floatp
+2026-04-15T16:13:03.843 [cplayer][info] VO: [libmpv] 1920x1080 yuv420p
+2026-04-15T16:13:03.843 [cplayer][v] VO: Description: render API for libmpv
+2026-04-15T16:13:03.843 [vo/libmpv][v] reconfig to 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:13:03.888 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T16:13:03.888 [libmpv_render][v] Video source: 1920x1080 (1:1)
+2026-04-15T16:13:03.888 [libmpv_render][v] Video display: (0, 0) 1920x1080 -> (0, 43) 2136x1201
+2026-04-15T16:13:03.888 [libmpv_render][v] Video scale: 1.112500/1.112037
+2026-04-15T16:13:03.888 [libmpv_render][v] OSD borders: l=0 t=43 r=0 b=44
+2026-04-15T16:13:03.888 [libmpv_render][v] Video borders: l=0 t=43 r=0 b=44
+2026-04-15T16:13:03.889 [libmpv_render][v] Texture for plane 0: 1920x1080
+2026-04-15T16:13:03.889 [libmpv_render][v] Texture for plane 1: 960x540
+2026-04-15T16:13:03.889 [libmpv_render][v] Texture for plane 2: 960x540
+2026-04-15T16:13:03.889 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T16:13:03.889 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T16:13:03.889 [cplayer][v] first video frame after restart shown
+2026-04-15T16:13:03.889 [cplayer][v] audio ready
+2026-04-15T16:13:03.889 [cplayer][v] starting audio playback
+2026-04-15T16:13:03.889 [libmpv_render][v] Dither to 8.
+2026-04-15T16:13:04.067 [cplayer][v] playback restart complete @ 0.043000, audio=playing, video=playing
+2026-04-15T16:13:04.106 [osd/libass][v] libass API version: 0x1704000
+2026-04-15T16:13:04.107 [osd/libass][v] libass source: tarball: 0.17.4
+2026-04-15T16:13:04.107 [osd/libass][v] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 14.1.0 (COMPLEX)
+2026-04-15T16:13:04.107 [osd/libass][v] Setting up fonts...
+2026-04-15T16:13:04.108 [osd/libass][v] Using font provider coretext
+2026-04-15T16:13:04.108 [osd/libass][v] Done.
+2026-04-15T16:14:18.529 createMpv: begin
+2026-04-15T16:14:18.532 createMpv: mpv_create() succeeded
+2026-04-15T16:14:18.538 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T16:14:18.538 initializeRenderContext: creating libmpv render context
+2026-04-15T16:14:18.543 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T16:14:18.572 [cplayer][v] Applying profile 'sw-fast'...
+2026-04-15T16:14:18.572 [cplayer][v] Setting option 'sws-scaler' = 'bilinear' (flags = 4)
+2026-04-15T16:14:18.572 [cplayer][v] Setting option 'sws-fast' = 'yes' (flags = 4)
+2026-04-15T16:14:18.572 [cplayer][v] Setting option 'zimg-scaler' = 'bilinear' (flags = 4)
+2026-04-15T16:14:18.573 [cplayer][v] Setting option 'zimg-dither' = 'no' (flags = 4)
+2026-04-15T16:14:18.573 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T16:14:18.573 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T16:14:18.574 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T16:14:18.574 [cplayer][v] FFmpeg library versions:
+2026-04-15T16:14:18.574 [cplayer][v] libavcodec      62.28.100
+2026-04-15T16:14:18.574 [cplayer][v] libavdevice     62.3.100
+2026-04-15T16:14:18.574 [cplayer][v] libavfilter     11.14.100
+2026-04-15T16:14:18.575 [cplayer][v] libavformat     62.12.100
+2026-04-15T16:14:18.575 [cplayer][v] libavutil       60.26.100
+2026-04-15T16:14:18.575 [cplayer][v] libswresample   6.3.100
+2026-04-15T16:14:18.575 [cplayer][v] libswscale      9.5.100
+2026-04-15T16:14:18.575 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T16:14:18.575 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T16:14:18.575 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T16:14:18.576 [libmpv_render][v] GL_VERSION='4.1 Metal - 90.5'
+2026-04-15T16:14:18.576 [libmpv_render][v] Detected desktop OpenGL 4.1.
+2026-04-15T16:14:18.576 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T16:14:18.576 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T16:14:18.576 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='4.10'
+2026-04-15T16:14:18.577 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T16:14:18.577 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T16:14:18.578 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T16:14:18.578 [libmpv_render][error] after creating texture: OpenGL error INVALID_ENUM.
+2026-04-15T16:14:18.578 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T16:14:18.578 [libmpv_render][v] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+2026-04-15T16:14:18.579 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T16:14:18.579 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T16:14:18.579 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T16:14:27.550 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T16:14:27.551 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T16:14:27.551 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T16:14:27.551 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T16:14:27.552 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T16:14:27.552 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T16:14:27.552 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T16:14:27.552 [ytdl_hook][v] playlist hook
+2026-04-15T16:14:27.552 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:14:27.552 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:14:27.553 [demux][v] Trying demuxers for level=normal.
+2026-04-15T16:14:27.572 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T16:14:27.596 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T16:14:27.597 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:14:27.604 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T16:14:27.604 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T16:14:27.605 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T16:14:27.606 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T16:14:27.606 [lavf][v] select track 0
+2026-04-15T16:14:27.607 [lavf][v] select track 1
+2026-04-15T16:14:27.607 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T16:14:27.607 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T16:14:27.607 [display-tags][info] File tags:
+2026-04-15T16:14:27.607 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T16:14:27.608 [vd][v] Container reported FPS: 29.970031
+2026-04-15T16:14:27.608 [vd][v] Codec list:
+2026-04-15T16:14:27.608 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T16:14:27.608 [vd][v] Opening decoder h264
+2026-04-15T16:14:27.608 [vd][v] No hardware decoding requested.
+2026-04-15T16:14:27.608 [vd][v] Using software decoding.
+2026-04-15T16:14:27.608 [vd][v] Detected 12 logical cores.
+2026-04-15T16:14:27.609 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T16:14:27.609 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T16:14:27.609 [vf][v] User filter list:
+2026-04-15T16:14:27.609 [vf][v] (empty)
+2026-04-15T16:14:27.609 [ad][v] Codec list:
+2026-04-15T16:14:27.609 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T16:14:27.610 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T16:14:27.610 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T16:14:27.610 [ad][v] Opening decoder aac
+2026-04-15T16:14:27.610 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T16:14:27.611 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T16:14:27.611 [af][v] User filter list:
+2026-04-15T16:14:27.611 [af][v] (empty)
+2026-04-15T16:14:27.612 [cplayer][v] Starting playback...
+2026-04-15T16:14:27.620 [vd][v] Using software decoding.
+2026-04-15T16:14:27.623 [vd][v] Decoder format: 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/auto CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:14:27.624 [vd][v] Using container aspect ratio.
+2026-04-15T16:14:27.624 [vf][v] [in] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:14:27.624 [vf][v] [userdeint] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:14:27.624 [vf][v] [userdeint] (disabled)
+2026-04-15T16:14:27.625 [vf][v] [autovflip] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:14:27.636 [vf][v] [autovflip] (disabled)
+2026-04-15T16:14:27.636 [vf][v] [autorotate] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:14:27.636 [vf][v] [autorotate] (disabled)
+2026-04-15T16:14:27.637 [vf][v] [convert] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:14:27.637 [vf][v] [convert] (disabled)
+2026-04-15T16:14:27.637 [vf][v] [out] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:14:27.637 [af][v] [in] 48000Hz stereo 2ch floatp
+2026-04-15T16:14:27.637 [af][v] [userspeed] 48000Hz stereo 2ch floatp
+2026-04-15T16:14:27.637 [af][v] [userspeed] (disabled)
+2026-04-15T16:14:27.637 [af][v] [convert] 48000Hz stereo 2ch floatp
+2026-04-15T16:14:27.637 [ao][v] Trying audio driver 'coreaudio'
+2026-04-15T16:14:27.638 [ao/coreaudio][v] requested format: 48000 Hz, stereo channels, floatp
+2026-04-15T16:14:27.738 [ao/coreaudio][v] selected audio output device: WH-1000XM3 (146)
+2026-04-15T16:14:27.738 [ao/coreaudio][v] input channel layout:
+2026-04-15T16:14:27.738 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T16:14:27.739 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T16:14:27.739 [ao/coreaudio][v] - description 1: label <2, 1>,  flags: <0>
+2026-04-15T16:14:27.739 [ao/coreaudio][v] mp chmap: stereo
+2026-04-15T16:14:27.739 [ao/coreaudio][v] input channel layout:
+2026-04-15T16:14:27.739 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T16:14:27.739 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T16:14:27.739 [ao/coreaudio][v] - description 1: label <2, 1>,  flags: <0>
+2026-04-15T16:14:27.740 [ao/coreaudio][v] mp chmap: stereo
+2026-04-15T16:14:27.740 [ao/coreaudio][v] Channel layouts:
+2026-04-15T16:14:27.740 [ao/coreaudio][v] - stereo
+2026-04-15T16:14:27.740 [ao/coreaudio][v] - stereo
+2026-04-15T16:14:27.740 [ao/coreaudio][v] - mono
+2026-04-15T16:14:27.741 [ao/coreaudio][v] result: stereo
+2026-04-15T16:14:27.741 [ao/coreaudio][v] audio channel layout: tag: <6619138>
+2026-04-15T16:14:27.749 [ao/coreaudio][v] Latency property cntl: 8079 frames
+2026-04-15T16:14:27.749 [ao/coreaudio][v] Latency property zisf: 512 frames
+2026-04-15T16:14:27.749 [ao/coreaudio][v] Latency property tfas: 0 frames
+2026-04-15T16:14:27.749 [ao/coreaudio][v] Device sample rate: 44100.000000
+2026-04-15T16:14:27.749 [ao/coreaudio][v] audiounit latency [ns]: 354166
+2026-04-15T16:14:27.750 [ao/coreaudio][v] device latency [ns]: 194807256
+2026-04-15T16:14:27.750 [ao/coreaudio][v] device buffer: 18736 samples.
+2026-04-15T16:14:27.750 [ao/coreaudio][v] using soft-buffer of 18736 samples.
+2026-04-15T16:14:27.750 [cplayer][info] AO: [coreaudio] 48000Hz stereo 2ch floatp
+2026-04-15T16:14:27.751 [cplayer][v] AO: Description: CoreAudio AudioUnit
+2026-04-15T16:14:27.752 [af][v] [convert] (disabled)
+2026-04-15T16:14:27.752 [af][v] [out] 48000Hz stereo 2ch floatp
+2026-04-15T16:14:27.752 [cplayer][info] VO: [libmpv] 1920x1080 yuv420p
+2026-04-15T16:14:27.753 [cplayer][v] VO: Description: render API for libmpv
+2026-04-15T16:14:27.753 [vo/libmpv][v] reconfig to 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:14:27.803 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T16:14:27.803 [libmpv_render][v] Video source: 1920x1080 (1:1)
+2026-04-15T16:14:27.803 [libmpv_render][v] Video display: (0, 0) 1920x1080 -> (0, 43) 2136x1201
+2026-04-15T16:14:27.804 [libmpv_render][v] Video scale: 1.112500/1.112037
+2026-04-15T16:14:27.804 [libmpv_render][v] OSD borders: l=0 t=43 r=0 b=44
+2026-04-15T16:14:27.804 [libmpv_render][v] Video borders: l=0 t=43 r=0 b=44
+2026-04-15T16:14:27.804 [libmpv_render][v] Texture for plane 0: 1920x1080
+2026-04-15T16:14:27.805 [libmpv_render][v] Texture for plane 1: 960x540
+2026-04-15T16:14:27.805 [libmpv_render][v] Texture for plane 2: 960x540
+2026-04-15T16:14:27.805 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T16:14:27.805 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T16:14:27.806 [cplayer][v] first video frame after restart shown
+2026-04-15T16:14:27.806 [cplayer][v] audio ready
+2026-04-15T16:14:27.806 [cplayer][v] starting audio playback
+2026-04-15T16:14:27.806 [libmpv_render][v] Dither to 8.
+2026-04-15T16:14:27.912 [cplayer][v] playback restart complete @ 0.043000, audio=playing, video=playing
+2026-04-15T16:14:27.949 [osd/libass][v] libass API version: 0x1704000
+2026-04-15T16:14:27.950 [osd/libass][v] libass source: tarball: 0.17.4
+2026-04-15T16:14:27.950 [osd/libass][v] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 14.1.0 (COMPLEX)
+2026-04-15T16:14:27.950 [osd/libass][v] Setting up fonts...
+2026-04-15T16:14:27.950 [osd/libass][v] Using font provider coretext
+2026-04-15T16:14:27.951 [osd/libass][v] Done.
+2026-04-15T16:31:23.117 createMpv: begin
+2026-04-15T16:31:23.125 createMpv: mpv_create() succeeded
+2026-04-15T16:31:23.133 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T16:31:23.133 initializeRenderContext: creating libmpv render context
+2026-04-15T16:31:23.138 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T16:31:23.168 [cplayer][v] Applying profile 'sw-fast'...
+2026-04-15T16:31:23.168 [cplayer][v] Setting option 'sws-scaler' = 'bilinear' (flags = 4)
+2026-04-15T16:31:23.168 [cplayer][v] Setting option 'sws-fast' = 'yes' (flags = 4)
+2026-04-15T16:31:23.168 [cplayer][v] Setting option 'zimg-scaler' = 'bilinear' (flags = 4)
+2026-04-15T16:31:23.168 [cplayer][v] Setting option 'zimg-dither' = 'no' (flags = 4)
+2026-04-15T16:31:23.168 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T16:31:23.168 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T16:31:23.169 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T16:31:23.169 [cplayer][v] FFmpeg library versions:
+2026-04-15T16:31:23.169 [cplayer][v] libavcodec      62.28.100
+2026-04-15T16:31:23.169 [cplayer][v] libavdevice     62.3.100
+2026-04-15T16:31:23.169 [cplayer][v] libavfilter     11.14.100
+2026-04-15T16:31:23.169 [cplayer][v] libavformat     62.12.100
+2026-04-15T16:31:23.169 [cplayer][v] libavutil       60.26.100
+2026-04-15T16:31:23.169 [cplayer][v] libswresample   6.3.100
+2026-04-15T16:31:23.169 [cplayer][v] libswscale      9.5.100
+2026-04-15T16:31:23.170 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T16:31:23.170 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T16:31:23.170 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T16:31:23.170 [cplayer][v] Waiting for scripts...
+2026-04-15T16:31:23.170 [cplayer][v] Done loading scripts.
+2026-04-15T16:31:23.170 [libmpv_render][v] GL_VERSION='4.1 Metal - 90.5'
+2026-04-15T16:31:23.170 [libmpv_render][v] Detected desktop OpenGL 4.1.
+2026-04-15T16:31:23.170 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T16:31:23.170 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T16:31:23.171 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='4.10'
+2026-04-15T16:31:23.171 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T16:31:23.171 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T16:31:23.171 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T16:31:23.171 [libmpv_render][error] after creating texture: OpenGL error INVALID_ENUM.
+2026-04-15T16:31:23.171 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T16:31:23.172 [libmpv_render][v] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+2026-04-15T16:31:23.172 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T16:31:23.172 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T16:31:23.172 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T16:31:33.270 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T16:31:33.270 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T16:31:33.270 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T16:31:33.270 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T16:31:33.270 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T16:31:33.270 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T16:31:33.271 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T16:31:33.271 [ytdl_hook][v] playlist hook
+2026-04-15T16:31:33.271 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:31:33.271 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:31:33.271 [demux][v] Trying demuxers for level=normal.
+2026-04-15T16:31:33.283 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T16:31:33.317 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T16:31:33.317 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T16:31:33.323 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T16:31:33.324 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T16:31:33.324 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T16:31:33.325 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T16:31:33.325 [lavf][v] select track 0
+2026-04-15T16:31:33.325 [lavf][v] select track 1
+2026-04-15T16:31:33.325 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T16:31:33.325 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T16:31:33.325 [display-tags][info] File tags:
+2026-04-15T16:31:33.325 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T16:31:33.325 [vd][v] Container reported FPS: 29.970031
+2026-04-15T16:31:33.327 [vd][v] Codec list:
+2026-04-15T16:31:33.327 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T16:31:33.327 [vd][v] Opening decoder h264
+2026-04-15T16:31:33.327 [vd][v] No hardware decoding requested.
+2026-04-15T16:31:33.328 [vd][v] Using software decoding.
+2026-04-15T16:31:33.328 [vd][v] Detected 12 logical cores.
+2026-04-15T16:31:33.328 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T16:31:33.329 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T16:31:33.330 [vf][v] User filter list:
+2026-04-15T16:31:33.330 [vf][v] (empty)
+2026-04-15T16:31:33.330 [ad][v] Codec list:
+2026-04-15T16:31:33.330 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T16:31:33.330 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T16:31:33.330 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T16:31:33.330 [ad][v] Opening decoder aac
+2026-04-15T16:31:33.330 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T16:31:33.332 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T16:31:33.332 [af][v] User filter list:
+2026-04-15T16:31:33.332 [af][v] (empty)
+2026-04-15T16:31:33.332 [cplayer][v] Starting playback...
+2026-04-15T16:31:33.343 [vd][v] Using software decoding.
+2026-04-15T16:31:33.343 [vd][v] Decoder format: 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/auto CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:31:33.343 [vd][v] Using container aspect ratio.
+2026-04-15T16:31:33.343 [vf][v] [in] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:31:33.343 [vf][v] [userdeint] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:31:33.343 [vf][v] [userdeint] (disabled)
+2026-04-15T16:31:33.344 [vf][v] [autovflip] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:31:33.344 [vf][v] [autovflip] (disabled)
+2026-04-15T16:31:33.344 [vf][v] [autorotate] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:31:33.344 [vf][v] [autorotate] (disabled)
+2026-04-15T16:31:33.344 [vf][v] [convert] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:31:33.344 [vf][v] [convert] (disabled)
+2026-04-15T16:31:33.344 [vf][v] [out] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:31:33.344 [af][v] [in] 48000Hz stereo 2ch floatp
+2026-04-15T16:31:33.345 [af][v] [userspeed] 48000Hz stereo 2ch floatp
+2026-04-15T16:31:33.345 [af][v] [userspeed] (disabled)
+2026-04-15T16:31:33.345 [af][v] [convert] 48000Hz stereo 2ch floatp
+2026-04-15T16:31:33.345 [ao][v] Trying audio driver 'coreaudio'
+2026-04-15T16:31:33.345 [ao/coreaudio][v] requested format: 48000 Hz, stereo channels, floatp
+2026-04-15T16:31:33.451 [ao/coreaudio][v] selected audio output device: WH-1000XM3 (146)
+2026-04-15T16:31:33.451 [ao/coreaudio][v] input channel layout:
+2026-04-15T16:31:33.451 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T16:31:33.451 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T16:31:33.452 [ao/coreaudio][v] - description 1: label <2, 1>,  flags: <0>
+2026-04-15T16:31:33.452 [ao/coreaudio][v] mp chmap: stereo
+2026-04-15T16:31:33.452 [ao/coreaudio][v] input channel layout:
+2026-04-15T16:31:33.452 [ao/coreaudio][v] audio channel layout: tag: <0>, descriptions <2>
+2026-04-15T16:31:33.452 [ao/coreaudio][v] - description 0: label <1, 0>,  flags: <0>
+2026-04-15T16:31:33.452 [ao/coreaudio][v] - description 1: label <2, 1>,  flags: <0>
+2026-04-15T16:31:33.453 [ao/coreaudio][v] mp chmap: stereo
+2026-04-15T16:31:33.453 [ao/coreaudio][v] Channel layouts:
+2026-04-15T16:31:33.453 [ao/coreaudio][v] - stereo
+2026-04-15T16:31:33.453 [ao/coreaudio][v] - stereo
+2026-04-15T16:31:33.454 [ao/coreaudio][v] - mono
+2026-04-15T16:31:33.454 [ao/coreaudio][v] result: stereo
+2026-04-15T16:31:33.454 [ao/coreaudio][v] audio channel layout: tag: <6619138>
+2026-04-15T16:31:33.462 [ao/coreaudio][v] Latency property cntl: 8079 frames
+2026-04-15T16:31:33.462 [ao/coreaudio][v] Latency property zisf: 512 frames
+2026-04-15T16:31:33.462 [ao/coreaudio][v] Latency property tfas: 0 frames
+2026-04-15T16:31:33.462 [ao/coreaudio][v] Device sample rate: 44100.000000
+2026-04-15T16:31:33.462 [ao/coreaudio][v] audiounit latency [ns]: 354166
+2026-04-15T16:31:33.462 [ao/coreaudio][v] device latency [ns]: 194807256
+2026-04-15T16:31:33.462 [ao/coreaudio][v] device buffer: 18736 samples.
+2026-04-15T16:31:33.462 [ao/coreaudio][v] using soft-buffer of 18736 samples.
+2026-04-15T16:31:33.463 [cplayer][info] AO: [coreaudio] 48000Hz stereo 2ch floatp
+2026-04-15T16:31:33.463 [cplayer][v] AO: Description: CoreAudio AudioUnit
+2026-04-15T16:31:33.463 [af][v] [convert] (disabled)
+2026-04-15T16:31:33.463 [af][v] [out] 48000Hz stereo 2ch floatp
+2026-04-15T16:31:33.464 [cplayer][info] VO: [libmpv] 1920x1080 yuv420p
+2026-04-15T16:31:33.464 [cplayer][v] VO: Description: render API for libmpv
+2026-04-15T16:31:33.465 [vo/libmpv][v] reconfig to 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T16:31:33.515 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T16:31:33.516 [libmpv_render][v] Video source: 1920x1080 (1:1)
+2026-04-15T16:31:33.516 [libmpv_render][v] Video display: (0, 0) 1920x1080 -> (0, 43) 2136x1201
+2026-04-15T16:31:33.516 [libmpv_render][v] Video scale: 1.112500/1.112037
+2026-04-15T16:31:33.516 [libmpv_render][v] OSD borders: l=0 t=43 r=0 b=44
+2026-04-15T16:31:33.516 [libmpv_render][v] Video borders: l=0 t=43 r=0 b=44
+2026-04-15T16:31:33.516 [libmpv_render][v] Texture for plane 0: 1920x1080
+2026-04-15T16:31:33.517 [libmpv_render][v] Texture for plane 1: 960x540
+2026-04-15T16:31:33.517 [libmpv_render][v] Texture for plane 2: 960x540
+2026-04-15T16:31:33.517 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T16:31:33.517 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T16:31:33.517 [cplayer][v] first video frame after restart shown
+2026-04-15T16:31:33.517 [cplayer][v] audio ready
+2026-04-15T16:31:33.517 [cplayer][v] starting audio playback
+2026-04-15T16:31:33.517 [libmpv_render][v] Dither to 8.
+2026-04-15T16:31:33.653 [cplayer][v] playback restart complete @ 0.043000, audio=playing, video=playing
+2026-04-15T16:31:33.692 [osd/libass][v] libass API version: 0x1704000
+2026-04-15T16:31:33.692 [osd/libass][v] libass source: tarball: 0.17.4
+2026-04-15T16:31:33.692 [osd/libass][v] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 14.1.0 (COMPLEX)
+2026-04-15T16:31:33.692 [osd/libass][v] Setting up fonts...
+2026-04-15T16:31:33.693 [osd/libass][v] Using font provider coretext
+2026-04-15T16:31:33.693 [osd/libass][v] Done.
+2026-04-15T16:32:04.774 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:04.978 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:05.180 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:05.381 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:05.587 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:05.792 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:06.001 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:06.202 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:06.407 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:06.609 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:06.814 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:07.019 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:07.225 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:07.427 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:07.650 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:07.837 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:08.042 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:08.245 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:08.446 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:08.649 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:08.851 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:09.059 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:09.259 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:09.465 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:09.669 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:09.874 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:10.078 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:10.279 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:10.484 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:10.690 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:10.938 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:18.652 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:18.847 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:19.049 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:19.251 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:19.457 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:19.662 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:19.869 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:20.071 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:20.284 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:20.481 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:20.683 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:20.883 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:21.085 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:21.291 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:21.498 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:21.701 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:21.906 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:22.111 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:22.316 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:22.520 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:22.722 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:22.924 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:23.125 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:23.327 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:23.529 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:23.731 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:23.935 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:24.140 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:24.345 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:24.550 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:24.758 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:24.964 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:25.170 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:25.369 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:25.577 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:25.778 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:25.990 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:26.187 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:26.392 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:26.596 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:26.804 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:27.008 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:27.206 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:27.412 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:27.620 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:27.821 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:28.034 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:28.239 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:28.433 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:28.644 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:28.853 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:29.052 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:29.257 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:29.463 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:29.663 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:29.869 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:30.079 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:30.278 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:30.476 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:30.674 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:30.876 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:31.083 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:31.286 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:31.487 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:31.693 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:31.899 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:32.105 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:32.307 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:32.510 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:32.718 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:32.915 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:33.118 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:33.329 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:33.530 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:33.732 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:34.026 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:34.138 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:34.342 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:34.547 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:34.746 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:34.950 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:35.159 [vo/libmpv][v] mpv_render_context_render() not being called or stuck.
+2026-04-15T16:32:39.797 [cplayer][v] Set property: pause=true -> 1
+2026-04-15T19:01:31.049 createMpv: begin
+2026-04-15T19:01:31.054 createMpv: mpv_create() succeeded
+2026-04-15T19:01:31.061 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T19:01:31.062 injectAudioFilter: mpv_command af add => 0 (success), filter=lavfi=[pan=stereo|c0=c0|c1=c1,asetnsamples=n=1024,ametadata=mode=print:file=pipe\\:\/\/\/./pipe/aiplayer-audio-24450]
+2026-04-15T19:01:31.062 initializeRenderContext: creating libmpv render context
+2026-04-15T19:01:31.066 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T19:01:31.100 [cplayer][v] Applying profile 'sw-fast'...
+2026-04-15T19:01:31.100 [cplayer][v] Setting option 'sws-scaler' = 'bilinear' (flags = 4)
+2026-04-15T19:01:31.100 [cplayer][v] Setting option 'sws-fast' = 'yes' (flags = 4)
+2026-04-15T19:01:31.100 [cplayer][v] Setting option 'zimg-scaler' = 'bilinear' (flags = 4)
+2026-04-15T19:01:31.100 [cplayer][v] Setting option 'zimg-dither' = 'no' (flags = 4)
+2026-04-15T19:01:31.101 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T19:01:31.101 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T19:01:31.101 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T19:01:31.102 [cplayer][v] FFmpeg library versions:
+2026-04-15T19:01:31.102 [cplayer][v] libavcodec      62.28.100
+2026-04-15T19:01:31.102 [cplayer][v] libavdevice     62.3.100
+2026-04-15T19:01:31.103 [cplayer][v] libavfilter     11.14.100
+2026-04-15T19:01:31.103 [cplayer][v] libavformat     62.12.100
+2026-04-15T19:01:31.103 [cplayer][v] libavutil       60.26.100
+2026-04-15T19:01:31.104 [cplayer][v] libswresample   6.3.100
+2026-04-15T19:01:31.104 [cplayer][v] libswscale      9.5.100
+2026-04-15T19:01:31.105 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T19:01:31.105 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T19:01:31.105 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T19:01:31.106 [cplayer][v] Waiting for scripts...
+2026-04-15T19:01:31.106 [cplayer][v] Done loading scripts.
+2026-04-15T19:01:31.106 [libmpv_render][v] GL_VERSION='4.1 Metal - 90.5'
+2026-04-15T19:01:31.106 [libmpv_render][v] Detected desktop OpenGL 4.1.
+2026-04-15T19:01:31.106 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T19:01:31.106 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T19:01:31.106 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='4.10'
+2026-04-15T19:01:31.106 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T19:01:31.107 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T19:01:31.107 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T19:01:31.107 [libmpv_render][error] after creating texture: OpenGL error INVALID_ENUM.
+2026-04-15T19:01:31.107 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T19:01:31.108 [libmpv_render][v] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+2026-04-15T19:01:31.108 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T19:01:31.108 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T19:01:31.108 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T19:01:41.815 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T19:01:41.816 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T19:01:41.816 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T19:01:41.816 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T19:01:41.816 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T19:01:41.816 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T19:01:41.816 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T19:01:41.816 [ytdl_hook][v] playlist hook
+2026-04-15T19:01:41.817 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T19:01:41.817 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T19:01:41.817 [demux][v] Trying demuxers for level=normal.
+2026-04-15T19:01:41.817 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T19:01:41.855 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T19:01:41.855 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T19:01:41.860 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T19:01:41.861 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T19:01:41.861 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T19:01:41.861 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T19:01:41.861 [lavf][v] select track 0
+2026-04-15T19:01:41.862 [lavf][v] select track 1
+2026-04-15T19:01:41.862 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T19:01:41.862 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T19:01:41.862 [display-tags][info] File tags:
+2026-04-15T19:01:41.862 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T19:01:41.862 [vd][v] Container reported FPS: 29.970031
+2026-04-15T19:01:41.862 [vd][v] Codec list:
+2026-04-15T19:01:41.863 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T19:01:41.863 [vd][v] Opening decoder h264
+2026-04-15T19:01:41.863 [vd][v] No hardware decoding requested.
+2026-04-15T19:01:41.863 [vd][v] Using software decoding.
+2026-04-15T19:01:41.863 [vd][v] Detected 12 logical cores.
+2026-04-15T19:01:41.863 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T19:01:41.864 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T19:01:41.864 [vf][v] User filter list:
+2026-04-15T19:01:41.864 [vf][v] (empty)
+2026-04-15T19:01:41.864 [ad][v] Codec list:
+2026-04-15T19:01:41.864 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T19:01:41.864 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T19:01:41.864 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T19:01:41.864 [ad][v] Opening decoder aac
+2026-04-15T19:01:41.864 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T19:01:41.865 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T19:01:41.865 [user_filter_wrapper][v] Setting option 'graph' = 'pan=stereo|c0=c0|c1=c1,asetnsamples=n=1024,ametadata=mode=print:file=pipe\\:\/\/\/./pipe/aiplayer-audio-24450' (flags = 0)
+2026-04-15T19:01:41.865 [ffmpeg][error] Parsed_pan_0: Expected out channel name, got "c0=c0"
+2026-04-15T19:01:41.865 [ffmpeg][error] AVFilterGraph: Error initializing filters
+2026-04-15T19:01:41.865 [lavfi][fatal] parsing the filter graph failed
+2026-04-15T19:01:41.865 [user_filter_wrapper][error] Creating filter 'lavfi' failed.
+2026-04-15T19:01:41.865 [cplayer][error] Audio filter initialized failed!
+2026-04-15T19:01:41.865 [lavf][v] deselect track 1
+2026-04-15T19:01:41.865 [cplayer][info] Audio: no audio
+2026-04-15T19:01:41.866 [cplayer][v] Starting playback...
+2026-04-15T19:01:41.873 [vd][v] Using software decoding.
+2026-04-15T19:01:41.873 [vd][v] Decoder format: 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/auto CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:01:41.873 [vd][v] Using container aspect ratio.
+2026-04-15T19:01:41.873 [vf][v] [in] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:01:41.874 [vf][v] [userdeint] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:01:41.874 [vf][v] [userdeint] (disabled)
+2026-04-15T19:01:41.874 [vf][v] [autovflip] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:01:41.874 [vf][v] [autovflip] (disabled)
+2026-04-15T19:01:41.874 [vf][v] [autorotate] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:01:41.874 [vf][v] [autorotate] (disabled)
+2026-04-15T19:01:41.874 [vf][v] [convert] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:01:41.874 [vf][v] [convert] (disabled)
+2026-04-15T19:01:41.874 [vf][v] [out] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:01:41.874 [cplayer][info] VO: [libmpv] 1920x1080 yuv420p
+2026-04-15T19:01:41.875 [cplayer][v] VO: Description: render API for libmpv
+2026-04-15T19:01:41.875 [vo/libmpv][v] reconfig to 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:01:41.929 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T19:01:41.929 [libmpv_render][v] Video source: 1920x1080 (1:1)
+2026-04-15T19:01:41.929 [libmpv_render][v] Video display: (0, 0) 1920x1080 -> (0, 43) 2136x1201
+2026-04-15T19:01:41.929 [libmpv_render][v] Video scale: 1.112500/1.112037
+2026-04-15T19:01:41.929 [libmpv_render][v] OSD borders: l=0 t=43 r=0 b=44
+2026-04-15T19:01:41.929 [libmpv_render][v] Video borders: l=0 t=43 r=0 b=44
+2026-04-15T19:01:41.929 [libmpv_render][v] Texture for plane 0: 1920x1080
+2026-04-15T19:01:41.930 [libmpv_render][v] Texture for plane 1: 960x540
+2026-04-15T19:01:41.930 [libmpv_render][v] Texture for plane 2: 960x540
+2026-04-15T19:01:41.930 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T19:01:41.930 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T19:01:41.930 [cplayer][v] first video frame after restart shown
+2026-04-15T19:01:41.930 [cplayer][v] playback restart complete @ 0.043000, audio=eof, video=playing
+2026-04-15T19:01:41.930 [libmpv_render][v] Dither to 8.
+2026-04-15T19:01:41.937 [osd/libass][v] libass API version: 0x1704000
+2026-04-15T19:01:41.938 [osd/libass][v] libass source: tarball: 0.17.4
+2026-04-15T19:01:41.938 [osd/libass][v] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 14.1.0 (COMPLEX)
+2026-04-15T19:01:41.938 [osd/libass][v] Setting up fonts...
+2026-04-15T19:01:41.938 [osd/libass][v] Using font provider coretext
+2026-04-15T19:01:41.938 [osd/libass][v] Done.
+2026-04-15T19:04:45.391 createMpv: begin
+2026-04-15T19:04:45.399 createMpv: mpv_create() succeeded
+2026-04-15T19:04:45.408 createMpv: mpv_initialize() => 0 (success)
+2026-04-15T19:04:45.409 injectAudioFilter: mpv_command af add => 0 (success), filter=lavfi=[pan=stereo|c0=c0|c1=c1,asetnsamples=n=1024,ametadata=mode=print:file=pipe\\:\/\/\/./pipe/aiplayer-audio-31183]
+2026-04-15T19:04:45.409 initializeRenderContext: creating libmpv render context
+2026-04-15T19:04:45.414 initializeRenderContext: mpv_render_context_create() => 0 (success)
+2026-04-15T19:04:45.442 [cplayer][v] Applying profile 'sw-fast'...
+2026-04-15T19:04:45.442 [cplayer][v] Setting option 'sws-scaler' = 'bilinear' (flags = 4)
+2026-04-15T19:04:45.442 [cplayer][v] Setting option 'sws-fast' = 'yes' (flags = 4)
+2026-04-15T19:04:45.442 [cplayer][v] Setting option 'zimg-scaler' = 'bilinear' (flags = 4)
+2026-04-15T19:04:45.442 [cplayer][v] Setting option 'zimg-dither' = 'no' (flags = 4)
+2026-04-15T19:04:45.443 [cplayer][v] mpv v0.41.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+2026-04-15T19:04:45.443 [cplayer][v] libplacebo version: v7.360.1
+2026-04-15T19:04:45.443 [cplayer][v] FFmpeg version: 8.1
+2026-04-15T19:04:45.443 [cplayer][v] FFmpeg library versions:
+2026-04-15T19:04:45.443 [cplayer][v] libavcodec      62.28.100
+2026-04-15T19:04:45.443 [cplayer][v] libavdevice     62.3.100
+2026-04-15T19:04:45.444 [cplayer][v] libavfilter     11.14.100
+2026-04-15T19:04:45.444 [cplayer][v] libavformat     62.12.100
+2026-04-15T19:04:45.444 [cplayer][v] libavutil       60.26.100
+2026-04-15T19:04:45.444 [cplayer][v] libswresample   6.3.100
+2026-04-15T19:04:45.444 [cplayer][v] libswscale      9.5.100
+2026-04-15T19:04:45.445 [cplayer][v] Configuration: -Dbuild-date=false -Dhtml-build=enabled -Djavascript=enabled -Dlibmpv=true -Dlua=luajit -Dlibarchive=enabled -Duchardet=enabled -Dvulkan=enabled -Dprefix=/opt/homebrew/Cellar/mpv/0.41.0_4 -Ddatadir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/mpv -Dlibdir=/opt/homebrew/Cellar/mpv/0.41.0_4/lib -Dmandir=/opt/homebrew/Cellar/mpv/0.41.0_4/share/man -Dsysconfdir=/opt/homebrew/etc/mpv -Dbuildtype=release -Dwrap_mode=nofallback
+2026-04-15T19:04:45.445 [cplayer][v] List of enabled features: avfoundation bsd-fstatfs cocoa coreaudio cplugins darwin ffmpeg gl gl-cocoa glob glob-posix gpl iconv javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo luajit mac-thread-name macos-10-15-4-features macos-11-3-features macos-11-features macos-12-features macos-cocoa-cb macos-media-player macos-touchbar posix posix-shm rubberband rubberband-3 swift uchardet vapoursynth vector videotoolbox-gl videotoolbox-pl vk-khr-display vulkan zimg zimg-st428 zlib
+2026-04-15T19:04:45.445 [clipboard][v] Initialized mac clipboard backend.
+2026-04-15T19:04:45.445 [cplayer][v] Waiting for scripts...
+2026-04-15T19:04:45.445 [cplayer][v] Done loading scripts.
+2026-04-15T19:04:45.446 [libmpv_render][v] GL_VERSION='4.1 Metal - 90.5'
+2026-04-15T19:04:45.446 [libmpv_render][v] Detected desktop OpenGL 4.1.
+2026-04-15T19:04:45.446 [libmpv_render][v] GL_VENDOR='Apple'
+2026-04-15T19:04:45.446 [libmpv_render][v] GL_RENDERER='Apple M3 Pro'
+2026-04-15T19:04:45.446 [libmpv_render][v] GL_SHADING_LANGUAGE_VERSION='4.10'
+2026-04-15T19:04:45.446 [libmpv_render][v] Loaded extension GL_APPLE_rgb_422.
+2026-04-15T19:04:45.446 [libmpv_render][v] GL_*_swap_control extension missing.
+2026-04-15T19:04:45.447 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T19:04:45.447 [libmpv_render][error] after creating texture: OpenGL error INVALID_ENUM.
+2026-04-15T19:04:45.447 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T19:04:45.447 [libmpv_render][v] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+2026-04-15T19:04:45.447 [libmpv_render][v] Loading hwdec driver 'videotoolbox'
+2026-04-15T19:04:45.447 [libmpv_render][v] Loading hwdec driver 'vulkan'
+2026-04-15T19:04:45.448 [libmpv_render/vulkan][v] This is not a libplacebo vulkan gpu api context.
+2026-04-15T19:04:53.364 [cplayer][v] Set property: pause=false -> 1
+2026-04-15T19:04:53.365 [cplayer][v] Running hook: auto_profiles/on_before_start_file
+2026-04-15T19:04:53.365 [cplayer][v] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+2026-04-15T19:04:53.365 [cplayer][v] Running hook: auto_profiles/on_load
+2026-04-15T19:04:53.365 [cplayer][v] Failed sending hook command auto_profiles/on_load. Removing hook.
+2026-04-15T19:04:53.365 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T19:04:53.366 [cplayer][v] Running hook: ytdl_hook/on_load
+2026-04-15T19:04:53.366 [ytdl_hook][v] playlist hook
+2026-04-15T19:04:53.366 [bdmv/bluray][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T19:04:53.366 [file][v] Opening /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T19:04:53.366 [demux][v] Trying demuxers for level=normal.
+2026-04-15T19:04:53.380 [lavf][v] Found 'mov,mp4,m4a,3gp,3g2,mj2' at score=100 size=2048.
+2026-04-15T19:04:53.411 [demux][v] Detected file format: mov,mp4,m4a,3gp,3g2,mj2 (libavformat)
+2026-04-15T19:04:53.411 [cplayer][v] Opening done: /Users/zhaopeng.charles/Downloads/432055065-1-208.mp4
+2026-04-15T19:04:53.416 [find_files][v] Loading external files in /Users/zhaopeng.charles/Downloads/
+2026-04-15T19:04:53.417 [cplayer][v] Running hook: auto_profiles/on_preloaded
+2026-04-15T19:04:53.417 [cplayer][v] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+2026-04-15T19:04:53.417 [cplayer][v] Running hook: ytdl_hook/on_preloaded
+2026-04-15T19:04:53.417 [lavf][v] select track 0
+2026-04-15T19:04:53.417 [lavf][v] select track 1
+2026-04-15T19:04:53.417 [cplayer][info] ● Video  --vid=1  (h264 1920x1080 29.97 fps) [default]
+2026-04-15T19:04:53.417 [cplayer][info] ● Audio  --aid=1  (aac 2ch 48000 Hz 109 kbps) [default]
+2026-04-15T19:04:53.417 [display-tags][info] File tags:
+2026-04-15T19:04:53.418 [display-tags][info] Description: Packed by Bilibili XCoder v2.0.2
+2026-04-15T19:04:53.418 [vd][v] Container reported FPS: 29.970031
+2026-04-15T19:04:53.419 [vd][v] Codec list:
+2026-04-15T19:04:53.419 [vd][v] h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T19:04:53.419 [vd][v] Opening decoder h264
+2026-04-15T19:04:53.420 [vd][v] No hardware decoding requested.
+2026-04-15T19:04:53.420 [vd][v] Using software decoding.
+2026-04-15T19:04:53.420 [vd][v] Detected 12 logical cores.
+2026-04-15T19:04:53.420 [vd][v] Requesting 13 threads for decoding.
+2026-04-15T19:04:53.422 [vd][v] Selected decoder: h264 - H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+2026-04-15T19:04:53.422 [vf][v] User filter list:
+2026-04-15T19:04:53.422 [vf][v] (empty)
+2026-04-15T19:04:53.422 [ad][v] Codec list:
+2026-04-15T19:04:53.422 [ad][v] aac - AAC (Advanced Audio Coding)
+2026-04-15T19:04:53.422 [ad][v] aac_fixed (aac) - AAC (Advanced Audio Coding)
+2026-04-15T19:04:53.422 [ad][v] aac_at (aac) - aac (AudioToolbox)
+2026-04-15T19:04:53.422 [ad][v] Opening decoder aac
+2026-04-15T19:04:53.422 [ad][v] Requesting 1 threads for decoding.
+2026-04-15T19:04:53.424 [ad][v] Selected decoder: aac - AAC (Advanced Audio Coding)
+2026-04-15T19:04:53.424 [user_filter_wrapper][v] Setting option 'graph' = 'pan=stereo|c0=c0|c1=c1,asetnsamples=n=1024,ametadata=mode=print:file=pipe\\:\/\/\/./pipe/aiplayer-audio-31183' (flags = 0)
+2026-04-15T19:04:53.425 [ffmpeg][error] Parsed_pan_0: Expected out channel name, got "c0=c0"
+2026-04-15T19:04:53.425 [ffmpeg][error] AVFilterGraph: Error initializing filters
+2026-04-15T19:04:53.425 [lavfi][fatal] parsing the filter graph failed
+2026-04-15T19:04:53.426 [user_filter_wrapper][error] Creating filter 'lavfi' failed.
+2026-04-15T19:04:53.426 [cplayer][error] Audio filter initialized failed!
+2026-04-15T19:04:53.426 [lavf][v] deselect track 1
+2026-04-15T19:04:53.426 [cplayer][info] Audio: no audio
+2026-04-15T19:04:53.426 [cplayer][v] Starting playback...
+2026-04-15T19:04:53.435 [vd][v] Using software decoding.
+2026-04-15T19:04:53.436 [vd][v] Decoder format: 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/auto CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:04:53.436 [vd][v] Using container aspect ratio.
+2026-04-15T19:04:53.436 [vf][v] [in] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:04:53.436 [vf][v] [userdeint] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:04:53.436 [vf][v] [userdeint] (disabled)
+2026-04-15T19:04:53.436 [vf][v] [autovflip] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:04:53.436 [vf][v] [autovflip] (disabled)
+2026-04-15T19:04:53.436 [vf][v] [autorotate] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:04:53.436 [vf][v] [autorotate] (disabled)
+2026-04-15T19:04:53.437 [vf][v] [convert] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:04:53.437 [vf][v] [convert] (disabled)
+2026-04-15T19:04:53.437 [vf][v] [out] 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:04:53.437 [cplayer][info] VO: [libmpv] 1920x1080 yuv420p
+2026-04-15T19:04:53.437 [cplayer][v] VO: Description: render API for libmpv
+2026-04-15T19:04:53.437 [vo/libmpv][v] reconfig to 1920x1080 yuv420p bt.709/bt.709/bt.1886/limited/display CL=mpeg2/4/h264 crop=1920x1080+0+0 A=none
+2026-04-15T19:04:53.498 [libmpv_render][v] Window size: 2136x1288 (Borders: l=0 t=0 r=0 b=0)
+2026-04-15T19:04:53.498 [libmpv_render][v] Video source: 1920x1080 (1:1)
+2026-04-15T19:04:53.498 [libmpv_render][v] Video display: (0, 0) 1920x1080 -> (0, 43) 2136x1201
+2026-04-15T19:04:53.498 [libmpv_render][v] Video scale: 1.112500/1.112037
+2026-04-15T19:04:53.498 [libmpv_render][v] OSD borders: l=0 t=43 r=0 b=44
+2026-04-15T19:04:53.498 [libmpv_render][v] Video borders: l=0 t=43 r=0 b=44
+2026-04-15T19:04:53.498 [libmpv_render][v] Texture for plane 0: 1920x1080
+2026-04-15T19:04:53.499 [libmpv_render][v] Texture for plane 1: 960x540
+2026-04-15T19:04:53.499 [libmpv_render][v] Texture for plane 2: 960x540
+2026-04-15T19:04:53.499 [libmpv_render][v] Testing FBO format rgba16f
+2026-04-15T19:04:53.499 [libmpv_render][v] Using FBO format rgba16f.
+2026-04-15T19:04:53.499 [cplayer][v] first video frame after restart shown
+2026-04-15T19:04:53.499 [cplayer][v] playback restart complete @ 0.043000, audio=eof, video=playing
+2026-04-15T19:04:53.500 [libmpv_render][v] Dither to 8.
+2026-04-15T19:04:53.509 [osd/libass][v] libass API version: 0x1704000
+2026-04-15T19:04:53.509 [osd/libass][v] libass source: tarball: 0.17.4
+2026-04-15T19:04:53.510 [osd/libass][v] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 14.1.0 (COMPLEX)
+2026-04-15T19:04:53.510 [osd/libass][v] Setting up fonts...
+2026-04-15T19:04:53.510 [osd/libass][v] Using font provider coretext
+2026-04-15T19:04:53.510 [osd/libass][v] Done.

@@ -867,6 +867,7 @@ CMakeFiles/aiplayer.dir/aiplayer_autogen/mocs_compilation.cpp.o: aiplayer_autoge
   /opt/homebrew/include/mpv/client.h \
   /opt/homebrew/include/mpv/render.h \
   /opt/homebrew/include/mpv/render_gl.h \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QProcess \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q17memory.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q20algorithm.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q20bit.h \
@@ -919,6 +920,7 @@ CMakeFiles/aiplayer.dir/aiplayer_autogen/mocs_compilation.cpp.o: aiplayer_autoge
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qglobalstatic.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qhash.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qhashfunctions.h \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qiodevice.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qiodevicebase.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qiterable.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qiterator.h \
@@ -942,6 +944,7 @@ CMakeFiles/aiplayer.dir/aiplayer_autogen/mocs_compilation.cpp.o: aiplayer_autoge
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qoverload.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpair.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpoint.h \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qprocess.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qprocessordetection.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qrect.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qrefcount.h \
@@ -2934,6 +2937,7 @@ CMakeFiles/aiplayer.dir/src/mainwindow.cpp.o: /Users/zhaopeng.charles/code/magec
   /opt/homebrew/include/mpv/render_gl.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QCoreApplication \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QFileInfo \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QProcess \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QTimer \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q17memory.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q20bit.h \
@@ -3026,6 +3030,7 @@ CMakeFiles/aiplayer.dir/src/mainwindow.cpp.o: /Users/zhaopeng.charles/code/magec
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qoverload.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpair.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpoint.h \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qprocess.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qprocessordetection.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qrect.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qrefcount.h \
@@ -4014,7 +4019,9 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QDateTime \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QDir \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QEvent \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QFile \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QMetaObject \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QProcess \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QTimer \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q17memory.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q20bit.h \
@@ -4107,6 +4114,7 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qoverload.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpair.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpoint.h \
+  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qprocess.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qprocessordetection.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qrect.h \
   /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qrefcount.h \
@@ -4248,8 +4256,6 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qtimezone.h:
 
-/opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qiodevice.h:
-
 /opt/homebrew/opt/qt/lib/QtWidgets.framework/Headers/QFileDialog:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qfile.h:
@@ -4378,6 +4384,8 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qscopeguard.h:
 
+/opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qprocess.h:
+
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpoint.h:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpair.h:
@@ -4411,6 +4419,8 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qiterable.h:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qiodevicebase.h:
+
+/opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qiodevice.h:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qhashfunctions.h:
 
@@ -4475,6 +4485,8 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o: /Users/zhaopeng.charles/code/magech
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q20type_traits.h:
 
 /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/q20bit.h:
+
+/opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QProcess:
 
 /opt/homebrew/include/mpv/render_gl.h:
 

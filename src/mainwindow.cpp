@@ -9,6 +9,8 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSlider>
+#include <QComboBox>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -60,18 +62,37 @@ MainWindow::MainWindow(QWidget *parent)
 
     layout->addWidget(videoContainer, 1);
 
+    auto *progressLayout = new QHBoxLayout();
+    m_timeLabel = new QLabel(QStringLiteral("00:00 / 00:00"), central);
+    m_seekSlider = new QSlider(Qt::Horizontal, central);
+    m_seekSlider->setRange(0, 1000);
+    progressLayout->addWidget(m_timeLabel);
+    progressLayout->addWidget(m_seekSlider);
+    layout->addLayout(progressLayout);
+
     auto *controls = new QHBoxLayout();
     controls->setSpacing(8);
 
     auto *openButton = new QPushButton(QStringLiteral("打开视频"), central);
     m_playButton = new QPushButton(QStringLiteral("播放"), central);
     m_pauseButton = new QPushButton(QStringLiteral("暂停"), central);
+    
+    m_speedComboBox = new QComboBox(central);
+    m_speedComboBox->addItem("0.5x", 0.5);
+    m_speedComboBox->addItem("1.0x", 1.0);
+    m_speedComboBox->addItem("1.25x", 1.25);
+    m_speedComboBox->addItem("1.5x", 1.5);
+    m_speedComboBox->addItem("2.0x", 2.0);
+    m_speedComboBox->setCurrentIndex(1); // Default 1.0x
+    
     m_statusLabel = new QLabel(QStringLiteral("未加载文件"), central);
     m_statusLabel->setMinimumWidth(320);
 
     controls->addWidget(openButton);
     controls->addWidget(m_playButton);
     controls->addWidget(m_pauseButton);
+    controls->addWidget(new QLabel(QStringLiteral("倍速:")));
+    controls->addWidget(m_speedComboBox);
     controls->addStretch(1);
     controls->addWidget(m_statusLabel);
 
@@ -82,8 +103,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_playButton, &QPushButton::clicked, this, &MainWindow::play);
     connect(m_pauseButton, &QPushButton::clicked, this, &MainWindow::pause);
     connect(m_playerWidget, &MpvWidget::playbackStateChanged, this, &MainWindow::updatePlaybackState);
+    connect(m_playerWidget, &MpvWidget::timePosChanged, this, &MainWindow::onTimePosChanged);
+    connect(m_playerWidget, &MpvWidget::durationChanged, this, &MainWindow::onDurationChanged);
     connect(m_playerWidget, &MpvWidget::fileLoaded, this, &MainWindow::updateLoadedFile);
     connect(m_playerWidget, &MpvWidget::errorOccurred, this, &MainWindow::showError);
+
+    connect(m_seekSlider, &QSlider::sliderPressed, this, [this]() { m_isSeeking = true; });
+    connect(m_seekSlider, &QSlider::sliderReleased, this, [this]() { m_isSeeking = false; m_playerWidget->seek(m_seekSlider->value() / 1000.0 * m_duration); });
+    connect(m_seekSlider, &QSlider::sliderMoved, this, &MainWindow::onSeekSliderMoved);
+    connect(m_speedComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::onSpeedChanged);
 
     // 订阅 ASR 文本更新，更新字幕 overlay
     connect(m_playerWidget, &MpvWidget::asrTextUpdated, this, [this](const QString &text) {
@@ -155,4 +183,37 @@ void MainWindow::updateLoadedFile(const QString &filePath) {
 
 void MainWindow::showError(const QString &message) {
     QMessageBox::critical(this, QStringLiteral("AIPlayer 错误"), message);
+}
+
+QString MainWindow::formatTime(double seconds) {
+    int h = static_cast<int>(seconds) / 3600;
+    int m = (static_cast<int>(seconds) % 3600) / 60;
+    int s = static_cast<int>(seconds) % 60;
+    if (h > 0) {
+        return QString::asprintf("%02d:%02d:%02d", h, m, s);
+    }
+    return QString::asprintf("%02d:%02d", m, s);
+}
+
+void MainWindow::onTimePosChanged(double pos) {
+    if (m_isSeeking || m_duration <= 0.0) return;
+    
+    m_seekSlider->setValue(static_cast<int>(pos / m_duration * 1000));
+    m_timeLabel->setText(QStringLiteral("%1 / %2").arg(formatTime(pos), formatTime(m_duration)));
+}
+
+void MainWindow::onDurationChanged(double duration) {
+    m_duration = duration;
+    m_timeLabel->setText(QStringLiteral("00:00 / %1").arg(formatTime(duration)));
+}
+
+void MainWindow::onSeekSliderMoved(int value) {
+    if (m_duration <= 0.0) return;
+    double pos = value / 1000.0 * m_duration;
+    m_timeLabel->setText(QStringLiteral("%1 / %2").arg(formatTime(pos), formatTime(m_duration)));
+}
+
+void MainWindow::onSpeedChanged(int index) {
+    double speed = m_speedComboBox->itemData(index).toDouble();
+    m_playerWidget->setPlaybackSpeed(speed);
 }

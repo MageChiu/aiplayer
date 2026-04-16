@@ -10,8 +10,6 @@
 #include <cstdlib>
 
 int main(int argc, char *argv[]) {
-    freopen("/tmp/aiplayer_stderr.log", "w", stderr);
-    freopen("/tmp/aiplayer_stdout.log", "w", stdout);
     setenv("PATH", "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin", 1);
     setenv("DYLD_LIBRARY_PATH", "/opt/homebrew/lib:/usr/local/lib", 1);
     setenv("DYLD_FALLBACK_LIBRARY_PATH", "/opt/homebrew/lib:/usr/local/lib", 1);
@@ -21,8 +19,8 @@ int main(int argc, char *argv[]) {
 
     QSurfaceFormat format;
     format.setRenderableType(QSurfaceFormat::OpenGL);
-    format.setVersion(2, 1);
-    format.setProfile(QSurfaceFormat::NoProfile);
+    format.setVersion(4, 1);
+    format.setProfile(QSurfaceFormat::CoreProfile);
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);

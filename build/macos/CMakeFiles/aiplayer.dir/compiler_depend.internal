@@ -4193,6 +4193,7 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qdatetime.h
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qcalendar.h
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qlocale.h
+ /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QDebug
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QDir
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qdir.h
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qdirlisting.h
@@ -4202,6 +4203,17 @@ CMakeFiles/aiplayer.dir/src/mpvwidget.cpp.o
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qfileinfo.h
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qtimezone.h
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QEvent
+ /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/QLocalServer
+ /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qlocalserver.h
+ /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetworkglobal.h
+ /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetwork-config.h
+ /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qtnetworkexports.h
+ /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qabstractsocket.h
+ /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qproperty.h
+ /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/qpropertyprivate.h
+ /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/source_location
+ /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/QLocalSocket
+ /opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers/qlocalsocket.h
  /opt/homebrew/opt/qt/lib/QtCore.framework/Headers/QMetaObject
  /opt/homebrew/opt/qt/lib/QtGui.framework/Headers/QOpenGLContext
  /opt/homebrew/opt/qt/lib/QtGui.framework/Headers/qopenglcontext.h
