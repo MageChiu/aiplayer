@@ -1,3 +1,0 @@
-/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/CMakeFiles/whispercpp-populate.dir
-/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/CMakeFiles/edit_cache.dir
-/Users/zhaopeng.charles/code/magechiu/aiplayer/build/_deps/whispercpp-subbuild/CMakeFiles/rebuild_cache.dir

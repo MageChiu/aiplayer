@@ -21,3 +21,4 @@
 	@rpath/libggml-base.0.dylib (compatibility version 0.0.0, current version 0.9.8)
 	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 2000.67.0)
 	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)
+	@executable_path/../Frameworks/libunwind.1.dylib (compatibility version 1.0.0, current version 1.0.0)

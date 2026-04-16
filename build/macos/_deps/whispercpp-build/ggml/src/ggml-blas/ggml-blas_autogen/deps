@@ -1,8 +1,0 @@
-ggml-blas_autogen/timestamp: \
-	/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-blas/CMakeLists.txt \
-	/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/_deps/whispercpp-src/ggml/src/ggml-blas/ggml-blas.cpp \
-	/opt/homebrew/share/cmake/Modules/CheckFunctionExists.cmake \
-	/opt/homebrew/share/cmake/Modules/FindBLAS.cmake \
-	/opt/homebrew/share/cmake/Modules/FindPackageHandleStandardArgs.cmake \
-	/opt/homebrew/share/cmake/Modules/FindPackageMessage.cmake \
-	/opt/homebrew/bin/cmake
