@@ -19,7 +19,6 @@ jobs:
           brew install cmake ninja pkg-config
           brew install mpv
           brew install ffmpeg
-          brew install libtorrent-rasterbar
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -59,7 +58,6 @@ jobs:
           brew install cmake ninja pkg-config
           brew install mpv
           brew install ffmpeg
-          brew install libtorrent-rasterbar
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
