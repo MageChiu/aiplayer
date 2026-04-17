@@ -120,6 +120,13 @@ if (-not (Test-Path $exePath)) {
 if (Test-Path $exePath) {
     $destExe = Join-Path $DistDir 'aiplayer.exe'
     Copy-Item $exePath $destExe -Force
+
+    Get-ChildItem -Path $BuildDir -Recurse -File -Filter '*.dll' -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -notmatch '^(Qt|libmpv|mpv-2|vcruntime|msvcp|concrt|ucrtbase)' } |
+        ForEach-Object {
+            Copy-Item $_.FullName $DistDir -Force
+        }
+
     Write-Host "[Windows] 构建完成，可执行文件已复制到: $destExe" -ForegroundColor Green
     Write-Host "[Windows] dist 目录: $DistDir" -ForegroundColor Green
 } else {

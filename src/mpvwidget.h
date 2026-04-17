@@ -70,6 +70,7 @@ private:
     void requestUpdate();
     void renderFrame();
     void setPaused(bool paused);
+    bool isEofReached() const;
     void appendMpvLog(const QString &message);
     QString mpvErrorString(int errorCode) const;
     void extractAudioWithFFmpeg(const QString &videoPath);
