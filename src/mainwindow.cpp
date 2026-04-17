@@ -83,6 +83,8 @@ MainWindow::MainWindow(QWidget *parent)
     auto *openUrlButton = new QPushButton(QStringLiteral("打开网络流"), central);
     m_playButton = new QPushButton(QStringLiteral("播放"), central);
     m_pauseButton = new QPushButton(QStringLiteral("暂停"), central);
+    auto *stopButton = new QPushButton(QStringLiteral("停止"), central);
+    auto *replayButton = new QPushButton(QStringLiteral("重播"), central);
     
     m_speedComboBox = new QComboBox(central);
     m_speedComboBox->addItem("0.5x", 0.5);
@@ -118,6 +120,8 @@ MainWindow::MainWindow(QWidget *parent)
     controls->addWidget(openUrlButton);
     controls->addWidget(m_playButton);
     controls->addWidget(m_pauseButton);
+    controls->addWidget(stopButton);
+    controls->addWidget(replayButton);
     controls->addWidget(new QLabel(QStringLiteral("倍速:")));
     controls->addWidget(m_speedComboBox);
     
@@ -140,6 +144,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(openUrlButton, &QPushButton::clicked, this, &MainWindow::openUrl);
     connect(m_playButton, &QPushButton::clicked, this, &MainWindow::play);
     connect(m_pauseButton, &QPushButton::clicked, this, &MainWindow::pause);
+    connect(stopButton, &QPushButton::clicked, this, &MainWindow::stop);
+    connect(replayButton, &QPushButton::clicked, this, &MainWindow::replay);
     connect(m_playerWidget, &MpvWidget::playbackStateChanged, this, &MainWindow::updatePlaybackState);
     connect(m_playerWidget, &MpvWidget::timePosChanged, this, &MainWindow::onTimePosChanged);
     connect(m_playerWidget, &MpvWidget::durationChanged, this, &MainWindow::onDurationChanged);
@@ -149,7 +155,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_playerWidget, &MpvWidget::errorOccurred, this, &MainWindow::showError);
 
     connect(m_seekSlider, &QSlider::sliderPressed, this, [this]() { m_isSeeking = true; });
-    connect(m_seekSlider, &QSlider::sliderReleased, this, [this]() { m_isSeeking = false; m_playerWidget->seek(m_seekSlider->value() / 1000.0 * m_duration); });
+    connect(m_seekSlider, &QSlider::sliderReleased, this, [this]() {
+        if (m_duration > 0.0) {
+            m_playerWidget->seek(m_seekSlider->value() / 1000.0 * m_duration);
+        }
+        m_isSeeking = false;
+    });
     connect(m_seekSlider, &QSlider::sliderMoved, this, &MainWindow::onSeekSliderMoved);
     connect(m_speedComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::onSpeedChanged);
     connect(m_settingsButton, &QPushButton::clicked, this, &MainWindow::openSettings);
@@ -163,6 +174,8 @@ MainWindow::MainWindow(QWidget *parent)
     openUrlButton->setFocusPolicy(Qt::NoFocus);
     m_playButton->setFocusPolicy(Qt::NoFocus);
     m_pauseButton->setFocusPolicy(Qt::NoFocus);
+    stopButton->setFocusPolicy(Qt::NoFocus);
+    replayButton->setFocusPolicy(Qt::NoFocus);
     m_seekSlider->setFocusPolicy(Qt::NoFocus);
     m_speedComboBox->setFocusPolicy(Qt::NoFocus);
 
@@ -250,6 +263,16 @@ void MainWindow::play() {
 
 void MainWindow::pause() {
     m_playerWidget->pause();
+}
+
+void MainWindow::stop() {
+    m_playerWidget->stop();
+    m_seekSlider->setValue(0);
+    m_timeLabel->setText(QStringLiteral("00:00 / %1").arg(formatTime(m_duration)));
+}
+
+void MainWindow::replay() {
+    m_playerWidget->replay();
 }
 
 void MainWindow::updatePlaybackState(bool paused) {

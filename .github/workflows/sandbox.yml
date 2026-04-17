@@ -7,6 +7,83 @@ on:
       - ci-sandbox/**
 
 jobs:
+  build-macos-intel:
+    runs-on: macos-15-intel
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies (macOS)
+        run: |
+          brew install cmake ninja pkg-config nasm
+          brew install mpv
+          brew install ffmpeg
+
+      - name: Setup nasm in PATH
+        run: |
+          echo "$(brew --prefix nasm)/bin" >> "$GITHUB_PATH"
+          "$(brew --prefix nasm)/bin/nasm" -v
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.6.2'
+          host: 'mac'
+          target: 'desktop'
+          arch: 'clang_64'
+
+      - name: Build macOS App
+        run: |
+          chmod +x scripts/build_macos.sh
+          ./scripts/build_macos.sh --release
+
+      - name: Diagnose macOS bundle
+        if: always()
+        run: |
+          echo "== .deps =="
+          find .deps -maxdepth 3 -type f | sort || true
+          echo "== vcpkg_installed =="
+          find vcpkg_installed -maxdepth 3 -type f | sort || true
+          echo "== otool app =="
+          otool -L dist/macos/aiplayer.app/Contents/MacOS/aiplayer || true
+          echo "== Homebrew path scan =="
+          python3 - <<'PY'
+          import os, subprocess
+          root='dist/macos/aiplayer.app/Contents'
+          issues=[]
+          for base, _, files in os.walk(root):
+              for f in files:
+                  path=os.path.join(base,f)
+                  out=subprocess.run(['otool','-L',path],capture_output=True,text=True,check=False)
+                  if out.returncode != 0:
+                      continue
+                  for line in out.stdout.splitlines()[1:]:
+                      dep=line.strip().split(' ',1)[0]
+                      if dep.startswith('/opt/homebrew/') or dep.startswith('/usr/local/'):
+                          issues.append((os.path.relpath(path, root), dep))
+          if issues:
+              for rel,dep in issues:
+                  print(f'{rel} -> {dep}')
+          else:
+              print('OK: no Homebrew absolute dependencies found')
+          PY
+
+      - name: Archive macOS Build
+        if: success()
+        run: |
+          cd dist/macos
+          zip -r AIPlayer-macOS-x86_64-sandbox.zip aiplayer.app
+          cd ../..
+
+      - name: Upload macOS Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AIPlayer-macOS-x86_64-sandbox
+          path: dist/macos/AIPlayer-macOS-x86_64-sandbox.zip
+
   build-macos-arm64:
     runs-on: macos-14
     steps:
@@ -17,9 +94,14 @@ jobs:
 
       - name: Install dependencies (macOS)
         run: |
-          brew install cmake ninja pkg-config
+          brew install cmake ninja pkg-config nasm
           brew install mpv
           brew install ffmpeg
+
+      - name: Setup nasm in PATH
+        run: |
+          echo "$(brew --prefix nasm)/bin" >> "$GITHUB_PATH"
+          "$(brew --prefix nasm)/bin/nasm" -v
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3

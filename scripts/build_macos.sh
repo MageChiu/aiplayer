@@ -38,6 +38,13 @@ VCPKG_TRIPLET="${VCPKG_TARGET_TRIPLET:-$(detect_vcpkg_triplet)}"
 VCPKG_INSTALLED_DIR="${SRC_DIR}/vcpkg_installed/${VCPKG_TRIPLET}"
 MPV_ROOT="${MPV_ROOT:-${DEPS_DIR}/mpv}"
 
+if command_exists brew && brew list nasm >/dev/null 2>&1; then
+  NASM_BIN="$(brew --prefix nasm)/bin"
+  if [[ -d "${NASM_BIN}" ]]; then
+    export PATH="${NASM_BIN}:${PATH}"
+  fi
+fi
+
 echo "[macOS] 检查依赖..."
 MISSING=()
 
@@ -50,11 +57,14 @@ fi
 if ! command_exists pkg-config; then
   MISSING+=("pkg-config")
 fi
+if ! command_exists nasm; then
+  MISSING+=("nasm")
+fi
 
 if ((${#MISSING[@]} > 0)); then
   echo "[macOS] 检测到缺少以下依赖: ${MISSING[*]}" >&2
   echo "请使用 Homebrew 安装，例如:" >&2
-  echo "  brew install cmake pkg-config mpv" >&2
+  echo "  brew install cmake pkg-config nasm mpv" >&2
   echo "  brew install qt@6" >&2
   echo "安装完成后请确保 Qt6 的 cmake 包可见，例如:" >&2
   echo "  export CMAKE_PREFIX_PATH=\"$(brew --prefix qt@6):${CMAKE_PREFIX_PATH-}\"" >&2
