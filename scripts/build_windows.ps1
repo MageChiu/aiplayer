@@ -29,9 +29,9 @@ if ($missing.Count -gt 0) {
 }
 
 if (-not $vcpkgRoot -or -not (Test-Path $vcpkgRoot)) {
-    Write-Warning '[Windows] 未检测到 VCPKG_ROOT，建议使用 vcpkg 安装 ffmpeg 与 libtorrent。'
+    Write-Warning '[Windows] 未检测到 VCPKG_ROOT，将使用项目内 bootstrap_deps.ps1 以 manifest 模式准备 ffmpeg 与 libtorrent。'
     Write-Host '  参考命令:' -ForegroundColor Yellow
-    Write-Host '    vcpkg install ffmpeg:x64-windows libtorrent:x64-windows' -ForegroundColor Yellow
+    Write-Host '    .\scripts\bootstrap_deps.ps1' -ForegroundColor Yellow
 }
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -40,7 +40,7 @@ $DepsDir = Join-Path $SrcDir '.deps'
 $DefaultVcpkgRoot = Join-Path $DepsDir 'vcpkg'
 $BuildDir = Join-Path $SrcDir 'build/windows'
 $DistDir = Join-Path $SrcDir 'dist/windows'
-$mpvDevRoot = Join-Path $DepsDir 'mpv'
+$mpvDevRoot = if ($env:MPV_ROOT) { $env:MPV_ROOT } else { Join-Path $DepsDir 'mpv' }
 $envMpvInclude = $env:MPV_INCLUDE_DIR
 $envMpvLibrary = $env:MPV_LIBRARY
 
@@ -71,6 +71,10 @@ if ($vcpkgRoot -and (Test-Path $vcpkgRoot)) {
     if (Test-Path $toolchain) {
         $cmakeArgs += "-DCMAKE_TOOLCHAIN_FILE=$toolchain"
     }
+}
+
+if (Test-Path $mpvDevRoot) {
+    $cmakeArgs += "-DMPV_ROOT=$mpvDevRoot"
 }
 
 if ($envMpvInclude -and (Test-Path $envMpvInclude)) {

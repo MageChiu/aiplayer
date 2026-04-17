@@ -36,6 +36,7 @@ detect_vcpkg_triplet() {
 
 VCPKG_TRIPLET="${VCPKG_TARGET_TRIPLET:-$(detect_vcpkg_triplet)}"
 VCPKG_INSTALLED_DIR="${SRC_DIR}/vcpkg_installed/${VCPKG_TRIPLET}"
+MPV_ROOT="${MPV_ROOT:-${DEPS_DIR}/mpv}"
 
 echo "[macOS] 检查依赖..."
 MISSING=()
@@ -45,9 +46,6 @@ if ! command_exists cmake; then
 fi
 if ! command_exists qtpaths6 && ! command_exists qmake6 && ! command_exists qtpaths; then
   MISSING+=("qt6 (qt@6)")
-fi
-if ! command_exists mpv; then
-  MISSING+=("mpv")
 fi
 if ! command_exists pkg-config; then
   MISSING+=("pkg-config")
@@ -77,17 +75,15 @@ if command_exists brew; then
     QT_PREFIX="$(brew --prefix qt@6)"
     QT_CMAKE_PREFIX="${QT_PREFIX}"
   fi
-  if brew list mpv >/dev/null 2>&1; then
-    MPV_PREFIX="$(brew --prefix mpv)"
-    if [[ -f "${MPV_PREFIX}/include/mpv/client.h" ]]; then
-      MPV_INCLUDE_DIR="${MPV_PREFIX}/include"
-    fi
-    if [[ -f "${MPV_PREFIX}/lib/libmpv.dylib" ]]; then
-      MPV_LIBRARY="${MPV_PREFIX}/lib/libmpv.dylib"
-    elif [[ -f "${MPV_PREFIX}/lib/libmpv.2.dylib" ]]; then
-      MPV_LIBRARY="${MPV_PREFIX}/lib/libmpv.2.dylib"
-    fi
-  fi
+fi
+
+if [[ -f "${MPV_ROOT}/include/mpv/client.h" ]]; then
+  MPV_INCLUDE_DIR="${MPV_ROOT}/include"
+fi
+if [[ -f "${MPV_ROOT}/lib/libmpv.dylib" ]]; then
+  MPV_LIBRARY="${MPV_ROOT}/lib/libmpv.dylib"
+elif [[ -f "${MPV_ROOT}/lib/libmpv.2.dylib" ]]; then
+  MPV_LIBRARY="${MPV_ROOT}/lib/libmpv.2.dylib"
 fi
 
 BUILD_DIR="${SRC_DIR}/build/macos"
@@ -119,6 +115,9 @@ if [[ -n "${MPV_INCLUDE_DIR}" ]]; then
 fi
 if [[ -n "${MPV_LIBRARY}" ]]; then
   CMAKE_ARGS+=("-DMPV_LIBRARY=${MPV_LIBRARY}")
+fi
+if [[ -d "${MPV_ROOT}" ]]; then
+  CMAKE_ARGS+=("-DMPV_ROOT=${MPV_ROOT}")
 fi
 
 if [[ -n "${QT_CMAKE_PREFIX}" ]]; then
