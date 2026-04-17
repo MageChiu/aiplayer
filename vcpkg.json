@@ -1,0 +1,17 @@
+{
+  "name": "aiplayer",
+  "version-string": "0.1.0",
+  "builtin-baseline": "b8922ae57c61d4192a504bbb955d19599fa68f2a",
+  "dependencies": [
+    {
+      "name": "ffmpeg",
+      "default-features": false,
+      "features": [
+        "avcodec",
+        "avformat",
+        "swresample"
+      ]
+    },
+    "libtorrent"
+  ]
+}

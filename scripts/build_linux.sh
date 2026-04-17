@@ -17,6 +17,10 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
+SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DEPS_DIR="${SRC_DIR}/.deps"
+VCPKG_ROOT="${VCPKG_ROOT:-${DEPS_DIR}/vcpkg}"
+
 echo "[Linux] 检查依赖..."
 MISSING=()
 
@@ -43,7 +47,9 @@ if ((${#MISSING[@]} > 0)); then
   exit 1
 fi
 
-SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+echo "[Linux] 准备项目内依赖..."
+"${SRC_DIR}/scripts/bootstrap_deps.sh"
+
 BUILD_DIR="${SRC_DIR}/build/linux"
 DIST_DIR="${SRC_DIR}/dist/linux"
 
@@ -53,6 +59,7 @@ CMAKE_ARGS=(
   -S "${SRC_DIR}"
   -B "${BUILD_DIR}"
   -DCMAKE_BUILD_TYPE="${BUILD_TYPE}"
+  -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 )
 
 echo "[Linux] 运行 CMake 配置 (类型: ${BUILD_TYPE})..."

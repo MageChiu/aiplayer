@@ -7,10 +7,9 @@
 // whisper.cpp 头文件
 #include "whisper.h"
 
-#include <QProcess>
-
 #include <atomic>
 #include <fstream>
+#include <memory>
 #include <mutex>
 #include <queue>
 #include <thread>
@@ -18,6 +17,7 @@
 class QOpenGLContext;
 class QTimer;
 class QNetworkAccessManager;
+class TorrentSessionController;
 
 class MpvWidget : public QOpenGLWidget {
     Q_OBJECT
@@ -71,12 +71,13 @@ private:
     void appendMpvLog(const QString &message);
     QString mpvErrorString(int errorCode) const;
     void extractAudioWithFFmpeg(const QString &videoPath);
+    void stopAudioExtraction();
+    void stopTorrentStreaming();
 
     // --- mpv 播放相关 ---
     mpv_handle *m_mpv = nullptr;
     mpv_render_context *m_renderContext = nullptr;
     QTimer *m_eventTimer = nullptr;
-    QProcess *m_ffmpegProcess = nullptr;
     bool m_initialized = false;
     bool m_paused = true;
     std::mutex m_logMutex;
@@ -91,12 +92,14 @@ private:
     std::vector<SubtitleSegment> m_subtitles;
     
     std::thread m_asrThread;
+    std::thread m_audioExtractThread;
     std::atomic<bool> m_asrRunning{false};
+    std::atomic<bool> m_audioExtractCancel{false};
     QString m_wavPath;
     QString m_asrStatus;
     std::mutex m_subtitleMutex;
     QNetworkAccessManager *m_networkManager = nullptr;
-    QProcess *m_webtorrentProcess = nullptr;
+    std::unique_ptr<TorrentSessionController> m_torrentController;
 
     void updateAsrStatus(const QString &status);
     void runWhisper();

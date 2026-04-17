@@ -19,6 +19,7 @@ jobs:
           brew install cmake ninja pkg-config
           brew install mpv
           brew install ffmpeg
+          brew install libtorrent-rasterbar
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -58,6 +59,7 @@ jobs:
           brew install cmake ninja pkg-config
           brew install mpv
           brew install ffmpeg
+          brew install libtorrent-rasterbar
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -102,6 +104,12 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2019_64'
+
+      - name: Setup vcpkg dependencies
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git "${{ github.workspace }}\vcpkg"
+          & "${{ github.workspace }}\vcpkg\bootstrap-vcpkg.bat" -disableMetrics
+          & "${{ github.workspace }}\vcpkg\vcpkg.exe" install ffmpeg:x64-windows libtorrent:x64-windows
 
       - name: Download and detect libmpv
         run: |
@@ -172,6 +180,7 @@ jobs:
           CMAKE_PREFIX_PATH: ${{ env.MPV_DEV_ROOT }}
           MPV_INCLUDE_DIR: ${{ env.MPV_INCLUDE_DIR }}
           MPV_LIBRARY: ${{ env.MPV_LIBRARY }}
+          VCPKG_ROOT: ${{ github.workspace }}\vcpkg
         run: |
           .\scripts\build_windows.ps1 --release
 
@@ -184,6 +193,13 @@ jobs:
             throw "Resolved MPV_DLL_PATH does not exist: $env:MPV_DLL_PATH"
           }
           Copy-Item $env:MPV_DLL_PATH dist\windows\ -Force
+
+          $vcpkgBin = "${{ github.workspace }}\vcpkg\installed\x64-windows\bin"
+          if (Test-Path $vcpkgBin) {
+            Get-ChildItem $vcpkgBin -Filter "*.dll" | ForEach-Object {
+              Copy-Item $_.FullName dist\windows\ -Force
+            }
+          }
           
           # 打包成 zip
           Compress-Archive -Path dist\windows\* -DestinationPath dist\windows\AIPlayer-Windows.zip

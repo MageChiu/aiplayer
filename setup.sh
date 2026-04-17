@@ -1,25 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v brew >/dev/null 2>&1; then
-  echo "Homebrew 未安装，请先安装 Homebrew: https://brew.sh/" >&2
-  exit 1
-fi
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-brew install qt mpv pkgconf cmake
-
-QT_PREFIX="$(brew --prefix qt)"
-MPV_PREFIX="$(brew --prefix mpv)"
-PKGCONF_PREFIX="$(brew --prefix pkgconf)"
+"${ROOT_DIR}/scripts/bootstrap_deps.sh"
 
 cat <<EOF
-依赖安装完成。
+项目内依赖初始化完成。
 
-建议在当前 shell 中执行：
-  export CMAKE_PREFIX_PATH="${QT_PREFIX}:${CMAKE_PREFIX_PATH:-}"
-  export PKG_CONFIG_PATH="${MPV_PREFIX}/lib/pkgconfig:${QT_PREFIX}/lib/pkgconfig:${PKGCONF_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+后续推荐直接使用平台构建脚本：
+  macOS:   ./scripts/build_macos.sh --release
+  Linux:   ./scripts/build_linux.sh --release
+  Windows: ./scripts/build_windows.ps1 --release
 
-然后构建：
-  cmake -S . -B build -DCMAKE_PREFIX_PATH="${QT_PREFIX}"
+如果只想手动执行 CMake，可参考：
+  export VCPKG_ROOT="${ROOT_DIR}/.deps/vcpkg"
+  cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE="\${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
   cmake --build build
 EOF

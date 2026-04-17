@@ -6,9 +6,16 @@ APP_PATH="${1:-$ROOT_DIR/build/aiplayer.app}"
 BIN_PATH="$APP_PATH/Contents/MacOS/aiplayer"
 FRAMEWORKS_DIR="$APP_PATH/Contents/Frameworks"
 DIAG_DIR="$ROOT_DIR/diag"
+DEPS_DIR="$ROOT_DIR/.deps"
+VCPKG_ROOT="${VCPKG_ROOT:-$DEPS_DIR/vcpkg}"
 BREW_BIN="${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin/}brew"
 if [[ ! -x "$BREW_BIN" ]]; then
   BREW_BIN="/opt/homebrew/bin/brew"
+fi
+
+FFMPEG_BREW_PREFIX=""
+if [[ -x "$BREW_BIN" ]] && "$BREW_BIN" list ffmpeg >/dev/null 2>&1; then
+  FFMPEG_BREW_PREFIX="$("$BREW_BIN" --prefix ffmpeg)"
 fi
 
 MPV_PREFIX="$($BREW_BIN --prefix mpv)"
@@ -37,14 +44,64 @@ bundle_dep() {
   install_name_tool -id "@rpath/$filename" "$FRAMEWORKS_DIR/$filename"
 }
 
+bundle_dep_from_candidates() {
+  local filename="$1"
+  shift
+  for src in "$@"; do
+    if [[ -n "$src" && -f "$src" ]]; then
+      cp -f "$src" "$FRAMEWORKS_DIR/$filename"
+      install_name_tool -id "@rpath/$filename" "$FRAMEWORKS_DIR/$filename"
+      return 0
+    fi
+  done
+  echo "missing dependency candidates for: $filename" >&2
+  printf '  %s\n' "$@" >&2
+  exit 1
+}
+
+bundle_dep_glob() {
+  local formula="$1"
+  local pattern="$2"
+  local formula_prefix
+  formula_prefix="$($BREW_BIN --prefix "$formula")"
+  local match
+  match="$(find "$formula_prefix" -path "$formula_prefix/$pattern" -type f | head -n 1)"
+  if [[ -z "$match" || ! -f "$match" ]]; then
+    echo "missing dependency pattern: $formula_prefix/$pattern" >&2
+    exit 1
+  fi
+
+  local filename
+  filename="$(basename "$match")"
+  cp -f "$match" "$FRAMEWORKS_DIR/$filename"
+  install_name_tool -id "@rpath/$filename" "$FRAMEWORKS_DIR/$filename"
+}
+
+detect_vcpkg_triplet() {
+  if [[ -d "$VCPKG_ROOT/installed/arm64-osx" ]]; then
+    echo "arm64-osx"
+    return
+  fi
+  if [[ -d "$VCPKG_ROOT/installed/x64-osx" ]]; then
+    echo "x64-osx"
+    return
+  fi
+}
+
+VCPKG_TRIPLET="$(detect_vcpkg_triplet || true)"
+VCPKG_LIB_DIR=""
+if [[ -n "$VCPKG_TRIPLET" ]]; then
+  VCPKG_LIB_DIR="$VCPKG_ROOT/installed/$VCPKG_TRIPLET/lib"
+fi
+
 bundle_dep libass lib/libass.9.dylib
-bundle_dep ffmpeg lib/libavcodec.62.dylib
-bundle_dep ffmpeg lib/libavdevice.62.dylib
-bundle_dep ffmpeg lib/libavfilter.11.dylib
-bundle_dep ffmpeg lib/libavformat.62.dylib
-bundle_dep ffmpeg lib/libavutil.60.dylib
-bundle_dep ffmpeg lib/libswresample.6.dylib
-bundle_dep ffmpeg lib/libswscale.9.dylib
+bundle_dep_from_candidates libavcodec.62.dylib "$VCPKG_LIB_DIR/libavcodec.62.dylib" "${FFMPEG_BREW_PREFIX}/lib/libavcodec.62.dylib"
+bundle_dep_from_candidates libavdevice.62.dylib "$VCPKG_LIB_DIR/libavdevice.62.dylib" "${FFMPEG_BREW_PREFIX}/lib/libavdevice.62.dylib"
+bundle_dep_from_candidates libavfilter.11.dylib "$VCPKG_LIB_DIR/libavfilter.11.dylib" "${FFMPEG_BREW_PREFIX}/lib/libavfilter.11.dylib"
+bundle_dep_from_candidates libavformat.62.dylib "$VCPKG_LIB_DIR/libavformat.62.dylib" "${FFMPEG_BREW_PREFIX}/lib/libavformat.62.dylib"
+bundle_dep_from_candidates libavutil.60.dylib "$VCPKG_LIB_DIR/libavutil.60.dylib" "${FFMPEG_BREW_PREFIX}/lib/libavutil.60.dylib"
+bundle_dep_from_candidates libswresample.6.dylib "$VCPKG_LIB_DIR/libswresample.6.dylib" "${FFMPEG_BREW_PREFIX}/lib/libswresample.6.dylib"
+bundle_dep_from_candidates libswscale.9.dylib "$VCPKG_LIB_DIR/libswscale.9.dylib" "${FFMPEG_BREW_PREFIX}/lib/libswscale.9.dylib"
 bundle_dep libplacebo lib/libplacebo.360.dylib
 bundle_dep mujs lib/libmujs.dylib
 bundle_dep little-cms2 lib/liblcms2.2.dylib
@@ -57,6 +114,9 @@ bundle_dep vapoursynth lib/libvapoursynth-script.0.dylib
 bundle_dep zimg lib/libzimg.2.dylib
 bundle_dep jpeg-turbo lib/libjpeg.8.dylib
 bundle_dep vulkan-loader lib/libvulkan.1.dylib
+if [[ -x "$BREW_BIN" ]] && "$BREW_BIN" list libtorrent-rasterbar >/dev/null 2>&1; then
+  bundle_dep_glob libtorrent-rasterbar "lib/libtorrent-rasterbar*.dylib"
+fi
 
 python3 - "$FRAMEWORKS_DIR" <<'PY'
 import os
