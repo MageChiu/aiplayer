@@ -16,9 +16,14 @@ jobs:
 
       - name: Install dependencies (macOS)
         run: |
-          brew install cmake ninja pkg-config
+          brew install cmake ninja pkg-config nasm
           brew install mpv
           brew install ffmpeg
+
+      - name: Setup nasm in PATH
+        run: |
+          echo "$(brew --prefix nasm)/bin" >> "$GITHUB_PATH"
+          "$(brew --prefix nasm)/bin/nasm" -v
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -86,9 +91,14 @@ jobs:
 
       - name: Install dependencies (macOS)
         run: |
-          brew install cmake ninja pkg-config
+          brew install cmake ninja pkg-config nasm
           brew install mpv
           brew install ffmpeg
+
+      - name: Setup nasm in PATH
+        run: |
+          echo "$(brew --prefix nasm)/bin" >> "$GITHUB_PATH"
+          "$(brew --prefix nasm)/bin/nasm" -v
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3

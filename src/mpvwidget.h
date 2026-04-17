@@ -30,6 +30,8 @@ public:
     void loadFile(const QString &filePath);
     void play();
     void pause();
+    void stop();
+    void replay();
     void togglePause();
     bool isPaused() const;
     void seek(double pos);

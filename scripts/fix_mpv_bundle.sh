@@ -12,7 +12,15 @@ VCPKG_ROOT="${VCPKG_ROOT:-$DEPS_DIR/vcpkg}"
 VCPKG_INSTALLED_ROOT="${ROOT_DIR}/vcpkg_installed"
 BREW_BIN="${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin/}brew"
 if [[ ! -x "$BREW_BIN" ]]; then
-  BREW_BIN="/opt/homebrew/bin/brew"
+  if command -v brew >/dev/null 2>&1; then
+    BREW_BIN="$(command -v brew)"
+  elif [[ -x "/opt/homebrew/bin/brew" ]]; then
+    BREW_BIN="/opt/homebrew/bin/brew"
+  elif [[ -x "/usr/local/bin/brew" ]]; then
+    BREW_BIN="/usr/local/bin/brew"
+  else
+    BREW_BIN=""
+  fi
 fi
 
 FFMPEG_BREW_PREFIX=""
@@ -44,6 +52,10 @@ install_name_tool -id "@rpath/libmpv.2.dylib" "$FRAMEWORKS_DIR/libmpv.2.dylib"
 bundle_dep() {
   local formula="$1"
   local relpath="$2"
+  if [[ -z "$BREW_BIN" ]]; then
+    echo "brew is required to resolve dependency formula '$formula'" >&2
+    exit 1
+  fi
   local filename
   filename="$(basename "$relpath")"
   local src
@@ -76,6 +88,10 @@ bundle_dep_from_candidates() {
 bundle_dep_glob() {
   local formula="$1"
   local pattern="$2"
+  if [[ -z "$BREW_BIN" ]]; then
+    echo "brew is required to resolve dependency formula '$formula'" >&2
+    exit 1
+  fi
   local formula_prefix
   formula_prefix="$($BREW_BIN --prefix "$formula")"
   local match
@@ -175,19 +191,19 @@ while queue:
         seen.add(dep)
 
 for name in os.listdir(frameworks_dir):
-    if not (name.endswith('.dylib') or name == 'Python'):
+    if not name.endswith('.dylib'):
         continue
     path = os.path.join(frameworks_dir, name)
     output = subprocess.check_output(['otool', '-L', path], text=True)
     for line in output.splitlines()[1:]:
         dep = line.strip().split(' ', 1)[0]
-        if dep.startswith('/opt/homebrew/'):
+        if dep.startswith('/opt/homebrew/') or dep.startswith('/usr/local/'):
             dep_name = os.path.basename(dep)
             candidate = os.path.join(frameworks_dir, dep_name)
             if os.path.exists(candidate):
                 subprocess.check_call(['install_name_tool', '-change', dep, f'@rpath/{dep_name}', path])
 
-all_targets = [os.path.join(frameworks_dir, 'Python')]
+all_targets = []
 all_targets.extend(queue)
 all_targets.extend(plain_dylibs.values())
 all_targets.extend(framework_bins.values())
@@ -200,12 +216,12 @@ for path in all_targets:
     for line in output.splitlines()[1:]:
         dep = line.strip().split(' ', 1)[0]
         dep_base = os.path.basename(dep)
-        if dep_base in framework_bins and dep.startswith('/opt/homebrew/'):
+        if dep_base in framework_bins and (dep.startswith('/opt/homebrew/') or dep.startswith('/usr/local/')):
             subprocess.check_call([
                 'install_name_tool', '-change', dep,
                 f'@rpath/{dep_base}.framework/Versions/A/{dep_base}', path
             ])
-        elif dep_base in plain_dylibs and dep.startswith('/opt/homebrew/'):
+        elif dep_base in plain_dylibs and (dep.startswith('/opt/homebrew/') or dep.startswith('/usr/local/')):
             subprocess.check_call([
                 'install_name_tool', '-change', dep,
                 f'@rpath/{dep_base}', path

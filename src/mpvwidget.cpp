@@ -584,6 +584,27 @@ void MpvWidget::pause() {
     setPaused(true);
 }
 
+void MpvWidget::stop() {
+    if (!m_mpv) {
+        return;
+    }
+    const char *args[] = {"stop", nullptr};
+    if (mpv_command(m_mpv, args) < 0) {
+        emit errorOccurred(QStringLiteral("停止播放失败"));
+        return;
+    }
+    setPaused(true);
+    emit timePosChanged(0.0);
+}
+
+void MpvWidget::replay() {
+    if (!m_mpv) {
+        return;
+    }
+    seek(0.0);
+    setPaused(false);
+}
+
 void MpvWidget::togglePause() {
     setPaused(!m_paused);
 }
@@ -883,13 +904,15 @@ void MpvWidget::setPaused(bool paused) {
 
 void MpvWidget::seek(double pos) {
     if (!m_mpv) return;
-    const char *args[] = {"seek", QByteArray::number(pos).constData(), "absolute", nullptr};
+    const QByteArray posArg = QByteArray::number(pos, 'f', 3);
+    const char *args[] = {"seek", posArg.constData(), "absolute", nullptr};
     mpv_command(m_mpv, args);
 }
 
 void MpvWidget::seekRelative(double pos) {
     if (!m_mpv) return;
-    const char *args[] = {"seek", QByteArray::number(pos).constData(), "relative", nullptr};
+    const QByteArray posArg = QByteArray::number(pos, 'f', 3);
+    const char *args[] = {"seek", posArg.constData(), "relative", nullptr};
     mpv_command(m_mpv, args);
 }
 

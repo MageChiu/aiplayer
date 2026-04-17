@@ -24,6 +24,8 @@ private slots:
     void openUrl();
     void play();
     void pause();
+    void stop();
+    void replay();
     void updatePlaybackState(bool paused);
     void updateLoadedFile(const QString &filePath);
     void showError(const QString &message);
