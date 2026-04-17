@@ -31,6 +31,7 @@
 #include <QNetworkRequest>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonObject>
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -107,6 +108,44 @@ QString findLargestPlayableFile(const QString &rootDir) {
     }
     return best.exists() ? best.absoluteFilePath() : QString();
 }
+
+QString joinUrl(const QString &baseUrl, const QString &endpoint) {
+    QString base = baseUrl.trimmed();
+    QString path = endpoint.trimmed();
+    if (base.endsWith('/') && path.startsWith('/')) {
+        base.chop(1);
+    } else if (!base.endsWith('/') && !path.startsWith('/')) {
+        path.prepend('/');
+    }
+    return base + path;
+}
+
+QString parseGoogleCompatibleTranslation(const QByteArray &payload) {
+    const QJsonDocument doc = QJsonDocument::fromJson(payload);
+    const QJsonArray arr = doc.array();
+    QString result;
+    if (!arr.isEmpty() && arr[0].isArray()) {
+        const QJsonArray lines = arr[0].toArray();
+        for (const QJsonValue &line : lines) {
+            if (line.isArray()) {
+                const QJsonArray parts = line.toArray();
+                if (!parts.isEmpty()) {
+                    result += parts.at(0).toString();
+                }
+            }
+        }
+    }
+    return result;
+}
+
+QString parseLibreTranslateTranslation(const QByteArray &payload) {
+    const QJsonDocument doc = QJsonDocument::fromJson(payload);
+    if (!doc.isObject()) {
+        return QString();
+    }
+    return doc.object().value(QStringLiteral("translatedText")).toString();
+}
+
 
 bool writeWaveHeader(QFile &file, quint32 sampleRate, quint16 channels, quint16 bitsPerSample, quint32 dataSize) {
     if (!file.isOpen()) {
@@ -1103,25 +1142,45 @@ void MpvWidget::translateSegment(int index, const QString &text) {
 
     QString targetLang = settings.value("target_lang", "zh-CN").toString();
     QString sourceLang = settings.value("source_lang", "auto").toString();
+    const QString provider = settings.value("translation_provider", "google").toString();
+    const QString baseUrl = settings.value("translation_base_url", "https://translate.googleapis.com").toString();
+    const QString endpoint = settings.value("translation_endpoint", "/translate_a/single?client=gtx&sl={sl}&tl={tl}&dt=t&q={q}").toString();
+    const QString apiKey = settings.value("translation_api_key", "").toString();
 
-    QUrl url("https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + QUrl::toPercentEncoding(text));
-    QNetworkRequest request(url);
-    QNetworkReply *reply = m_networkManager->get(request);
+    QNetworkRequest request;
+    QNetworkReply *reply = nullptr;
+
+    if (provider == "libretranslate") {
+        request.setUrl(QUrl(joinUrl(baseUrl, endpoint)));
+        request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
+        QJsonObject payload{
+            {QStringLiteral("q"), text},
+            {QStringLiteral("source"), sourceLang},
+            {QStringLiteral("target"), targetLang},
+            {QStringLiteral("format"), QStringLiteral("text")}
+        };
+        if (!apiKey.trimmed().isEmpty()) {
+            payload.insert(QStringLiteral("api_key"), apiKey.trimmed());
+        }
+        reply = m_networkManager->post(request, QJsonDocument(payload).toJson(QJsonDocument::Compact));
+    } else {
+        QString resolvedEndpoint = endpoint;
+        resolvedEndpoint.replace(QStringLiteral("{sl}"), sourceLang);
+        resolvedEndpoint.replace(QStringLiteral("{tl}"), targetLang);
+        resolvedEndpoint.replace(QStringLiteral("{q}"), QString::fromUtf8(QUrl::toPercentEncoding(text)));
+        request.setUrl(QUrl(joinUrl(baseUrl, resolvedEndpoint)));
+        reply = m_networkManager->get(request);
+    }
 
     connect(reply, &QNetworkReply::finished, this, [this, reply, index]() {
         reply->deleteLater();
         if (reply->error() == QNetworkReply::NoError) {
-            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-            QJsonArray arr = doc.array();
-            QString result;
-            if (!arr.isEmpty() && arr[0].isArray()) {
-                QJsonArray lines = arr[0].toArray();
-                for (int i = 0; i < lines.size(); ++i) {
-                    if (lines[i].isArray()) {
-                        result += lines[i].toArray()[0].toString();
-                    }
-                }
-            }
+            const QByteArray payload = reply->readAll();
+            const QString contentType = reply->header(QNetworkRequest::ContentTypeHeader).toString().toLower();
+            QString result = contentType.contains(QStringLiteral("application/json")) &&
+                                     payload.trimmed().startsWith('{')
+                                 ? parseLibreTranslateTranslation(payload)
+                                 : parseGoogleCompatibleTranslation(payload);
             if (!result.isEmpty()) {
                 std::lock_guard<std::mutex> lock(m_subtitleMutex);
                 if (index >= 0 && index < static_cast<int>(m_subtitles.size())) {

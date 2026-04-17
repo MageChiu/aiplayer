@@ -10,6 +10,7 @@ class QPushButton;
 class QProgressBar;
 class QCheckBox;
 class QLabel;
+class QLineEdit;
 
 class SettingsDialog : public QDialog {
     Q_OBJECT
@@ -30,11 +31,13 @@ private slots:
     void onDownloadFinished();
     void onDownloadError(QNetworkReply::NetworkError code);
     void saveSettings();
+    void onTranslationProviderChanged();
 
 private:
     QString modelDirectory() const;
     void loadSettings();
     void updateUIState();
+    void applyTranslationPreset(const QString &provider, bool forceOverwrite);
 
     QComboBox *m_modelCombo = nullptr;
     QPushButton *m_downloadButton = nullptr;
@@ -45,6 +48,11 @@ private:
     QComboBox *m_sourceLangCombo = nullptr;
     QCheckBox *m_enableTranslationCheck = nullptr;
     QComboBox *m_targetLangCombo = nullptr;
+    QComboBox *m_translationProviderCombo = nullptr;
+    QLineEdit *m_translationBaseUrlEdit = nullptr;
+    QLineEdit *m_translationEndpointEdit = nullptr;
+    QLineEdit *m_translationApiKeyEdit = nullptr;
+    QLabel *m_translationHintLabel = nullptr;
     
     QPushButton *m_okButton = nullptr;
     QPushButton *m_cancelButton = nullptr;
