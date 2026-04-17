@@ -11,6 +11,7 @@
 #include <QNetworkRequest>
 #include <QUrl>
 #include <QFileInfo>
+#include <QLineEdit>
 #include <QDir>
 #include <QCoreApplication>
 #include <QDesktopServices>
@@ -87,6 +88,41 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     transLayout->addWidget(targetLangLabel);
     transLayout->addWidget(m_targetLangCombo);
 
+    auto *providerLabel = new QLabel(QStringLiteral("翻译服务:"));
+    m_translationProviderCombo = new QComboBox();
+    m_translationProviderCombo->addItem(QStringLiteral("Google Translate"), "google");
+    m_translationProviderCombo->addItem(QStringLiteral("Google 兼容接口"), "google-compatible");
+    m_translationProviderCombo->addItem(QStringLiteral("LibreTranslate"), "libretranslate");
+
+    auto *providerLayout = new QHBoxLayout();
+    providerLayout->addWidget(providerLabel);
+    providerLayout->addWidget(m_translationProviderCombo, 1);
+
+    auto *baseUrlLabel = new QLabel(QStringLiteral("基础地址:"));
+    m_translationBaseUrlEdit = new QLineEdit();
+    m_translationBaseUrlEdit->setPlaceholderText(QStringLiteral("例如: https://translate.googleapis.com"));
+    auto *baseUrlLayout = new QHBoxLayout();
+    baseUrlLayout->addWidget(baseUrlLabel);
+    baseUrlLayout->addWidget(m_translationBaseUrlEdit, 1);
+
+    auto *endpointLabel = new QLabel(QStringLiteral("接口入口:"));
+    m_translationEndpointEdit = new QLineEdit();
+    m_translationEndpointEdit->setPlaceholderText(QStringLiteral("例如: /translate_a/single?client=gtx&sl={sl}&tl={tl}&dt=t&q={q}"));
+    auto *endpointLayout = new QHBoxLayout();
+    endpointLayout->addWidget(endpointLabel);
+    endpointLayout->addWidget(m_translationEndpointEdit, 1);
+
+    auto *apiKeyLabel = new QLabel(QStringLiteral("API Key:"));
+    m_translationApiKeyEdit = new QLineEdit();
+    m_translationApiKeyEdit->setPlaceholderText(QStringLiteral("可选；LibreTranslate 等服务可使用"));
+    auto *apiKeyLayout = new QHBoxLayout();
+    apiKeyLayout->addWidget(apiKeyLabel);
+    apiKeyLayout->addWidget(m_translationApiKeyEdit, 1);
+
+    m_translationHintLabel = new QLabel();
+    m_translationHintLabel->setWordWrap(true);
+    m_translationHintLabel->setStyleSheet(QStringLiteral("color: #666;"));
+
     // Buttons
     auto *buttonLayout = new QHBoxLayout();
     m_okButton = new QPushButton(QStringLiteral("确定"));
@@ -105,6 +141,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     layout->addWidget(new QLabel(QStringLiteral("<b>语音及翻译设置</b>")));
     layout->addLayout(sourceLayout);
     layout->addLayout(transLayout);
+    layout->addLayout(providerLayout);
+    layout->addLayout(baseUrlLayout);
+    layout->addLayout(endpointLayout);
+    layout->addLayout(apiKeyLayout);
+    layout->addWidget(m_translationHintLabel);
     layout->addSpacing(20);
     layout->addLayout(buttonLayout);
 
@@ -112,6 +153,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     updateUIState();
 
     connect(m_modelCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsDialog::updateUIState);
+    connect(m_enableTranslationCheck, &QCheckBox::toggled, this, &SettingsDialog::updateUIState);
+    connect(m_translationProviderCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsDialog::onTranslationProviderChanged);
 }
 
 SettingsDialog::~SettingsDialog() {
@@ -145,6 +188,17 @@ void SettingsDialog::loadSettings() {
     if (langIndex >= 0) {
         m_targetLangCombo->setCurrentIndex(langIndex);
     }
+
+    const QString provider = settings.value("translation_provider", "google").toString();
+    const int providerIndex = m_translationProviderCombo->findData(provider);
+    if (providerIndex >= 0) {
+        m_translationProviderCombo->setCurrentIndex(providerIndex);
+    }
+    applyTranslationPreset(m_translationProviderCombo->currentData().toString(), false);
+
+    m_translationBaseUrlEdit->setText(settings.value("translation_base_url", m_translationBaseUrlEdit->text()).toString());
+    m_translationEndpointEdit->setText(settings.value("translation_endpoint", m_translationEndpointEdit->text()).toString());
+    m_translationApiKeyEdit->setText(settings.value("translation_api_key", "").toString());
 }
 
 void SettingsDialog::saveSettings() {
@@ -153,6 +207,10 @@ void SettingsDialog::saveSettings() {
     settings.setValue("source_lang", m_sourceLangCombo->currentData().toString());
     settings.setValue("translation_enabled", m_enableTranslationCheck->isChecked());
     settings.setValue("target_lang", m_targetLangCombo->currentData().toString());
+    settings.setValue("translation_provider", m_translationProviderCombo->currentData().toString());
+    settings.setValue("translation_base_url", m_translationBaseUrlEdit->text().trimmed());
+    settings.setValue("translation_endpoint", m_translationEndpointEdit->text().trimmed());
+    settings.setValue("translation_api_key", m_translationApiKeyEdit->text().trimmed());
     accept();
 }
 
@@ -176,6 +234,47 @@ void SettingsDialog::updateUIState() {
         m_statusLabel->setText(QStringLiteral("状态: 未下载 (目录: %1)").arg(modelDirectory()));
         m_downloadButton->setText(QStringLiteral("下载模型"));
     }
+
+    const bool translationEnabled = m_enableTranslationCheck->isChecked();
+    m_targetLangCombo->setEnabled(translationEnabled);
+    m_translationProviderCombo->setEnabled(translationEnabled);
+    m_translationBaseUrlEdit->setEnabled(translationEnabled);
+    m_translationEndpointEdit->setEnabled(translationEnabled);
+    m_translationApiKeyEdit->setEnabled(translationEnabled);
+    m_translationHintLabel->setEnabled(translationEnabled);
+}
+
+void SettingsDialog::applyTranslationPreset(const QString &provider, bool forceOverwrite) {
+    QString defaultBaseUrl;
+    QString defaultEndpoint;
+    QString hintText;
+
+    if (provider == "libretranslate") {
+        defaultBaseUrl = QStringLiteral("https://libretranslate.com");
+        defaultEndpoint = QStringLiteral("/translate");
+        hintText = QStringLiteral("LibreTranslate 使用 POST JSON 请求，常见字段包括 q/source/target/format/api_key。");
+    } else if (provider == "google-compatible") {
+        defaultBaseUrl = QStringLiteral("https://translate.googleapis.com");
+        defaultEndpoint = QStringLiteral("/translate_a/single?client=gtx&sl={sl}&tl={tl}&dt=t&q={q}");
+        hintText = QStringLiteral("Google 兼容接口使用 GET 请求；可修改基础地址接入自建或兼容镜像。支持占位符 {sl} / {tl} / {q}。");
+    } else {
+        defaultBaseUrl = QStringLiteral("https://translate.googleapis.com");
+        defaultEndpoint = QStringLiteral("/translate_a/single?client=gtx&sl={sl}&tl={tl}&dt=t&q={q}");
+        hintText = QStringLiteral("Google Translate 默认入口，使用 GET 请求。支持占位符 {sl} / {tl} / {q}。");
+    }
+
+    if (forceOverwrite || m_translationBaseUrlEdit->text().trimmed().isEmpty()) {
+        m_translationBaseUrlEdit->setText(defaultBaseUrl);
+    }
+    if (forceOverwrite || m_translationEndpointEdit->text().trimmed().isEmpty()) {
+        m_translationEndpointEdit->setText(defaultEndpoint);
+    }
+    m_translationHintLabel->setText(hintText);
+}
+
+void SettingsDialog::onTranslationProviderChanged() {
+    applyTranslationPreset(m_translationProviderCombo->currentData().toString(), true);
+    updateUIState();
 }
 
 void SettingsDialog::onDownloadClicked() {
