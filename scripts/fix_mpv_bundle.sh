@@ -7,7 +7,9 @@ BIN_PATH="$APP_PATH/Contents/MacOS/aiplayer"
 FRAMEWORKS_DIR="$APP_PATH/Contents/Frameworks"
 DIAG_DIR="$ROOT_DIR/diag"
 DEPS_DIR="$ROOT_DIR/.deps"
+MPV_ROOT="${MPV_ROOT:-$DEPS_DIR/mpv}"
 VCPKG_ROOT="${VCPKG_ROOT:-$DEPS_DIR/vcpkg}"
+VCPKG_INSTALLED_ROOT="${ROOT_DIR}/vcpkg_installed"
 BREW_BIN="${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin/}brew"
 if [[ ! -x "$BREW_BIN" ]]; then
   BREW_BIN="/opt/homebrew/bin/brew"
@@ -18,8 +20,20 @@ if [[ -x "$BREW_BIN" ]] && "$BREW_BIN" list ffmpeg >/dev/null 2>&1; then
   FFMPEG_BREW_PREFIX="$("$BREW_BIN" --prefix ffmpeg)"
 fi
 
-MPV_PREFIX="$($BREW_BIN --prefix mpv)"
-LIBMPV_SRC="$MPV_PREFIX/lib/libmpv.2.dylib"
+LIBMPV_SRC=""
+if [[ -f "$MPV_ROOT/lib/libmpv.2.dylib" ]]; then
+  LIBMPV_SRC="$MPV_ROOT/lib/libmpv.2.dylib"
+elif [[ -f "$MPV_ROOT/lib/libmpv.dylib" ]]; then
+  LIBMPV_SRC="$MPV_ROOT/lib/libmpv.dylib"
+elif [[ -x "$BREW_BIN" ]] && "$BREW_BIN" list mpv >/dev/null 2>&1; then
+  MPV_PREFIX="$("$BREW_BIN" --prefix mpv)"
+  LIBMPV_SRC="$MPV_PREFIX/lib/libmpv.2.dylib"
+fi
+
+if [[ -z "$LIBMPV_SRC" || ! -f "$LIBMPV_SRC" ]]; then
+  echo "missing libmpv source library in MPV_ROOT or Homebrew mpv" >&2
+  exit 1
+fi
 
 mkdir -p "$FRAMEWORKS_DIR" "$DIAG_DIR"
 cp -f "$LIBMPV_SRC" "$FRAMEWORKS_DIR/"
@@ -78,11 +92,11 @@ bundle_dep_glob() {
 }
 
 detect_vcpkg_triplet() {
-  if [[ -d "$VCPKG_ROOT/installed/arm64-osx" ]]; then
+  if [[ -d "$VCPKG_INSTALLED_ROOT/arm64-osx" ]]; then
     echo "arm64-osx"
     return
   fi
-  if [[ -d "$VCPKG_ROOT/installed/x64-osx" ]]; then
+  if [[ -d "$VCPKG_INSTALLED_ROOT/x64-osx" ]]; then
     echo "x64-osx"
     return
   fi
@@ -91,7 +105,7 @@ detect_vcpkg_triplet() {
 VCPKG_TRIPLET="$(detect_vcpkg_triplet || true)"
 VCPKG_LIB_DIR=""
 if [[ -n "$VCPKG_TRIPLET" ]]; then
-  VCPKG_LIB_DIR="$VCPKG_ROOT/installed/$VCPKG_TRIPLET/lib"
+  VCPKG_LIB_DIR="$VCPKG_INSTALLED_ROOT/$VCPKG_TRIPLET/lib"
 fi
 
 bundle_dep libass lib/libass.9.dylib
@@ -128,6 +142,23 @@ frameworks_dir = sys.argv[1]
 queue = [os.path.join(frameworks_dir, name) for name in os.listdir(frameworks_dir) if name.endswith('.dylib')]
 seen = set()
 
+framework_bins = {}
+for name in os.listdir(frameworks_dir):
+    if not name.endswith('.framework'):
+        continue
+    bin_name = name[:-10]
+    candidate = os.path.join(frameworks_dir, name, 'Versions', 'A', bin_name)
+    if os.path.isfile(candidate):
+        framework_bins[bin_name] = candidate
+        subprocess.check_call(['install_name_tool', '-id', f'@rpath/{name}/Versions/A/{bin_name}', candidate])
+
+plain_dylibs = {}
+for name in os.listdir(frameworks_dir):
+    candidate = os.path.join(frameworks_dir, name)
+    if os.path.isfile(candidate) and name.endswith('.dylib'):
+        plain_dylibs[name] = candidate
+        subprocess.check_call(['install_name_tool', '-id', f'@rpath/{name}', candidate])
+
 while queue:
     path = queue.pop(0)
     output = subprocess.check_output(['otool', '-L', path], text=True)
@@ -158,6 +189,30 @@ for name in os.listdir(frameworks_dir):
             candidate = os.path.join(frameworks_dir, dep_name)
             if os.path.exists(candidate):
                 subprocess.check_call(['install_name_tool', '-change', dep, f'@rpath/{dep_name}', path])
+
+all_targets = [os.path.join(frameworks_dir, 'Python')]
+all_targets.extend(queue)
+all_targets.extend(plain_dylibs.values())
+all_targets.extend(framework_bins.values())
+all_targets.append(os.path.join(os.path.dirname(frameworks_dir), 'MacOS', 'aiplayer'))
+
+for path in all_targets:
+    if not os.path.exists(path):
+        continue
+    output = subprocess.check_output(['otool', '-L', path], text=True)
+    for line in output.splitlines()[1:]:
+        dep = line.strip().split(' ', 1)[0]
+        dep_base = os.path.basename(dep)
+        if dep_base in framework_bins and dep.startswith('/opt/homebrew/'):
+            subprocess.check_call([
+                'install_name_tool', '-change', dep,
+                f'@rpath/{dep_base}.framework/Versions/A/{dep_base}', path
+            ])
+        elif dep_base in plain_dylibs and dep.startswith('/opt/homebrew/'):
+            subprocess.check_call([
+                'install_name_tool', '-change', dep,
+                f'@rpath/{dep_base}', path
+            ])
 
 print(f'bundled {len(seen)} transitive Homebrew dependencies')
 PY

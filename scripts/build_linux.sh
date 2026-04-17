@@ -20,6 +20,7 @@ command_exists() {
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEPS_DIR="${SRC_DIR}/.deps"
 VCPKG_ROOT="${VCPKG_ROOT:-${DEPS_DIR}/vcpkg}"
+MPV_ROOT="${MPV_ROOT:-${DEPS_DIR}/mpv}"
 
 echo "[Linux] 检查依赖..."
 MISSING=()
@@ -60,6 +61,7 @@ CMAKE_ARGS=(
   -B "${BUILD_DIR}"
   -DCMAKE_BUILD_TYPE="${BUILD_TYPE}"
   -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+  -DMPV_ROOT="${MPV_ROOT}"
 )
 
 echo "[Linux] 运行 CMake 配置 (类型: ${BUILD_TYPE})..."

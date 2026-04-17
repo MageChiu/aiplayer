@@ -30,7 +30,95 @@ function(_aiplayer_create_interface_target target_name)
     endif()
 endfunction()
 
+function(_aiplayer_require_library out_var)
+    set(options)
+    set(oneValueArgs NAME)
+    set(multiValueArgs HINTS)
+    cmake_parse_arguments(REQLIB "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    find_library(_found_library NAMES "${REQLIB_NAME}" HINTS ${REQLIB_HINTS} REQUIRED)
+    set(${out_var} "${_found_library}" PARENT_SCOPE)
+endfunction()
+
+function(_aiplayer_apply_pkgconfig_static target_name prefix)
+    target_include_directories(${target_name} INTERFACE ${${prefix}_INCLUDE_DIRS})
+    if(DEFINED ${prefix}_STATIC_LIBRARY_DIRS)
+        target_link_directories(${target_name} INTERFACE ${${prefix}_STATIC_LIBRARY_DIRS})
+    else()
+        target_link_directories(${target_name} INTERFACE ${${prefix}_LIBRARY_DIRS})
+    endif()
+    if(DEFINED ${prefix}_STATIC_LINK_LIBRARIES)
+        target_link_libraries(${target_name} INTERFACE ${${prefix}_STATIC_LINK_LIBRARIES})
+    else()
+        target_link_libraries(${target_name} INTERFACE ${${prefix}_LINK_LIBRARIES})
+    endif()
+
+    set(_pkg_options)
+    if(DEFINED ${prefix}_STATIC_LDFLAGS_OTHER)
+        set(_pkg_options ${${prefix}_STATIC_LDFLAGS_OTHER})
+    elseif(DEFINED ${prefix}_LDFLAGS_OTHER)
+        set(_pkg_options ${${prefix}_LDFLAGS_OTHER})
+    endif()
+
+    if(_pkg_options)
+        set(_normalized_link_options)
+        set(_expect_framework_name FALSE)
+        foreach(_opt IN LISTS _pkg_options)
+            if(_expect_framework_name)
+                list(APPEND _normalized_link_options "SHELL:-framework ${_opt}")
+                set(_expect_framework_name FALSE)
+            elseif(_opt STREQUAL "-framework")
+                set(_expect_framework_name TRUE)
+            else()
+                list(APPEND _normalized_link_options "${_opt}")
+            endif()
+        endforeach()
+        target_link_options(${target_name} INTERFACE ${_normalized_link_options})
+    endif()
+endfunction()
+
+function(_aiplayer_try_mpv_root mpv_root)
+    if(NOT mpv_root)
+        return()
+    endif()
+
+    if(APPLE)
+        set(_candidate_names libmpv libmpv.2 mpv mpv-2 libmpv-2)
+    elseif(UNIX)
+        set(_candidate_names libmpv mpv mpv-2 libmpv-2)
+    else()
+        set(_candidate_names mpv libmpv mpv-2 libmpv-2)
+    endif()
+
+    find_path(_mpv_include_dir NAMES mpv/client.h
+        HINTS "${mpv_root}/include"
+        NO_DEFAULT_PATH
+    )
+    find_library(_mpv_library
+        NAMES ${_candidate_names}
+        HINTS "${mpv_root}/lib"
+        NO_DEFAULT_PATH
+    )
+
+    if(_mpv_include_dir AND _mpv_library)
+        _aiplayer_create_manual_mpv_target(
+            INCLUDE_DIR "${_mpv_include_dir}"
+            LIBRARY "${_mpv_library}"
+        )
+    endif()
+endfunction()
+
 function(_aiplayer_resolve_mpv_non_windows)
+    if(TARGET AIPlayer::MPV)
+        return()
+    endif()
+
+    set(_default_mpv_root "${CMAKE_SOURCE_DIR}/.deps/mpv")
+    if(DEFINED MPV_ROOT AND EXISTS "${MPV_ROOT}")
+        _aiplayer_try_mpv_root("${MPV_ROOT}")
+    elseif(EXISTS "${_default_mpv_root}")
+        _aiplayer_try_mpv_root("${_default_mpv_root}")
+    endif()
+
     if(TARGET AIPlayer::MPV)
         return()
     endif()
@@ -96,6 +184,13 @@ function(aiplayer_resolve_dependencies)
     endif()
 
     if(WIN32)
+        set(_default_mpv_root "${CMAKE_SOURCE_DIR}/.deps/mpv")
+        if(DEFINED MPV_ROOT AND EXISTS "${MPV_ROOT}")
+            _aiplayer_try_mpv_root("${MPV_ROOT}")
+        elseif(EXISTS "${_default_mpv_root}")
+            _aiplayer_try_mpv_root("${_default_mpv_root}")
+        endif()
+
         if(DEFINED MPV_INCLUDE_DIR AND DEFINED MPV_LIBRARY AND EXISTS "${MPV_INCLUDE_DIR}" AND EXISTS "${MPV_LIBRARY}")
             _aiplayer_create_manual_mpv_target(INCLUDE_DIR "${MPV_INCLUDE_DIR}" LIBRARY "${MPV_LIBRARY}")
         else()
@@ -125,17 +220,15 @@ function(aiplayer_resolve_dependencies)
         add_library(AIPlayer::FFmpeg ALIAS AIPlayer_FFmpeg)
     else()
         find_package(PkgConfig REQUIRED)
-        pkg_check_modules(AVFORMAT REQUIRED IMPORTED_TARGET libavformat)
-        pkg_check_modules(AVCODEC REQUIRED IMPORTED_TARGET libavcodec)
-        pkg_check_modules(AVUTIL REQUIRED IMPORTED_TARGET libavutil)
-        pkg_check_modules(SWRESAMPLE REQUIRED IMPORTED_TARGET libswresample)
+        pkg_check_modules(AVFORMAT REQUIRED libavformat)
+        pkg_check_modules(AVCODEC REQUIRED libavcodec)
+        pkg_check_modules(AVUTIL REQUIRED libavutil)
+        pkg_check_modules(SWRESAMPLE REQUIRED libswresample)
         _aiplayer_create_interface_target(AIPlayer_FFmpeg)
-        target_link_libraries(AIPlayer_FFmpeg INTERFACE
-            PkgConfig::AVFORMAT
-            PkgConfig::AVCODEC
-            PkgConfig::AVUTIL
-            PkgConfig::SWRESAMPLE
-        )
+        _aiplayer_apply_pkgconfig_static(AIPlayer_FFmpeg AVFORMAT)
+        _aiplayer_apply_pkgconfig_static(AIPlayer_FFmpeg AVCODEC)
+        _aiplayer_apply_pkgconfig_static(AIPlayer_FFmpeg AVUTIL)
+        _aiplayer_apply_pkgconfig_static(AIPlayer_FFmpeg SWRESAMPLE)
         add_library(AIPlayer::FFmpeg ALIAS AIPlayer_FFmpeg)
     endif()
 
@@ -154,9 +247,9 @@ function(aiplayer_resolve_dependencies)
             message(FATAL_ERROR "libtorrent not found. Please bootstrap local dependencies first.")
         endif()
         find_package(PkgConfig REQUIRED)
-        pkg_check_modules(LIBTORRENT REQUIRED IMPORTED_TARGET libtorrent-rasterbar)
+        pkg_check_modules(LIBTORRENT REQUIRED libtorrent-rasterbar)
         _aiplayer_create_interface_target(AIPlayer_Torrent)
-        target_link_libraries(AIPlayer_Torrent INTERFACE PkgConfig::LIBTORRENT)
+        _aiplayer_apply_pkgconfig_static(AIPlayer_Torrent LIBTORRENT)
         add_library(AIPlayer::Torrent ALIAS AIPlayer_Torrent)
     endif()
 endfunction()

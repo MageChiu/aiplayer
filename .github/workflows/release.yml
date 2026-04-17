@@ -109,7 +109,11 @@ jobs:
         run: |
           git clone https://github.com/microsoft/vcpkg.git "${{ github.workspace }}\vcpkg"
           & "${{ github.workspace }}\vcpkg\bootstrap-vcpkg.bat" -disableMetrics
-          & "${{ github.workspace }}\vcpkg\vcpkg.exe" install ffmpeg:x64-windows libtorrent:x64-windows
+          Remove-Item Env:VCPKG_ROOT -ErrorAction SilentlyContinue
+          & "${{ github.workspace }}\vcpkg\vcpkg.exe" install `
+            --triplet x64-windows `
+            --x-manifest-root="${{ github.workspace }}" `
+            --vcpkg-root="${{ github.workspace }}\vcpkg"
 
       - name: Download and detect libmpv
         run: |
@@ -119,7 +123,7 @@ jobs:
             throw "Cannot find mpv-dev-x86_64 asset in latest release."
           }
           Write-Host "Using mpv asset: $($asset.name)"
-          $mpvRoot = Join-Path "${{ github.workspace }}" "mpv-dev"
+          $mpvRoot = Join-Path "${{ github.workspace }}" ".deps\mpv"
           New-Item -ItemType Directory -Force -Path $mpvRoot | Out-Null
           Invoke-WebRequest -Uri $asset.browser_download_url -OutFile (Join-Path "${{ github.workspace }}" "mpv-dev.7z")
           7z x (Join-Path "${{ github.workspace }}" "mpv-dev.7z") "-o$mpvRoot" -y
@@ -166,7 +170,7 @@ jobs:
             throw "Neither mpv-2.dll nor libmpv-2.dll was found after extracting mpv-dev archive."
           }
 
-          "MPV_DEV_ROOT=$mpvRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "MPV_ROOT=$mpvRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
           "MPV_INCLUDE_DIR=$includeDir" | Out-File -FilePath $env:GITHUB_ENV -Append
           "MPV_LIBRARY=$($libFile.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           "MPV_DLL_PATH=$($dllFile.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -177,7 +181,7 @@ jobs:
 
       - name: Build Windows Exe
         env:
-          CMAKE_PREFIX_PATH: ${{ env.MPV_DEV_ROOT }}
+          MPV_ROOT: ${{ env.MPV_ROOT }}
           MPV_INCLUDE_DIR: ${{ env.MPV_INCLUDE_DIR }}
           MPV_LIBRARY: ${{ env.MPV_LIBRARY }}
           VCPKG_ROOT: ${{ github.workspace }}\vcpkg
@@ -194,7 +198,7 @@ jobs:
           }
           Copy-Item $env:MPV_DLL_PATH dist\windows\ -Force
 
-          $vcpkgBin = "${{ github.workspace }}\vcpkg\installed\x64-windows\bin"
+          $vcpkgBin = "${{ github.workspace }}\vcpkg_installed\x64-windows\bin"
           if (Test-Path $vcpkgBin) {
             Get-ChildItem $vcpkgBin -Filter "*.dll" | ForEach-Object {
               Copy-Item $_.FullName dist\windows\ -Force
