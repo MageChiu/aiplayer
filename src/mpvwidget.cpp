@@ -577,6 +577,9 @@ void MpvWidget::loadFile(const QString &filePath) {
 }
 
 void MpvWidget::play() {
+    if (isEofReached()) {
+        seek(0.0);
+    }
     setPaused(false);
 }
 
@@ -588,11 +591,7 @@ void MpvWidget::stop() {
     if (!m_mpv) {
         return;
     }
-    const char *args[] = {"stop", nullptr};
-    if (mpv_command(m_mpv, args) < 0) {
-        emit errorOccurred(QStringLiteral("停止播放失败"));
-        return;
-    }
+    seek(0.0);
     setPaused(true);
     emit timePosChanged(0.0);
 }
@@ -900,6 +899,18 @@ void MpvWidget::setPaused(bool paused) {
 
     m_paused = paused;
     emit playbackStateChanged(m_paused);
+}
+
+bool MpvWidget::isEofReached() const {
+    if (!m_mpv) {
+        return false;
+    }
+
+    int eofReached = 0;
+    if (mpv_get_property(m_mpv, "eof-reached", MPV_FORMAT_FLAG, &eofReached) < 0) {
+        return false;
+    }
+    return eofReached != 0;
 }
 
 void MpvWidget::seek(double pos) {
