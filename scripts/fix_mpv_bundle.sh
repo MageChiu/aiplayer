@@ -128,9 +128,6 @@ bundle_dep vapoursynth lib/libvapoursynth-script.0.dylib
 bundle_dep zimg lib/libzimg.2.dylib
 bundle_dep jpeg-turbo lib/libjpeg.8.dylib
 bundle_dep vulkan-loader lib/libvulkan.1.dylib
-if [[ -x "$BREW_BIN" ]] && "$BREW_BIN" list libtorrent-rasterbar >/dev/null 2>&1; then
-  bundle_dep_glob libtorrent-rasterbar "lib/libtorrent-rasterbar*.dylib"
-fi
 
 python3 - "$FRAMEWORKS_DIR" <<'PY'
 import os

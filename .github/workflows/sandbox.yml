@@ -1,81 +1,12 @@
-name: Release Build
+name: Sandbox Build
 
 on:
+  workflow_dispatch:
   push:
-    tags:
-      - 'release-*' # Trigger on tags starting with 'v', e.g., v1.0.0
+    branches:
+      - ci-sandbox/**
 
 jobs:
-  build-macos-intel:
-    runs-on: macos-15-intel
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Install dependencies (macOS)
-        run: |
-          brew install cmake ninja pkg-config
-          brew install mpv
-          brew install ffmpeg
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: '6.6.2'
-          host: 'mac'
-          target: 'desktop'
-          arch: 'clang_64'
-
-      - name: Build macOS App
-        run: |
-          chmod +x scripts/build_macos.sh
-          ./scripts/build_macos.sh --release
-
-      - name: Diagnose macOS bundle
-        if: always()
-        run: |
-          echo "== .deps =="
-          find .deps -maxdepth 3 -type f | sort || true
-          echo "== vcpkg_installed =="
-          find vcpkg_installed -maxdepth 3 -type f | sort || true
-          echo "== otool app =="
-          otool -L dist/macos/aiplayer.app/Contents/MacOS/aiplayer || true
-          echo "== Homebrew path scan =="
-          python3 - <<'PY'
-          import os, subprocess
-          root='dist/macos/aiplayer.app/Contents'
-          issues=[]
-          for base, _, files in os.walk(root):
-              for f in files:
-                  path=os.path.join(base,f)
-                  out=subprocess.run(['otool','-L',path],capture_output=True,text=True,check=False)
-                  if out.returncode != 0:
-                      continue
-                  for line in out.stdout.splitlines()[1:]:
-                      dep=line.strip().split(' ',1)[0]
-                      if dep.startswith('/opt/homebrew/') or dep.startswith('/usr/local/'):
-                          issues.append((os.path.relpath(path, root), dep))
-          if issues:
-              for rel,dep in issues:
-                  print(f'{rel} -> {dep}')
-          else:
-              print('OK: no Homebrew absolute dependencies found')
-          PY
-
-      - name: Archive macOS Build
-        run: |
-          cd dist/macos
-          zip -r AIPlayer-macOS-x86_64.zip aiplayer.app
-          cd ../..
-
-      - name: Upload macOS Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: AIPlayer-macOS-x86_64
-          path: dist/macos/AIPlayer-macOS-x86_64.zip
-
   build-macos-arm64:
     runs-on: macos-14
     steps:
@@ -135,16 +66,18 @@ jobs:
           PY
 
       - name: Archive macOS Build
+        if: success()
         run: |
           cd dist/macos
-          zip -r AIPlayer-macOS-arm64.zip aiplayer.app
+          zip -r AIPlayer-macOS-arm64-sandbox.zip aiplayer.app
           cd ../..
 
       - name: Upload macOS Artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: AIPlayer-macOS-arm64
-          path: dist/macos/AIPlayer-macOS-arm64.zip
+          name: AIPlayer-macOS-arm64-sandbox
+          path: dist/macos/AIPlayer-macOS-arm64-sandbox.zip
 
   build-windows:
     runs-on: windows-latest
@@ -188,9 +121,6 @@ jobs:
           Invoke-WebRequest -Uri $asset.browser_download_url -OutFile (Join-Path "${{ github.workspace }}" "mpv-dev.7z")
           7z x (Join-Path "${{ github.workspace }}" "mpv-dev.7z") "-o$mpvRoot" -y
 
-          Write-Host "Extracted mpv-dev tree:"
-          Get-ChildItem -Path $mpvRoot -Recurse | Select-Object FullName
-
           $clientHeader = Get-ChildItem -Path $mpvRoot -Recurse -File -Filter "client.h" |
             Where-Object { $_.FullName -match '[\\/]mpv[\\/]client\.h$' } |
             Select-Object -First 1
@@ -217,27 +147,18 @@ jobs:
                 Add-Content -Path $defPath -Value $matches[1] -Encoding ascii
               }
             }
-
             $generatedLib = Join-Path $mpvRoot "mpv.lib"
             & lib.exe "/def:$defPath" "/name:$dllName" "/out:$generatedLib" "/machine:x64"
             $libFile = Get-Item $generatedLib
           }
 
-          if (-not $libFile) {
-            throw "Neither mpv import library nor mpv/libmpv dll was found after extracting mpv-dev archive."
-          }
-          if (-not $dllFile) {
-            throw "Neither mpv-2.dll nor libmpv-2.dll was found after extracting mpv-dev archive."
-          }
+          if (-not $libFile) { throw "No mpv import library found." }
+          if (-not $dllFile) { throw "No mpv runtime dll found." }
 
           "MPV_ROOT=$mpvRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
           "MPV_INCLUDE_DIR=$includeDir" | Out-File -FilePath $env:GITHUB_ENV -Append
           "MPV_LIBRARY=$($libFile.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           "MPV_DLL_PATH=$($dllFile.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-          Write-Host "Resolved MPV include: $includeDir"
-          Write-Host "Resolved MPV library: $($libFile.FullName)"
-          Write-Host "Resolved MPV dll: $($dllFile.FullName)"
 
       - name: Build Windows Exe
         env:
@@ -262,10 +183,11 @@ jobs:
           Write-Host "MPV_DLL_PATH=$env:MPV_DLL_PATH"
 
       - name: Package Windows Build
+        if: success()
         run: |
           $windeployqt = (Get-Command windeployqt.exe).Source
           & $windeployqt dist\windows\aiplayer.exe
-          
+
           if (-not (Test-Path $env:MPV_DLL_PATH)) {
             throw "Resolved MPV_DLL_PATH does not exist: $env:MPV_DLL_PATH"
           }
@@ -277,53 +199,12 @@ jobs:
               Copy-Item $_.FullName dist\windows\ -Force
             }
           }
-          
-          # 打包成 zip
-          Compress-Archive -Path dist\windows\* -DestinationPath dist\windows\AIPlayer-Windows.zip
+
+          Compress-Archive -Path dist\windows\* -DestinationPath dist\windows\AIPlayer-Windows-sandbox.zip
 
       - name: Upload Windows Artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: AIPlayer-Windows
-          path: dist\windows\AIPlayer-Windows.zip
-
-  release:
-    needs: [build-macos-intel, build-macos-arm64, build-windows]
-    if: always() && (needs.build-macos-intel.result == 'success' || needs.build-macos-arm64.result == 'success' || needs.build-windows.result == 'success')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Download macOS Intel Artifact
-        uses: actions/download-artifact@v4
-        if: needs.build-macos-intel.result == 'success'
-        continue-on-error: true
-        with:
-          name: AIPlayer-macOS-x86_64
-          path: artifacts/macos-intel
-
-      - name: Download macOS Apple Silicon Artifact
-        uses: actions/download-artifact@v4
-        if: needs.build-macos-arm64.result == 'success'
-        continue-on-error: true
-        with:
-          name: AIPlayer-macOS-arm64
-          path: artifacts/macos-arm64
-
-      - name: Download Windows Artifact
-        uses: actions/download-artifact@v4
-        if: needs.build-windows.result == 'success'
-        continue-on-error: true
-        with:
-          name: AIPlayer-Windows
-          path: artifacts/windows
-
-      - name: Create GitHub Release and Upload Assets
-        uses: softprops/action-gh-release@v2
-        with:
-          files: artifacts/*/*.zip
-          generate_release_notes: false
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: AIPlayer-Windows-sandbox
+          path: dist\windows\AIPlayer-Windows-sandbox.zip
