@@ -20,7 +20,6 @@ $missing = @()
 
 if (-not (Test-Command 'cmake')) { $missing += 'cmake' }
 if (-not (Test-Command 'cl')) { $missing += 'MSVC (cl.exe)' }
-if (-not (Test-Command 'pkg-config')) { $missing += 'pkg-config(可选)' }
 
 $vcpkgRoot = $env:VCPKG_ROOT
 
@@ -29,13 +28,32 @@ if ($missing.Count -gt 0) {
     Write-Host '请确保已安装 Visual Studio 2022 (含 C++ 桌面开发)、CMake、Qt。' -ForegroundColor Yellow
 }
 
+if (-not $vcpkgRoot -or -not (Test-Path $vcpkgRoot)) {
+    Write-Warning '[Windows] 未检测到 VCPKG_ROOT，建议使用 vcpkg 安装 ffmpeg 与 libtorrent。'
+    Write-Host '  参考命令:' -ForegroundColor Yellow
+    Write-Host '    vcpkg install ffmpeg:x64-windows libtorrent:x64-windows' -ForegroundColor Yellow
+}
+
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $SrcDir = Resolve-Path (Join-Path $ScriptDir '..')
+$DepsDir = Join-Path $SrcDir '.deps'
+$DefaultVcpkgRoot = Join-Path $DepsDir 'vcpkg'
 $BuildDir = Join-Path $SrcDir 'build/windows'
 $DistDir = Join-Path $SrcDir 'dist/windows'
-$mpvDevRoot = Join-Path $SrcDir 'mpv-dev'
+$mpvDevRoot = Join-Path $DepsDir 'mpv'
 $envMpvInclude = $env:MPV_INCLUDE_DIR
 $envMpvLibrary = $env:MPV_LIBRARY
+
+if ((-not $vcpkgRoot -or -not (Test-Path $vcpkgRoot)) -or -not (Test-Path $mpvDevRoot)) {
+    Write-Host '[Windows] 准备项目内依赖...' -ForegroundColor Cyan
+    & (Join-Path $ScriptDir 'bootstrap_deps.ps1')
+}
+
+if (-not $vcpkgRoot -or -not (Test-Path $vcpkgRoot)) {
+    if (Test-Path $DefaultVcpkgRoot) {
+        $vcpkgRoot = $DefaultVcpkgRoot
+    }
+}
 
 New-Item -ItemType Directory -Force -Path $BuildDir | Out-Null
 New-Item -ItemType Directory -Force -Path $DistDir | Out-Null

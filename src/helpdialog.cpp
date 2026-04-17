@@ -29,10 +29,10 @@ HelpDialog::HelpDialog(QWidget *parent) : QDialog(parent) {
         "<li><b>HLS (m3u8)</b>: 苹果推出的流媒体协议，广泛用于在线视频网站点播和直播。</li>"
         "<li><b>RTMP (rtmp://)</b>: 实时消息传输协议，常用于斗鱼、虎牙等直播平台的推流和拉流。</li>"
         "<li><b>RTSP (rtsp://)</b>: 实时流传输协议，广泛应用于局域网 IPC 监控摄像头、安防系统。</li>"
-        "<li><b>磁力链接 (magnet:?xt=urn:btih:...)</b>: 基于 WebTorrent 技术的 P2P 边下边播功能。需要本地系统安装有 node 和 webtorrent-cli 依赖。</li>"
+        "<li><b>磁力链接 (magnet:?xt=urn:btih:...)</b>: 基于内置 libtorrent 引擎的 P2P 边下边播功能，无需额外安装 Node.js 或 webtorrent-cli。</li>"
         "<li><b>YouTube 等在线视频解析</b>: 如果环境内配置了 yt-dlp/youtube-dl，MPV 内核支持直接解析播放绝大多数在线视频网站的链接。</li>"
         "</ul>"
-        "<i>注：目前针对在线网络流，播放器会开启边下边播功能，但暂时会禁用 Whisper 本地 ASR 自动字幕提取。</i>"
+        "<i>注：目前针对在线网络流与磁力边播，播放器会优先保证播放稳定性，暂时不启用 Whisper 自动字幕提取。</i>"
     );
 
     auto *protocolsLabel = new QLabel(protocols, this);

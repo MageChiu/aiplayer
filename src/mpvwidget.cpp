@@ -2,20 +2,25 @@
 
 #include <QCoreApplication>
 #include <QDateTime>
+#include <QDataStream>
 #include <QDir>
+#include <QDirIterator>
 #include <QEvent>
 #include <QFile>
+#include <QFileInfo>
+#include <QFileInfoList>
 #include <QMetaObject>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-#include <QProcess>
 #include <QSurfaceFormat>
 #include <QTimer>
+#include <QVector>
 
 #include <chrono>
 #include <clocale>
 #include <cstdio>
 #include <cstring>
+#include <functional>
 
 #include <QStandardPaths>
 #include <QMessageBox>
@@ -26,7 +31,26 @@
 #include <QNetworkRequest>
 #include <QJsonDocument>
 #include <QJsonArray>
-#include <QRegularExpression>
+
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libavutil/avutil.h>
+#include <libavutil/channel_layout.h>
+#include <libavutil/opt.h>
+#include <libswresample/swresample.h>
+}
+
+#include <libtorrent/add_torrent_params.hpp>
+#include <libtorrent/alert_types.hpp>
+#include <libtorrent/error_code.hpp>
+#include <libtorrent/magnet_uri.hpp>
+#include <libtorrent/session.hpp>
+#include <libtorrent/settings_pack.hpp>
+#include <libtorrent/torrent_flags.hpp>
+#include <libtorrent/torrent_handle.hpp>
+
+namespace lt = libtorrent;
 
 namespace {
 constexpr QEvent::Type kMpvUpdateEvent = static_cast<QEvent::Type>(QEvent::User + 1);
@@ -39,26 +63,390 @@ QString appDataModelDirectory() {
     return QDir(baseDir).absoluteFilePath(QStringLiteral("models"));
 }
 
-QString resolveFfmpegProgram() {
-    const QString appDir = QCoreApplication::applicationDirPath();
-    const QStringList candidates = {
-        QDir(appDir).absoluteFilePath(QStringLiteral("ffmpeg")),
-        QDir(appDir).absoluteFilePath(QStringLiteral("ffmpeg.exe")),
-        QDir(appDir).absoluteFilePath(QStringLiteral("../Resources/bin/ffmpeg")),
-        QDir(appDir).absoluteFilePath(QStringLiteral("../Resources/bin/ffmpeg.exe")),
-        QDir(appDir).absoluteFilePath(QStringLiteral("../MacOS/ffmpeg")),
-        QDir(appDir).absoluteFilePath(QStringLiteral("../MacOS/ffmpeg.exe"))
-    };
+QString appDataTorrentDirectory() {
+    const QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (baseDir.isEmpty()) {
+        return QDir::homePath() + QStringLiteral("/.aiplayer/torrents");
+    }
+    return QDir(baseDir).absoluteFilePath(QStringLiteral("torrents"));
+}
 
-    for (const QString &candidate : candidates) {
-        if (QFileInfo::exists(candidate) && QFileInfo(candidate).isFile()) {
-            return QDir::cleanPath(candidate);
+QString ffmpegErrorString(int errorCode) {
+    char buffer[AV_ERROR_MAX_STRING_SIZE] = {0};
+    av_strerror(errorCode, buffer, sizeof(buffer));
+    return QString::fromUtf8(buffer);
+}
+
+bool isPlayableMediaFile(const QString &fileName) {
+    const QString suffix = QFileInfo(fileName).suffix().toLower();
+    static const QStringList kVideoSuffixes = {
+        QStringLiteral("mp4"),
+        QStringLiteral("mkv"),
+        QStringLiteral("avi"),
+        QStringLiteral("mov"),
+        QStringLiteral("ts"),
+        QStringLiteral("m2ts"),
+        QStringLiteral("webm"),
+        QStringLiteral("flv"),
+        QStringLiteral("wmv")
+    };
+    return kVideoSuffixes.contains(suffix);
+}
+
+QString findLargestPlayableFile(const QString &rootDir) {
+    QDirIterator it(rootDir, QDir::Files, QDirIterator::Subdirectories);
+    QFileInfo best;
+    while (it.hasNext()) {
+        const QFileInfo info(it.next());
+        if (!info.exists() || !info.isFile() || !isPlayableMediaFile(info.fileName())) {
+            continue;
+        }
+        if (!best.exists() || info.size() > best.size()) {
+            best = info;
+        }
+    }
+    return best.exists() ? best.absoluteFilePath() : QString();
+}
+
+bool writeWaveHeader(QFile &file, quint32 sampleRate, quint16 channels, quint16 bitsPerSample, quint32 dataSize) {
+    if (!file.isOpen()) {
+        return false;
+    }
+
+    file.seek(0);
+    const quint32 byteRate = sampleRate * channels * bitsPerSample / 8;
+    const quint16 blockAlign = channels * bitsPerSample / 8;
+    QByteArray header;
+    QDataStream stream(&header, QIODevice::WriteOnly);
+    stream.setByteOrder(QDataStream::LittleEndian);
+    stream.writeRawData("RIFF", 4);
+    stream << quint32(36 + dataSize);
+    stream.writeRawData("WAVE", 4);
+    stream.writeRawData("fmt ", 4);
+    stream << quint32(16);
+    stream << quint16(1);
+    stream << quint16(channels);
+    stream << quint32(sampleRate);
+    stream << quint32(byteRate);
+    stream << quint16(blockAlign);
+    stream << quint16(bitsPerSample);
+    stream.writeRawData("data", 4);
+    stream << quint32(dataSize);
+    return file.write(header) == header.size();
+}
+
+enum class AudioExtractResult {
+    Success,
+    Cancelled,
+    Failed
+};
+
+AudioExtractResult extractAudioToWaveFile(const QString &inputPath,
+                                         const QString &outputPath,
+                                         std::atomic<bool> *cancelFlag,
+                                         QString *errorMessage) {
+    AVFormatContext *formatContext = nullptr;
+    AVCodecContext *codecContext = nullptr;
+    SwrContext *resampleContext = nullptr;
+    AVPacket *packet = nullptr;
+    AVFrame *frame = nullptr;
+    const AVCodec *decoder = nullptr;
+    int audioStreamIndex = -1;
+    QFile outputFile(outputPath);
+    quint32 dataSize = 0;
+    AudioExtractResult result = AudioExtractResult::Failed;
+#if LIBAVUTIL_VERSION_MAJOR >= 57
+    AVChannelLayout outLayout{};
+    bool outLayoutInitialized = false;
+#endif
+
+    const QByteArray inputUtf8 = inputPath.toUtf8();
+    int fferr = avformat_open_input(&formatContext, inputUtf8.constData(), nullptr, nullptr);
+    if (fferr < 0) {
+        if (errorMessage) *errorMessage = ffmpegErrorString(fferr);
+        goto cleanup;
+    }
+
+    fferr = avformat_find_stream_info(formatContext, nullptr);
+    if (fferr < 0) {
+        if (errorMessage) *errorMessage = ffmpegErrorString(fferr);
+        goto cleanup;
+    }
+
+    audioStreamIndex = av_find_best_stream(formatContext, AVMEDIA_TYPE_AUDIO, -1, -1, &decoder, 0);
+    if (audioStreamIndex < 0 || !decoder) {
+        if (errorMessage) *errorMessage = QStringLiteral("未找到可用音频流");
+        goto cleanup;
+    }
+
+    codecContext = avcodec_alloc_context3(decoder);
+    if (!codecContext) {
+        if (errorMessage) *errorMessage = QStringLiteral("无法创建 FFmpeg 解码上下文");
+        goto cleanup;
+    }
+
+    fferr = avcodec_parameters_to_context(codecContext, formatContext->streams[audioStreamIndex]->codecpar);
+    if (fferr < 0) {
+        if (errorMessage) *errorMessage = ffmpegErrorString(fferr);
+        goto cleanup;
+    }
+
+    fferr = avcodec_open2(codecContext, decoder, nullptr);
+    if (fferr < 0) {
+        if (errorMessage) *errorMessage = ffmpegErrorString(fferr);
+        goto cleanup;
+    }
+
+    resampleContext = swr_alloc();
+    if (!resampleContext) {
+        if (errorMessage) *errorMessage = QStringLiteral("无法创建音频重采样器");
+        goto cleanup;
+    }
+
+#if LIBAVUTIL_VERSION_MAJOR >= 57
+    av_channel_layout_default(&outLayout, 1);
+    outLayoutInitialized = true;
+    av_opt_set_chlayout(resampleContext, "in_chlayout", &codecContext->ch_layout, 0);
+    av_opt_set_chlayout(resampleContext, "out_chlayout", &outLayout, 0);
+#else
+    const int64_t inChannelLayout = codecContext->channel_layout != 0
+        ? codecContext->channel_layout
+        : av_get_default_channel_layout(codecContext->channels);
+    av_opt_set_int(resampleContext, "in_channel_layout", inChannelLayout, 0);
+    av_opt_set_int(resampleContext, "out_channel_layout", AV_CH_LAYOUT_MONO, 0);
+#endif
+    av_opt_set_int(resampleContext, "in_sample_rate", codecContext->sample_rate, 0);
+    av_opt_set_int(resampleContext, "out_sample_rate", 16000, 0);
+    av_opt_set_sample_fmt(resampleContext, "in_sample_fmt", codecContext->sample_fmt, 0);
+    av_opt_set_sample_fmt(resampleContext, "out_sample_fmt", AV_SAMPLE_FMT_S16, 0);
+
+    fferr = swr_init(resampleContext);
+    if (fferr < 0) {
+        if (errorMessage) *errorMessage = ffmpegErrorString(fferr);
+        goto cleanup;
+    }
+
+    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (errorMessage) *errorMessage = QStringLiteral("无法创建输出 WAV 文件");
+        goto cleanup;
+    }
+    outputFile.write(QByteArray(44, '\0'));
+
+    packet = av_packet_alloc();
+    frame = av_frame_alloc();
+    if (!packet || !frame) {
+        if (errorMessage) *errorMessage = QStringLiteral("无法创建 FFmpeg 数据缓冲");
+        goto cleanup;
+    }
+
+    while ((fferr = av_read_frame(formatContext, packet)) >= 0) {
+        if (cancelFlag && cancelFlag->load()) {
+            result = AudioExtractResult::Cancelled;
+            goto cleanup;
+        }
+
+        if (packet->stream_index != audioStreamIndex) {
+            av_packet_unref(packet);
+            continue;
+        }
+
+        fferr = avcodec_send_packet(codecContext, packet);
+        av_packet_unref(packet);
+        if (fferr < 0) {
+            if (errorMessage) *errorMessage = ffmpegErrorString(fferr);
+            goto cleanup;
+        }
+
+        while ((fferr = avcodec_receive_frame(codecContext, frame)) >= 0) {
+            if (cancelFlag && cancelFlag->load()) {
+                result = AudioExtractResult::Cancelled;
+                goto cleanup;
+            }
+
+            const int outSamples = av_rescale_rnd(
+                swr_get_delay(resampleContext, codecContext->sample_rate) + frame->nb_samples,
+                16000,
+                codecContext->sample_rate,
+                AV_ROUND_UP);
+            QVector<uint8_t> pcmBuffer(outSamples * 2);
+            uint8_t *outData[] = { pcmBuffer.data() };
+
+            const int convertedSamples = swr_convert(
+                resampleContext,
+                outData,
+                outSamples,
+                const_cast<const uint8_t **>(frame->extended_data),
+                frame->nb_samples);
+            if (convertedSamples < 0) {
+                if (errorMessage) *errorMessage = ffmpegErrorString(convertedSamples);
+                goto cleanup;
+            }
+
+            const int bytesToWrite = convertedSamples * 2;
+            if (outputFile.write(reinterpret_cast<const char *>(pcmBuffer.constData()), bytesToWrite) != bytesToWrite) {
+                if (errorMessage) *errorMessage = QStringLiteral("写入 WAV 数据失败");
+                goto cleanup;
+            }
+            dataSize += bytesToWrite;
+            av_frame_unref(frame);
+        }
+
+        if (fferr != AVERROR(EAGAIN) && fferr != AVERROR_EOF) {
+            if (errorMessage) *errorMessage = ffmpegErrorString(fferr);
+            goto cleanup;
         }
     }
 
-    return QStandardPaths::findExecutable(QStringLiteral("ffmpeg"));
+    fferr = avcodec_send_packet(codecContext, nullptr);
+    if (fferr >= 0) {
+        while ((fferr = avcodec_receive_frame(codecContext, frame)) >= 0) {
+            const int outSamples = av_rescale_rnd(
+                swr_get_delay(resampleContext, codecContext->sample_rate) + frame->nb_samples,
+                16000,
+                codecContext->sample_rate,
+                AV_ROUND_UP);
+            QVector<uint8_t> pcmBuffer(outSamples * 2);
+            uint8_t *outData[] = { pcmBuffer.data() };
+            const int convertedSamples = swr_convert(
+                resampleContext,
+                outData,
+                outSamples,
+                const_cast<const uint8_t **>(frame->extended_data),
+                frame->nb_samples);
+            if (convertedSamples < 0) {
+                if (errorMessage) *errorMessage = ffmpegErrorString(convertedSamples);
+                goto cleanup;
+            }
+            const int bytesToWrite = convertedSamples * 2;
+            if (outputFile.write(reinterpret_cast<const char *>(pcmBuffer.constData()), bytesToWrite) != bytesToWrite) {
+                if (errorMessage) *errorMessage = QStringLiteral("写入 WAV 数据失败");
+                goto cleanup;
+            }
+            dataSize += bytesToWrite;
+            av_frame_unref(frame);
+        }
+    }
+
+    if (!writeWaveHeader(outputFile, 16000, 1, 16, dataSize)) {
+        if (errorMessage) *errorMessage = QStringLiteral("写入 WAV 文件头失败");
+        goto cleanup;
+    }
+    result = AudioExtractResult::Success;
+
+cleanup:
+#if LIBAVUTIL_VERSION_MAJOR >= 57
+    if (outLayoutInitialized) {
+        av_channel_layout_uninit(&outLayout);
+    }
+#endif
+    if (outputFile.isOpen()) {
+        outputFile.close();
+    }
+    if (result != AudioExtractResult::Success) {
+        QFile::remove(outputPath);
+    }
+    if (packet) av_packet_free(&packet);
+    if (frame) av_frame_free(&frame);
+    if (resampleContext) swr_free(&resampleContext);
+    if (codecContext) avcodec_free_context(&codecContext);
+    if (formatContext) avformat_close_input(&formatContext);
+    return result;
 }
 }
+
+class TorrentSessionController {
+public:
+    using PlayableCallback = std::function<void(const QString &, const QString &)>;
+    using StatusCallback = std::function<void(const QString &)>;
+    using ErrorCallback = std::function<void(const QString &)>;
+
+    TorrentSessionController(QString magnetUri, QString downloadDirectory)
+        : magnetUri_(std::move(magnetUri)), downloadDirectory_(std::move(downloadDirectory)) {}
+
+    ~TorrentSessionController() { stop(); }
+
+    void start(PlayableCallback onPlayable, StatusCallback onStatus, ErrorCallback onError) {
+        onPlayable_ = std::move(onPlayable);
+        onStatus_ = std::move(onStatus);
+        onError_ = std::move(onError);
+        stopRequested_.store(false);
+        worker_ = std::thread(&TorrentSessionController::run, this);
+    }
+
+    void stop() {
+        stopRequested_.store(true);
+        if (session_) {
+            session_->pause();
+        }
+        if (worker_.joinable()) {
+            worker_.join();
+        }
+        session_.reset();
+    }
+
+private:
+    void run() {
+        QDir().mkpath(downloadDirectory_);
+
+        lt::settings_pack settings;
+        settings.set_int(lt::settings_pack::alert_mask,
+                         lt::alert_category::error | lt::alert_category::status | lt::alert_category::storage);
+        session_ = std::make_unique<lt::session>(settings);
+
+        lt::error_code ec;
+        lt::add_torrent_params params = lt::parse_magnet_uri(magnetUri_.toStdString(), ec);
+        if (ec) {
+            if (onError_) onError_(QStringLiteral("解析磁力链接失败：%1").arg(QString::fromStdString(ec.message())));
+            return;
+        }
+
+        params.save_path = downloadDirectory_.toStdString();
+        handle_ = session_->add_torrent(std::move(params), ec);
+        if (ec) {
+            if (onError_) onError_(QStringLiteral("启动磁力任务失败：%1").arg(QString::fromStdString(ec.message())));
+            return;
+        }
+
+        handle_.set_flags(lt::torrent_flags::sequential_download);
+        if (onStatus_) onStatus_(QStringLiteral("磁力任务已启动，正在获取元数据..."));
+
+        while (!stopRequested_.load()) {
+            std::vector<lt::alert *> alerts;
+            session_->pop_alerts(&alerts);
+            for (lt::alert *alert : alerts) {
+                if (auto *metadata = lt::alert_cast<lt::metadata_received_alert>(alert)) {
+                    Q_UNUSED(metadata);
+                    if (onStatus_) onStatus_(QStringLiteral("已获取种子元数据，正在预缓冲视频..."));
+                } else if (auto *torrentErr = lt::alert_cast<lt::torrent_error_alert>(alert)) {
+                    if (onError_) onError_(QStringLiteral("磁力任务错误：%1").arg(QString::fromStdString(torrentErr->error.message())));
+                }
+            }
+
+            if (!playableNotified_) {
+                const QString mediaPath = findLargestPlayableFile(downloadDirectory_);
+                const QFileInfo info(mediaPath);
+                if (info.exists() && info.size() > 8 * 1024 * 1024) {
+                    playableNotified_ = true;
+                    if (onPlayable_) onPlayable_(info.absoluteFilePath(), info.fileName());
+                    if (onStatus_) onStatus_(QStringLiteral("已进入边下边播模式"));
+                }
+            }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+    }
+
+    QString magnetUri_;
+    QString downloadDirectory_;
+    std::unique_ptr<lt::session> session_;
+    lt::torrent_handle handle_;
+    std::thread worker_;
+    std::atomic<bool> stopRequested_{false};
+    bool playableNotified_ = false;
+    PlayableCallback onPlayable_;
+    StatusCallback onStatus_;
+    ErrorCallback onError_;
+};
 
 MpvWidget::MpvWidget(QWidget *parent)
     : QOpenGLWidget(parent), m_eventTimer(new QTimer(this)), m_networkManager(new QNetworkAccessManager(this)) {
@@ -72,20 +460,12 @@ MpvWidget::MpvWidget(QWidget *parent)
 }
 
 MpvWidget::~MpvWidget() {
+    stopAudioExtraction();
+    stopTorrentStreaming();
+
     m_asrRunning.store(false);
     if (m_asrThread.joinable()) {
         m_asrThread.join();
-    }
-
-    if (m_ffmpegProcess) {
-        m_ffmpegProcess->kill();
-        m_ffmpegProcess->waitForFinished(3000);
-        m_ffmpegProcess = nullptr;
-    }
-
-    if (m_webtorrentProcess) {
-        m_webtorrentProcess->kill();
-        m_webtorrentProcess->waitForFinished();
     }
 
     if (m_renderContext) {
@@ -113,18 +493,27 @@ bool MpvWidget::initializePlayer() {
     return true;
 }
 
+void MpvWidget::stopAudioExtraction() {
+    m_audioExtractCancel.store(true);
+    if (m_audioExtractThread.joinable()) {
+        m_audioExtractThread.join();
+    }
+}
+
+void MpvWidget::stopTorrentStreaming() {
+    if (m_torrentController) {
+        m_torrentController->stop();
+        m_torrentController.reset();
+    }
+}
+
 void MpvWidget::loadFile(const QString &filePath) {
     if (!initializePlayer()) {
         emit errorOccurred(QStringLiteral("播放器初始化失败"));
         return;
     }
 
-    if (m_webtorrentProcess) {
-        m_webtorrentProcess->kill();
-        m_webtorrentProcess->waitForFinished();
-        m_webtorrentProcess->deleteLater();
-        m_webtorrentProcess = nullptr;
-    }
+    stopTorrentStreaming();
 
     bool isNetworkStream = filePath.startsWith("http://", Qt::CaseInsensitive) ||
                            filePath.startsWith("https://", Qt::CaseInsensitive) ||
@@ -147,44 +536,32 @@ void MpvWidget::loadFile(const QString &filePath) {
     }
 
     if (isMagnet) {
-        m_webtorrentProcess = new QProcess(this);
-        connect(m_webtorrentProcess, &QProcess::readyReadStandardOutput, this, [this]() {
-            QString output = QString::fromUtf8(m_webtorrentProcess->readAllStandardOutput());
-            std::fprintf(stderr, "[WebTorrent] %s", output.toUtf8().constData());
-            
-            // Parse Server running at: http://localhost:8000/0
-            QRegularExpression re("Server running at: (http://[a-zA-Z0-9_.:]+/[0-9]+)");
-            QRegularExpressionMatch match = re.match(output);
-            if (match.hasMatch()) {
-                QString streamUrl = match.captured(1);
-                std::fprintf(stderr, "[WebTorrent] Found stream URL: %s\n", streamUrl.toUtf8().constData());
-                
-                const QByteArray utf8 = streamUrl.toUtf8();
-                const char *cmd[] = {"loadfile", utf8.constData(), nullptr};
-                mpv_command(m_mpv, cmd);
-                setPaused(false);
-                emit fileLoaded(QStringLiteral("磁力链接下载中..."));
-                
-                // Disconnect to avoid loading multiple times if it prints again
-                disconnect(m_webtorrentProcess, &QProcess::readyReadStandardOutput, this, nullptr);
-            }
-        });
-        
-        connect(m_webtorrentProcess, &QProcess::readyReadStandardError, this, [this]() {
-            std::fprintf(stderr, "[WebTorrent ERR] %s", m_webtorrentProcess->readAllStandardError().constData());
-        });
-        
-        connect(m_webtorrentProcess, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this, [this](int exitCode, QProcess::ExitStatus status) {
-            std::fprintf(stderr, "[WebTorrent] Process exited with code %d\n", exitCode);
-        });
-
-        // Use webtorrent cli tool (needs to be installed globally via npm install -g webtorrent-cli)
-        m_webtorrentProcess->start("webtorrent", QStringList() << filePath << "--keep-seeding");
-        if (!m_webtorrentProcess->waitForStarted(3000)) {
-            emit errorOccurred(QStringLiteral("无法启动 webtorrent 进程。请确保系统已安装 Node.js 并且通过 'npm install -g webtorrent-cli' 安装了依赖。"));
-            m_webtorrentProcess->deleteLater();
-            m_webtorrentProcess = nullptr;
-        }
+        const QString downloadRoot = QDir(appDataTorrentDirectory())
+                                         .absoluteFilePath(QDateTime::currentDateTimeUtc().toString(QStringLiteral("yyyyMMdd_hhmmss_zzz")));
+        m_torrentController = std::make_unique<TorrentSessionController>(filePath, downloadRoot);
+        m_torrentController->start(
+            [this](const QString &mediaPath, const QString &displayName) {
+                QMetaObject::invokeMethod(this, [this, mediaPath, displayName]() {
+                    const QByteArray utf8 = mediaPath.toUtf8();
+                    const char *cmd[] = {"loadfile", utf8.constData(), nullptr};
+                    if (mpv_command(m_mpv, cmd) < 0) {
+                        emit errorOccurred(QStringLiteral("无法加载磁力缓存文件：%1").arg(mediaPath));
+                        return;
+                    }
+                    setPaused(false);
+                    emit fileLoaded(QStringLiteral("磁力边播：%1").arg(displayName));
+                }, Qt::QueuedConnection);
+            },
+            [this](const QString &status) {
+                QMetaObject::invokeMethod(this, [this, status]() {
+                    std::lock_guard<std::mutex> lock(m_subtitleMutex);
+                    m_asrStatus = status;
+                    emit asrTextUpdated(m_asrStatus, QString());
+                }, Qt::QueuedConnection);
+            },
+            [this](const QString &error) {
+                QMetaObject::invokeMethod(this, [this, error]() { emit errorOccurred(error); }, Qt::QueuedConnection);
+            });
         return;
     }
 
@@ -315,109 +692,39 @@ void MpvWidget::createMpv() {
 
 void MpvWidget::extractAudioWithFFmpeg(const QString &videoPath) {
     const QString outputPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/aiplayer_audio.wav";
-    const QString ffmpegProgram = resolveFfmpegProgram();
-
-    if (ffmpegProgram.isEmpty()) {
-        emit errorOccurred(QStringLiteral("未找到 FFmpeg 可执行文件。请将 ffmpeg 放入系统 PATH，或放到应用目录/Resources/bin 下。"));
-        return;
-    }
-
-    if (m_ffmpegProcess) {
-        m_ffmpegProcess->kill();
-        m_ffmpegProcess->waitForFinished(3000);
-        m_ffmpegProcess->deleteLater();
-        m_ffmpegProcess = nullptr;
-    }
+    stopAudioExtraction();
+    m_audioExtractCancel.store(false);
 
     if (QFile::exists(outputPath)) {
         QFile::remove(outputPath);
     }
 
-    m_ffmpegProcess = new QProcess(this);
-    m_ffmpegProcess->setProgram(ffmpegProgram);
-    m_ffmpegProcess->setArguments({
-        QStringLiteral("-y"),
-        QStringLiteral("-i"),
-        videoPath,
-        QStringLiteral("-ar"),
-        QStringLiteral("16000"),
-        QStringLiteral("-ac"),
-        QStringLiteral("1"),
-        QStringLiteral("-c:a"),
-        QStringLiteral("pcm_s16le"),
-        outputPath,
+    m_audioExtractThread = std::thread([this, videoPath, outputPath]() {
+        QString err;
+        const AudioExtractResult result = extractAudioToWaveFile(videoPath, outputPath, &m_audioExtractCancel, &err);
+        QMetaObject::invokeMethod(this, [this, result, outputPath, err]() {
+            if (result == AudioExtractResult::Cancelled) {
+                return;
+            }
+            if (result != AudioExtractResult::Success) {
+                emit errorOccurred(QStringLiteral("FFmpeg 音频抽取失败：%1").arg(err));
+                return;
+            }
+
+            m_wavPath = outputPath;
+            {
+                std::lock_guard<std::mutex> lock(m_subtitleMutex);
+                m_subtitles.clear();
+                m_asrStatus = QStringLiteral("[ASR] 准备处理...");
+            }
+
+            m_asrRunning.store(false);
+            if (m_asrThread.joinable()) m_asrThread.join();
+
+            m_asrRunning.store(true);
+            m_asrThread = std::thread(&MpvWidget::runWhisper, this);
+        }, Qt::QueuedConnection);
     });
-
-    connect(m_ffmpegProcess, &QProcess::readyReadStandardOutput, this, [this]() {
-        if (!m_ffmpegProcess) {
-            return;
-        }
-        const QByteArray data = m_ffmpegProcess->readAllStandardOutput();
-        if (!data.isEmpty()) {
-            std::fprintf(stderr, "%s", data.constData());
-            std::fflush(stderr);
-        }
-    });
-
-    connect(m_ffmpegProcess, &QProcess::readyReadStandardError, this, [this]() {
-        if (!m_ffmpegProcess) {
-            return;
-        }
-        const QByteArray data = m_ffmpegProcess->readAllStandardError();
-        if (!data.isEmpty()) {
-            std::fprintf(stderr, "%s", data.constData());
-            std::fflush(stderr);
-        }
-    });
-
-    connect(m_ffmpegProcess,
-            qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
-            this,
-            [this, outputPath](int exitCode, QProcess::ExitStatus exitStatus) {
-                std::fprintf(stderr,
-                             "[FFmpeg] Process finished with exitCode=%d, exitStatus=%d\n",
-                             exitCode,
-                             static_cast<int>(exitStatus));
-                if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
-                    std::fprintf(stderr,
-                                 "[FFmpeg] Audio extraction finished! %s is ready.\n",
-                                 outputPath.toUtf8().constData());
-                    
-                    m_wavPath = outputPath;
-                    {
-                        std::lock_guard<std::mutex> lock(m_subtitleMutex);
-                        m_subtitles.clear();
-                        m_asrStatus = QStringLiteral("[ASR] 准备处理...");
-                    }
-                    
-                    // Stop previous ASR thread if running
-                    m_asrRunning.store(false);
-                    if (m_asrThread.joinable()) m_asrThread.join();
-                    
-                    // Start new ASR thread
-                    m_asrRunning.store(true);
-                    m_asrThread = std::thread(&MpvWidget::runWhisper, this);
-                }
-                std::fflush(stderr);
-                m_ffmpegProcess->deleteLater();
-                m_ffmpegProcess = nullptr;
-            });
-
-    connect(m_ffmpegProcess,
-            &QProcess::errorOccurred,
-            this,
-            [this](QProcess::ProcessError error) {
-                emit errorOccurred(QStringLiteral("FFmpeg 音频提取失败：%1").arg(static_cast<int>(error)));
-                m_ffmpegProcess->deleteLater();
-                m_ffmpegProcess = nullptr;
-            });
-
-    std::fprintf(stderr,
-                 "[FFmpeg] Starting extraction: %s -> %s\n",
-                 videoPath.toUtf8().constData(),
-                 outputPath.toUtf8().constData());
-    std::fflush(stderr);
-    m_ffmpegProcess->start();
 }
 
 

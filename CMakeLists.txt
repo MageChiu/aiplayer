@@ -9,40 +9,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets OpenGLWidgets Network)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(Dependencies)
 
-if(WIN32)
-    # Windows 下优先尝试直接查找 mpv 头文件和库
-    find_path(MPV_INCLUDE_DIR NAMES mpv/client.h)
-    find_library(MPV_LIBRARY NAMES mpv libmpv mpv-2 libmpv-2)
-    if(MPV_INCLUDE_DIR AND MPV_LIBRARY)
-        message(STATUS "Found mpv manually: ${MPV_LIBRARY}")
-        add_library(PkgConfig::MPV UNKNOWN IMPORTED)
-        set_target_properties(PkgConfig::MPV PROPERTIES
-            IMPORTED_LOCATION "${MPV_LIBRARY}"
-            INTERFACE_INCLUDE_DIRECTORIES "${MPV_INCLUDE_DIR}"
-        )
-    else()
-        find_package(PkgConfig REQUIRED)
-        pkg_check_modules(MPV REQUIRED IMPORTED_TARGET mpv)
-    endif()
-else()
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(MPV REQUIRED IMPORTED_TARGET mpv)
-endif()
-
-include(FetchContent)
-
-FetchContent_Declare(
-    whispercpp
-    GIT_REPOSITORY https://github.com/ggerganov/whisper.cpp.git
-    GIT_TAG        master
-)
-
-# whisper.cpp 默认会尝试用 ccache；本机 ccache 动态库依赖异常会导致构建中断
-set(GGML_CCACHE OFF CACHE BOOL "Disable ccache for ggml" FORCE)
-
-FetchContent_MakeAvailable(whispercpp)
+aiplayer_resolve_dependencies()
 
 qt_standard_project_setup()
 
@@ -58,20 +28,18 @@ qt_add_executable(aiplayer
 # whisper.cpp 头文件路径
 target_include_directories(aiplayer PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${whispercpp_SOURCE_DIR}
 )
 
-target_link_libraries(aiplayer PRIVATE
-    Qt6::Widgets
-    Qt6::OpenGLWidgets
-    Qt6::Network
-    PkgConfig::MPV
-    whisper
-)
+aiplayer_link_dependencies(aiplayer)
 
 if(APPLE)
+    find_program(BREW_EXECUTABLE brew HINTS /opt/homebrew/bin /usr/local/bin)
+    if(NOT BREW_EXECUTABLE)
+        message(FATAL_ERROR "Homebrew not found. Please install brew and required dependencies.")
+    endif()
+
     execute_process(
-        COMMAND /opt/homebrew/bin/brew --prefix mpv
+        COMMAND ${BREW_EXECUTABLE} --prefix mpv
         OUTPUT_VARIABLE MPV_PREFIX
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
@@ -80,7 +48,13 @@ if(APPLE)
         message(FATAL_ERROR "Failed to resolve Homebrew mpv prefix")
     endif()
 
-    find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS /opt/homebrew/bin)
+    find_program(MACDEPLOYQT_EXECUTABLE macdeployqt
+        HINTS
+            $ENV{Qt6_DIR}/../../../bin
+            $ENV{CMAKE_PREFIX_PATH}/bin
+            /opt/homebrew/bin
+            /usr/local/bin
+    )
     if(NOT MACDEPLOYQT_EXECUTABLE)
         message(FATAL_ERROR "macdeployqt not found")
     endif()
