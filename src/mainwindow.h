@@ -9,6 +9,7 @@ class QComboBox;
 class MpvWidget;
 class QWidget;
 class QKeyEvent;
+class LogWindow;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -39,6 +40,7 @@ private slots:
     void onVolumeChanged(int volume);
     void onMuteStateChanged(bool mute);
     void openHelp();
+    void openLogWindow();
 
 private:
     void tryAutoLoadFromArgs();
@@ -54,6 +56,7 @@ private:
     QComboBox *m_speedComboBox = nullptr;
     QPushButton *m_settingsButton = nullptr;
     QPushButton *m_helpButton = nullptr;
+    QPushButton *m_logButton = nullptr;
 
     QPushButton *m_muteButton = nullptr;
     QSlider *m_volumeSlider = nullptr;
@@ -66,4 +69,5 @@ private:
     // Phase 2/3：字幕 Overlay
     QWidget *m_subtitleOverlay = nullptr;
     QLabel *m_subtitleLabel = nullptr;
+    LogWindow *m_logWindow = nullptr;
 };

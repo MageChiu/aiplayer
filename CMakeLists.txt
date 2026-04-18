@@ -18,7 +18,10 @@ qt_standard_project_setup()
 
 qt_add_executable(aiplayer
     src/main.cpp
+    src/logcenter.cpp
+    src/logwindow.cpp
     src/mainwindow.cpp
+    src/localtranslationengine.cpp
     src/mpvwidget.cpp
     src/settingsdialog.cpp
     src/helpdialog.cpp
@@ -31,6 +34,17 @@ target_include_directories(aiplayer PRIVATE
 )
 
 aiplayer_link_dependencies(aiplayer)
+
+add_executable(aiplayer_translate_helper
+    src/translationhelper.cpp
+)
+set_target_properties(aiplayer_translate_helper PROPERTIES
+    OUTPUT_NAME "aiplayer-translate-helper"
+)
+target_include_directories(aiplayer_translate_helper PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+aiplayer_link_llama_helper(aiplayer_translate_helper)
 
 if(APPLE)
     find_program(BREW_EXECUTABLE brew HINTS /opt/homebrew/bin /usr/local/bin)
@@ -65,8 +79,13 @@ if(APPLE)
         BUILD_RPATH "@executable_path/../Frameworks;@loader_path/../Frameworks"
         INSTALL_RPATH "@executable_path/../Frameworks;@loader_path/../Frameworks"
     )
+    set_target_properties(aiplayer_translate_helper PROPERTIES
+        BUILD_RPATH "@executable_path/../Frameworks;@loader_path/../Frameworks"
+        INSTALL_RPATH "@executable_path/../Frameworks;@loader_path/../Frameworks"
+    )
 
     add_custom_command(TARGET aiplayer POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:aiplayer_translate_helper>" "$<TARGET_FILE_DIR:aiplayer>/"
         COMMAND "${MACDEPLOYQT_EXECUTABLE}" "$<TARGET_BUNDLE_DIR:aiplayer>" -always-overwrite -verbose=1
         COMMAND /bin/sh "${CMAKE_CURRENT_SOURCE_DIR}/scripts/fix_mpv_bundle.sh" "$<TARGET_BUNDLE_DIR:aiplayer>"
         COMMAND /usr/bin/codesign --force --deep --sign - --timestamp=none "$<TARGET_BUNDLE_DIR:aiplayer>"
@@ -74,10 +93,17 @@ if(APPLE)
     )
 elseif(WIN32)
     set_target_properties(aiplayer PROPERTIES WIN32_EXECUTABLE TRUE)
-    # 可以在这里添加 windeployqt 或者 vcpkg 的处理
+    add_custom_command(TARGET aiplayer POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:aiplayer_translate_helper>" "$<TARGET_FILE_DIR:aiplayer>"
+        VERBATIM
+    )
 endif()
 
 install(TARGETS aiplayer
     BUNDLE DESTINATION .
+    RUNTIME DESTINATION bin
+)
+
+install(TARGETS aiplayer_translate_helper
     RUNTIME DESTINATION bin
 )

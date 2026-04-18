@@ -4,6 +4,8 @@
 
 #include "settingsdialog.h"
 #include "helpdialog.h"
+#include "logcenter.h"
+#include "logwindow.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -22,6 +24,50 @@
 #include <QInputDialog>
 
 #include <QGraphicsDropShadowEffect>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QUrl>
+
+namespace {
+void reportOpenVideoCrashDebug(const QString &hypothesisId, const QString &location, const QString &message, const QJsonObject &data = {}) {
+    if (qEnvironmentVariableIntValue("AIPLAYER_DEBUG_RUNTIME") == 0) {
+        return;
+    }
+    static auto *manager = new QNetworkAccessManager(qApp);
+    QNetworkRequest request(QUrl(QStringLiteral("http://127.0.0.1:7777/event")));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
+    const QJsonObject payload{
+        {QStringLiteral("sessionId"), QStringLiteral("open-video-crash")},
+        {QStringLiteral("runId"), QStringLiteral("pre")},
+        {QStringLiteral("hypothesisId"), hypothesisId},
+        {QStringLiteral("location"), location},
+        {QStringLiteral("msg"), QStringLiteral("[DEBUG] %1").arg(message)},
+        {QStringLiteral("data"), data},
+        {QStringLiteral("ts"), QString::number(QDateTime::currentMSecsSinceEpoch())}
+    };
+    manager->post(request, QJsonDocument(payload).toJson(QJsonDocument::Compact));
+}
+
+void reportTranslationDisplayDebug(const QString &hypothesisId, const QString &location, const QString &message, const QJsonObject &data = {}) {
+    if (qEnvironmentVariableIntValue("AIPLAYER_DEBUG_TRANSLATION") == 0) {
+        return;
+    }
+    static auto *manager = new QNetworkAccessManager(qApp);
+    QNetworkRequest request(QUrl(QStringLiteral("http://127.0.0.1:7777/event")));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
+    const QJsonObject payload{
+        {QStringLiteral("sessionId"), QStringLiteral("translation-display")},
+        {QStringLiteral("runId"), QStringLiteral("pre")},
+        {QStringLiteral("hypothesisId"), hypothesisId},
+        {QStringLiteral("location"), location},
+        {QStringLiteral("msg"), QStringLiteral("[DEBUG] %1").arg(message)},
+        {QStringLiteral("data"), data}
+    };
+    manager->post(request, QJsonDocument(payload).toJson(QJsonDocument::Compact));
+}
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
@@ -100,6 +146,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_helpButton = new QPushButton(QStringLiteral("❓ 帮助"), central);
     m_helpButton->setFocusPolicy(Qt::NoFocus);
 
+    m_logButton = new QPushButton(QStringLiteral("日志窗口"), central);
+    m_logButton->setFocusPolicy(Qt::NoFocus);
+
     m_muteButton = new QPushButton(QStringLiteral("🔊"), central);
     m_muteButton->setFixedWidth(40);
     m_muteButton->setFocusPolicy(Qt::NoFocus);
@@ -131,6 +180,7 @@ MainWindow::MainWindow(QWidget *parent)
     controls->addWidget(m_volumeSlider);
     controls->addWidget(m_fullscreenButton);
     controls->addWidget(m_settingsButton);
+    controls->addWidget(m_logButton);
     controls->addWidget(m_helpButton);
 
     auto *bottomLayout = new QHBoxLayout();
@@ -153,6 +203,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_playerWidget, &MpvWidget::muteStateChanged, this, &MainWindow::onMuteStateChanged);
     connect(m_playerWidget, &MpvWidget::fileLoaded, this, &MainWindow::updateLoadedFile);
     connect(m_playerWidget, &MpvWidget::errorOccurred, this, &MainWindow::showError);
+    connect(m_playerWidget, &MpvWidget::errorOccurred, this, [](const QString &message) {
+        LogCenter::instance().appendLog(QStringLiteral("error"), message);
+        LogCenter::instance().setStatus(QStringLiteral("最近错误"), message);
+    });
 
     connect(m_seekSlider, &QSlider::sliderPressed, this, [this]() { m_isSeeking = true; });
     connect(m_seekSlider, &QSlider::sliderReleased, this, [this]() {
@@ -164,6 +218,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_seekSlider, &QSlider::sliderMoved, this, &MainWindow::onSeekSliderMoved);
     connect(m_speedComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::onSpeedChanged);
     connect(m_settingsButton, &QPushButton::clicked, this, &MainWindow::openSettings);
+    connect(m_logButton, &QPushButton::clicked, this, &MainWindow::openLogWindow);
     connect(m_helpButton, &QPushButton::clicked, this, &MainWindow::openHelp);
     connect(m_muteButton, &QPushButton::clicked, this, &MainWindow::toggleMute);
     connect(m_volumeSlider, &QSlider::valueChanged, m_playerWidget, &MpvWidget::setVolume);
@@ -181,6 +236,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 订阅 ASR 文本更新，更新字幕 overlay
     connect(m_playerWidget, &MpvWidget::asrTextUpdated, this, [this](const QString &original, const QString &translated) {
+        LogCenter::instance().setStatus(QStringLiteral("当前原文"), original.left(120));
+        LogCenter::instance().setStatus(QStringLiteral("当前译文"), translated.left(120));
         if (!m_subtitleLabel) {
             return;
         }
@@ -197,6 +254,14 @@ MainWindow::MainWindow(QWidget *parent)
                                   "<span style='color: white; font-size: 22px; font-weight: bold;'>%1</span>"
                                   "</div>").arg(original);
         }
+
+        // #region debug-point D:ui-display
+        reportTranslationDisplayDebug(QStringLiteral("D"), QStringLiteral("mainwindow.cpp:asrTextUpdated"), QStringLiteral("ui received subtitle update"), {
+            {QStringLiteral("original"), original},
+            {QStringLiteral("translated"), translated},
+            {QStringLiteral("html"), html}
+        });
+        // #endregion
         
         m_subtitleLabel->setText(html);
 
@@ -226,6 +291,13 @@ void MainWindow::openFile() {
         return;
     }
 
+    // #region debug-point D:file-selected
+    reportOpenVideoCrashDebug(QStringLiteral("D"), QStringLiteral("mainwindow.cpp:229"), QStringLiteral("user selected local file"), {
+        {QStringLiteral("filePath"), filePath},
+        {QStringLiteral("exists"), QFileInfo::exists(filePath)},
+        {QStringLiteral("size"), QString::number(QFileInfo(filePath).size())}
+    });
+    // #endregion
     m_playerWidget->loadFile(filePath);
 }
 
@@ -387,4 +459,17 @@ void MainWindow::openSettings() {
 void MainWindow::openHelp() {
     HelpDialog dialog(this);
     dialog.exec();
+}
+
+void MainWindow::openLogWindow() {
+    if (!m_logWindow) {
+        m_logWindow = new LogWindow();
+        m_logWindow->setAttribute(Qt::WA_DeleteOnClose);
+        connect(m_logWindow, &QObject::destroyed, this, [this]() {
+            m_logWindow = nullptr;
+        });
+    }
+    m_logWindow->show();
+    m_logWindow->raise();
+    m_logWindow->activateWindow();
 }

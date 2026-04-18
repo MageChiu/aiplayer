@@ -10,6 +10,7 @@ DEPS_DIR="$ROOT_DIR/.deps"
 MPV_ROOT="${MPV_ROOT:-$DEPS_DIR/mpv}"
 VCPKG_ROOT="${VCPKG_ROOT:-$DEPS_DIR/vcpkg}"
 VCPKG_INSTALLED_ROOT="${ROOT_DIR}/vcpkg_installed"
+LLAMA_LIB_DIR="${ROOT_DIR}/build/macos/_deps/llamacpp-install/lib"
 BREW_BIN="${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin/}brew"
 if [[ ! -x "$BREW_BIN" ]]; then
   if command -v brew >/dev/null 2>&1; then
@@ -45,6 +46,14 @@ fi
 
 mkdir -p "$FRAMEWORKS_DIR" "$DIAG_DIR"
 cp -f "$LIBMPV_SRC" "$FRAMEWORKS_DIR/"
+
+if [[ -d "$LLAMA_LIB_DIR" ]]; then
+  find "$LLAMA_LIB_DIR" -maxdepth 1 \( -type f -o -type l \) \( -name 'libllama*.dylib' -o -name 'libggml*.dylib' \) -print0 | while IFS= read -r -d '' dylib; do
+    dest="$FRAMEWORKS_DIR/$(basename "$dylib")"
+    cp -fL "$dylib" "$dest"
+    install_name_tool -id "@rpath/$(basename "$dest")" "$dest" || true
+  done
+fi
 
 install_name_tool -change "$LIBMPV_SRC" "@rpath/libmpv.2.dylib" "$BIN_PATH" || true
 install_name_tool -id "@rpath/libmpv.2.dylib" "$FRAMEWORKS_DIR/libmpv.2.dylib"
@@ -208,6 +217,7 @@ all_targets.extend(queue)
 all_targets.extend(plain_dylibs.values())
 all_targets.extend(framework_bins.values())
 all_targets.append(os.path.join(os.path.dirname(frameworks_dir), 'MacOS', 'aiplayer'))
+all_targets.append(os.path.join(os.path.dirname(frameworks_dir), 'MacOS', 'aiplayer-translate-helper'))
 
 for path in all_targets:
     if not os.path.exists(path):
@@ -234,3 +244,6 @@ codesign --force --deep --sign - --timestamp=none "$APP_PATH"
 
 otool -L "$BIN_PATH" > "$DIAG_DIR/otool_aiplayer.txt"
 otool -L "$FRAMEWORKS_DIR/libmpv.2.dylib" > "$DIAG_DIR/otool_libmpv.txt"
+if [[ -f "$APP_PATH/Contents/MacOS/aiplayer-translate-helper" ]]; then
+  otool -L "$APP_PATH/Contents/MacOS/aiplayer-translate-helper" > "$DIAG_DIR/otool_translate_helper.txt"
+fi
