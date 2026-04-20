@@ -1,4 +1,7 @@
+#include "localtranslationengine.h"
+#include "logcenter.h"
 #include "mpvwidget.h"
+#include "whisper.h"
 
 #include <QCoreApplication>
 #include <QDateTime>
@@ -9,7 +12,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFileInfoList>
-#include <QMetaObject>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 #include <QSurfaceFormat>
@@ -17,10 +19,12 @@
 #include <QVector>
 
 #include <chrono>
+#include <array>
 #include <clocale>
 #include <cstdio>
 #include <cstring>
 #include <functional>
+#include <mutex>
 
 #include <QStandardPaths>
 #include <QMessageBox>
@@ -56,12 +60,58 @@ namespace lt = libtorrent;
 namespace {
 constexpr QEvent::Type kMpvUpdateEvent = static_cast<QEvent::Type>(QEvent::User + 1);
 
-QString appDataModelDirectory() {
+void reportOpenVideoCrashDebug(const QString &hypothesisId, const QString &location, const QString &message, const QJsonObject &data = {}) {
+    if (qEnvironmentVariableIntValue("AIPLAYER_DEBUG_RUNTIME") == 0) {
+        return;
+    }
+    static auto *manager = new QNetworkAccessManager(qApp);
+    QNetworkRequest request(QUrl(QStringLiteral("http://127.0.0.1:7777/event")));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
+    const QJsonObject payload{
+        {QStringLiteral("sessionId"), QStringLiteral("open-video-crash")},
+        {QStringLiteral("runId"), QStringLiteral("pre")},
+        {QStringLiteral("hypothesisId"), hypothesisId},
+        {QStringLiteral("location"), location},
+        {QStringLiteral("msg"), QStringLiteral("[DEBUG] %1").arg(message)},
+        {QStringLiteral("data"), data},
+        {QStringLiteral("ts"), QString::number(QDateTime::currentMSecsSinceEpoch())}
+    };
+    manager->post(request, QJsonDocument(payload).toJson(QJsonDocument::Compact));
+}
+
+void reportTranslationDisplayDebug(const QString &hypothesisId, const QString &location, const QString &message, const QJsonObject &data = {}) {
+    if (qEnvironmentVariableIntValue("AIPLAYER_DEBUG_TRANSLATION") == 0) {
+        return;
+    }
+    static auto *manager = new QNetworkAccessManager(qApp);
+    QNetworkRequest request(QUrl(QStringLiteral("http://127.0.0.1:7777/event")));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
+    const QJsonObject payload{
+        {QStringLiteral("sessionId"), QStringLiteral("translation-display")},
+        {QStringLiteral("runId"), QStringLiteral("pre")},
+        {QStringLiteral("hypothesisId"), hypothesisId},
+        {QStringLiteral("location"), location},
+        {QStringLiteral("msg"), QStringLiteral("[DEBUG] %1").arg(message)},
+        {QStringLiteral("data"), data},
+        {QStringLiteral("ts"), QString::number(QDateTime::currentMSecsSinceEpoch())}
+    };
+    manager->post(request, QJsonDocument(payload).toJson(QJsonDocument::Compact));
+}
+
+QString appDataBaseModelDirectory() {
     const QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (baseDir.isEmpty()) {
         return QDir::homePath() + QStringLiteral("/.aiplayer/models");
     }
     return QDir(baseDir).absoluteFilePath(QStringLiteral("models"));
+}
+
+QString appDataAsrModelDirectory() {
+    return QDir(appDataBaseModelDirectory()).absoluteFilePath(QStringLiteral("asr"));
+}
+
+QString appDataTranslationModelDirectory() {
+    return QDir(appDataBaseModelDirectory()).absoluteFilePath(QStringLiteral("translation"));
 }
 
 QString appDataTorrentDirectory() {
@@ -146,6 +196,17 @@ QString parseLibreTranslateTranslation(const QByteArray &payload) {
     return doc.object().value(QStringLiteral("translatedText")).toString();
 }
 
+QString buildLocalTranslationPrompt(const QString &sourceLang, const QString &targetLang, const QString &text) {
+    return QStringLiteral(
+               "You are a professional subtitle translator.\n"
+               "Translate the subtitle from %1 to %2.\n"
+               "Do not explain. Do not repeat the source text. Do not add notes.\n"
+               "Return only the translated subtitle wrapped in <translation> and </translation>.\n"
+               "Keep punctuation and line breaks natural.\n"
+               "<source>%3</source>\n"
+               "<translation>")
+        .arg(sourceLang, targetLang, text);
+}
 
 bool writeWaveHeader(QFile &file, quint32 sampleRate, quint16 channels, quint16 bitsPerSample, quint32 dataSize) {
     if (!file.isOpen()) {
@@ -502,6 +563,16 @@ MpvWidget::~MpvWidget() {
     stopAudioExtraction();
     stopTorrentStreaming();
 
+    {
+        std::lock_guard<std::mutex> lock(m_localTranslationQueueMutex);
+        std::queue<std::pair<int, QString>> empty;
+        std::swap(m_localTranslationQueue, empty);
+        m_localTranslationPendingIndices.clear();
+    }
+    if (m_localTranslationThread.joinable()) {
+        m_localTranslationThread.join();
+    }
+
     m_asrRunning.store(false);
     if (m_asrThread.joinable()) {
         m_asrThread.join();
@@ -547,6 +618,14 @@ void MpvWidget::stopTorrentStreaming() {
 }
 
 void MpvWidget::loadFile(const QString &filePath) {
+    // #region debug-point B:loadfile-entry
+    reportOpenVideoCrashDebug(QStringLiteral("B"), QStringLiteral("mpvwidget.cpp:loadFile:entry"), QStringLiteral("entered loadFile"), {
+        {QStringLiteral("filePath"), filePath},
+        {QStringLiteral("exists"), QFileInfo::exists(filePath)},
+        {QStringLiteral("initialized"), m_initialized},
+        {QStringLiteral("mpvReady"), m_mpv != nullptr}
+    });
+    // #endregion
     if (!initializePlayer()) {
         emit errorOccurred(QStringLiteral("播放器初始化失败"));
         return;
@@ -571,6 +650,11 @@ void MpvWidget::loadFile(const QString &filePath) {
         }
         emit asrTextUpdated(m_asrStatus, "");
     } else {
+        // #region debug-point B:extract-audio-start
+        reportOpenVideoCrashDebug(QStringLiteral("B"), QStringLiteral("mpvwidget.cpp:loadFile:extract"), QStringLiteral("starting audio extraction"), {
+            {QStringLiteral("filePath"), filePath}
+        });
+        // #endregion
         extractAudioWithFFmpeg(filePath);
     }
 
@@ -606,7 +690,19 @@ void MpvWidget::loadFile(const QString &filePath) {
 
     const QByteArray utf8 = filePath.toUtf8();
     const char *cmd[] = {"loadfile", utf8.constData(), nullptr};
-    if (mpv_command(m_mpv, cmd) < 0) {
+    // #region debug-point C:mpv-loadfile-before
+    reportOpenVideoCrashDebug(QStringLiteral("C"), QStringLiteral("mpvwidget.cpp:loadFile:mpv-before"), QStringLiteral("calling mpv loadfile"), {
+        {QStringLiteral("filePath"), filePath}
+    });
+    // #endregion
+    const int loadResult = mpv_command(m_mpv, cmd);
+    // #region debug-point C:mpv-loadfile-after
+    reportOpenVideoCrashDebug(QStringLiteral("C"), QStringLiteral("mpvwidget.cpp:loadFile:mpv-after"), QStringLiteral("mpv loadfile returned"), {
+        {QStringLiteral("result"), loadResult},
+        {QStringLiteral("filePath"), filePath}
+    });
+    // #endregion
+    if (loadResult < 0) {
         emit errorOccurred(QStringLiteral("无法加载文件：%1").arg(filePath));
         return;
     }
@@ -1004,7 +1100,8 @@ void MpvWidget::runWhisper() {
     // Try finding the model file
     QString modelPath;
     QStringList searchPaths = {
-        QDir(appDataModelDirectory()).absoluteFilePath(expectedModelName),
+        QDir(appDataAsrModelDirectory()).absoluteFilePath(expectedModelName),
+        QDir(appDataBaseModelDirectory()).absoluteFilePath(expectedModelName), // legacy location
         QCoreApplication::applicationDirPath() + "/" + expectedModelName,
         QDir::currentPath() + "/" + expectedModelName,
         QDir::homePath() + "/" + expectedModelName
@@ -1119,8 +1216,104 @@ bool MpvWidget::readWavAndProcess(const QString &wavPath, struct whisper_context
     return true;
 }
 
+void MpvWidget::processNextLocalTranslation() {
+    {
+        std::lock_guard<std::mutex> lock(m_localTranslationQueueMutex);
+        if (m_localTranslationRunning || m_localTranslationQueue.empty()) {
+            return;
+        }
+        m_localTranslationRunning = true;
+    }
+
+    // #region debug-point A:local-translation-start
+    reportOpenVideoCrashDebug(QStringLiteral("A"), QStringLiteral("mpvwidget.cpp:processNextLocalTranslation:start"), QStringLiteral("starting local translation worker"), {
+        {QStringLiteral("queueSize"), QString::number(static_cast<qint64>(m_localTranslationQueue.size()))}
+    });
+    // #endregion
+
+    if (m_localTranslationThread.joinable()) {
+        m_localTranslationThread.join();
+    }
+
+    QSettings settings("AIPlayer", "Settings");
+    QString modelPath = settings.value("translation_local_model_path", "").toString().trimmed();
+    if (modelPath.isEmpty()) {
+        const QString storedUrl = settings.value("translation_local_model_url", "").toString();
+        const QString fallbackUrl = storedUrl.isEmpty()
+            ? QStringLiteral("https://huggingface.co/bartowski/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf")
+            : storedUrl;
+        modelPath = QDir(appDataTranslationModelDirectory()).absoluteFilePath(QUrl(fallbackUrl).fileName());
+    }
+    if (!QFile::exists(modelPath)) {
+        emit errorOccurred(QStringLiteral("未找到本地翻译模型：%1，请先在设置中下载或选择翻译模型。").arg(modelPath));
+        m_localTranslationRunning = false;
+        return;
+    }
+
+    if (!m_localTranslationEngine) {
+        m_localTranslationEngine = std::make_unique<LocalTranslationEngine>();
+    }
+    QString modelError;
+    if (!m_localTranslationEngine->ensureModelLoaded(modelPath, &modelError)) {
+        // #region debug-point A:model-load-failed
+        reportOpenVideoCrashDebug(QStringLiteral("A"), QStringLiteral("mpvwidget.cpp:processNextLocalTranslation:model"), QStringLiteral("local translation model load failed"), {
+            {QStringLiteral("modelPath"), modelPath},
+            {QStringLiteral("error"), modelError}
+        });
+        // #endregion
+        emit errorOccurred(modelError);
+        m_localTranslationRunning = false;
+        return;
+    }
+
+    const QString targetLang = settings.value("target_lang", "zh-CN").toString();
+    const QString sourceLang = settings.value("source_lang", "auto").toString();
+
+    m_localTranslationThread = std::thread([this, sourceLang, targetLang]() {
+        for (;;) {
+            std::pair<int, QString> item;
+            {
+                std::lock_guard<std::mutex> lock(m_localTranslationQueueMutex);
+                if (m_localTranslationQueue.empty()) {
+                    break;
+                }
+                item = m_localTranslationQueue.front();
+                m_localTranslationQueue.pop();
+            }
+
+            QString errorMessage;
+            const QString prompt = buildLocalTranslationPrompt(sourceLang, targetLang, item.second);
+            const QString translated = m_localTranslationEngine->translate(prompt, 256, &errorMessage);
+
+            QMetaObject::invokeMethod(this, [this, index = item.first, translated, errorMessage]() {
+                {
+                    std::lock_guard<std::mutex> lock(m_localTranslationQueueMutex);
+                    m_localTranslationPendingIndices.erase(index);
+                }
+                if (!translated.isEmpty()) {
+                    applyTranslationResult(index, translated);
+                } else if (!errorMessage.isEmpty()) {
+                    handleTranslationFailure(QStringLiteral("本地离线翻译失败：%1").arg(errorMessage));
+                }
+            }, Qt::QueuedConnection);
+        }
+
+        QMetaObject::invokeMethod(this, [this]() {
+            m_localTranslationRunning = false;
+            processNextLocalTranslation();
+        }, Qt::QueuedConnection);
+    });
+}
+
 void MpvWidget::reTranslateAll() {
     std::vector<std::pair<int, QString>> segmentsToTranslate;
+
+    {
+        std::lock_guard<std::mutex> lock(m_localTranslationQueueMutex);
+        std::queue<std::pair<int, QString>> empty;
+        std::swap(m_localTranslationQueue, empty);
+        m_localTranslationPendingIndices.clear();
+    }
 
     {
         std::lock_guard<std::mutex> lock(m_subtitleMutex);
@@ -1142,6 +1335,96 @@ void MpvWidget::translateSegment(int index, const QString &text) {
 
     QString targetLang = settings.value("target_lang", "zh-CN").toString();
     QString sourceLang = settings.value("source_lang", "auto").toString();
+    const QString translationMode = settings.value("translation_mode", "online").toString();
+
+    if (translationMode == "local_gguf") {
+        {
+            std::lock_guard<std::mutex> subtitleLock(m_subtitleMutex);
+            if (index >= 0 && index < static_cast<int>(m_subtitles.size()) && !m_subtitles[index].translatedText.isEmpty()) {
+                return;
+            }
+        }
+        {
+            std::lock_guard<std::mutex> lock(m_localTranslationQueueMutex);
+            if (m_localTranslationPendingIndices.find(index) != m_localTranslationPendingIndices.end()) {
+                return;
+            }
+            m_localTranslationPendingIndices.insert(index);
+            m_localTranslationQueue.push({index, text});
+        }
+        processNextLocalTranslation();
+        return;
+    }
+
+    startOnlineTranslation(index, text, sourceLang, targetLang);
+}
+
+void MpvWidget::emitCurrentSubtitleUpdate() {
+    if (!m_mpv) {
+        return;
+    }
+
+    double pos = 0.0;
+    if (mpv_get_property(m_mpv, "time-pos", MPV_FORMAT_DOUBLE, &pos) < 0) {
+        return;
+    }
+
+    const qint64 posMs = static_cast<qint64>(pos * 1000);
+    QString currentText;
+    QString currentTranslated;
+    {
+        std::lock_guard<std::mutex> lock(m_subtitleMutex);
+        for (const auto &seg : m_subtitles) {
+            if (posMs >= seg.startMs && posMs <= seg.endMs) {
+                currentText = seg.text;
+                currentTranslated = seg.translatedText;
+                break;
+            }
+        }
+        if (currentText.isEmpty() && !m_asrStatus.isEmpty()) {
+            currentText = m_asrStatus;
+        }
+    }
+
+    // #region debug-point C:emit-current-subtitle
+    reportTranslationDisplayDebug(QStringLiteral("C"), QStringLiteral("mpvwidget.cpp:emitCurrentSubtitleUpdate"), QStringLiteral("emitting subtitle update"), {
+        {QStringLiteral("currentText"), currentText},
+        {QStringLiteral("currentTranslated"), currentTranslated},
+        {QStringLiteral("posMs"), QString::number(posMs)}
+    });
+    // #endregion
+    emit asrTextUpdated(currentText, currentTranslated);
+}
+
+void MpvWidget::applyTranslationResult(int index, const QString &translatedText) {
+    QString originalText;
+    {
+        std::lock_guard<std::mutex> lock(m_subtitleMutex);
+        if (index < 0 || index >= static_cast<int>(m_subtitles.size())) {
+            return;
+        }
+        originalText = m_subtitles[index].text;
+        m_subtitles[index].translatedText = translatedText;
+    }
+    // #region debug-point B:apply-translation-result
+    reportTranslationDisplayDebug(QStringLiteral("B"), QStringLiteral("mpvwidget.cpp:applyTranslationResult"), QStringLiteral("applied translation result"), {
+        {QStringLiteral("index"), index},
+        {QStringLiteral("originalText"), originalText},
+        {QStringLiteral("translatedText"), translatedText}
+    });
+    // #endregion
+    emitCurrentSubtitleUpdate();
+}
+
+void MpvWidget::handleTranslationFailure(const QString &message) {
+    LogCenter::instance().appendLog(QStringLiteral("translation"), message);
+    LogCenter::instance().setStatus(QStringLiteral("翻译状态"), message);
+    emit errorOccurred(message);
+}
+
+void MpvWidget::startOnlineTranslation(int index, const QString &text, const QString &sourceLang, const QString &targetLang) {
+    QSettings settings("AIPlayer", "Settings");
+
     const QString provider = settings.value("translation_provider", "google").toString();
     const QString baseUrl = settings.value("translation_base_url", "https://translate.googleapis.com").toString();
     const QString endpoint = settings.value("translation_endpoint", "/translate_a/single?client=gtx&sl={sl}&tl={tl}&dt=t&q={q}").toString();
@@ -1151,6 +1434,9 @@ void MpvWidget::translateSegment(int index, const QString &text) {
     QNetworkReply *reply = nullptr;
 
     if (provider == "libretranslate") {
+        LogCenter::instance().appendLog(QStringLiteral("online-translation"),
+                                        QStringLiteral("POST %1 [src=%2, dst=%3, text=%4]")
+                                            .arg(joinUrl(baseUrl, endpoint), sourceLang, targetLang, text.left(120)));
         request.setUrl(QUrl(joinUrl(baseUrl, endpoint)));
         request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
         QJsonObject payload{
@@ -1168,6 +1454,9 @@ void MpvWidget::translateSegment(int index, const QString &text) {
         resolvedEndpoint.replace(QStringLiteral("{sl}"), sourceLang);
         resolvedEndpoint.replace(QStringLiteral("{tl}"), targetLang);
         resolvedEndpoint.replace(QStringLiteral("{q}"), QString::fromUtf8(QUrl::toPercentEncoding(text)));
+        LogCenter::instance().appendLog(QStringLiteral("online-translation"),
+                                        QStringLiteral("GET %1 [src=%2, dst=%3, text=%4]")
+                                            .arg(joinUrl(baseUrl, resolvedEndpoint), sourceLang, targetLang, text.left(120)));
         request.setUrl(QUrl(joinUrl(baseUrl, resolvedEndpoint)));
         reply = m_networkManager->get(request);
     }
@@ -1182,16 +1471,18 @@ void MpvWidget::translateSegment(int index, const QString &text) {
                                  ? parseLibreTranslateTranslation(payload)
                                  : parseGoogleCompatibleTranslation(payload);
             if (!result.isEmpty()) {
-                std::lock_guard<std::mutex> lock(m_subtitleMutex);
-                if (index >= 0 && index < static_cast<int>(m_subtitles.size())) {
-                    m_subtitles[index].translatedText = result;
-                }
+                LogCenter::instance().appendLog(QStringLiteral("online-translation"),
+                                                QStringLiteral("在线翻译结果[%1]: %2").arg(index).arg(result.left(200)));
+                applyTranslationResult(index, result);
             }
+        } else {
+            handleTranslationFailure(QStringLiteral("在线翻译失败：%1").arg(reply->errorString()));
         }
     });
 }
 
 void MpvWidget::appendMpvLog(const QString &message) {
+    LogCenter::instance().appendLog(QStringLiteral("mpv"), message);
     std::lock_guard<std::mutex> lock(m_logMutex);
     const QString logPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/mpv.log";
     std::ofstream stream(logPath.toStdString(), std::ios::app);

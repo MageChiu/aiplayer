@@ -1,6 +1,7 @@
 include_guard(GLOBAL)
 
 include(FetchContent)
+include(ExternalProject)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets OpenGLWidgets Network)
 
@@ -74,6 +75,88 @@ function(_aiplayer_apply_pkgconfig_static target_name prefix)
         endforeach()
         target_link_options(${target_name} INTERFACE ${_normalized_link_options})
     endif()
+endfunction()
+
+function(_aiplayer_setup_llama_external)
+    if(TARGET AIPlayer::Llama)
+        return()
+    endif()
+
+    set(LLAMA_SOURCE_DIR "${CMAKE_BINARY_DIR}/_deps/llamacpp-src")
+    set(LLAMA_SUBBUILD_DIR "${CMAKE_BINARY_DIR}/_deps/llamacpp-subbuild")
+    set(LLAMA_BINARY_DIR "${CMAKE_BINARY_DIR}/_deps/llamacpp-build")
+    set(LLAMA_INSTALL_DIR "${CMAKE_BINARY_DIR}/_deps/llamacpp-install")
+
+    if(NOT EXISTS "${LLAMA_SOURCE_DIR}/include/llama.h")
+        FetchContent_Declare(
+            aiplayer_llamacpp_source
+            GIT_REPOSITORY https://github.com/ggml-org/llama.cpp.git
+            GIT_TAG        master
+            GIT_SHALLOW    TRUE
+            SOURCE_DIR     "${LLAMA_SOURCE_DIR}"
+            SUBBUILD_DIR   "${LLAMA_SUBBUILD_DIR}"
+        )
+        FetchContent_Populate(aiplayer_llamacpp_source)
+    endif()
+
+    set(_llama_cmake_args
+        -DCMAKE_INSTALL_PREFIX=${LLAMA_INSTALL_DIR}
+        -DBUILD_SHARED_LIBS=ON
+        -DLLAMA_BUILD_SERVER=OFF
+        -DLLAMA_BUILD_EXAMPLES=OFF
+        -DLLAMA_BUILD_TESTS=OFF
+        -DLLAMA_BUILD_TOOLS=OFF
+        -DLLAMA_BUILD_COMMON=OFF
+        -DLLAMA_CURL=OFF
+        -DGGML_CCACHE=OFF
+    )
+
+    if(CMAKE_BUILD_TYPE)
+        list(APPEND _llama_cmake_args -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+    endif()
+    if(CMAKE_TOOLCHAIN_FILE)
+        list(APPEND _llama_cmake_args -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE})
+    endif()
+    if(CMAKE_OSX_ARCHITECTURES)
+        list(APPEND _llama_cmake_args -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
+    endif()
+    if(CMAKE_OSX_DEPLOYMENT_TARGET)
+        list(APPEND _llama_cmake_args -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
+    endif()
+
+    if(WIN32)
+        set(_llama_imported_location "${LLAMA_INSTALL_DIR}/bin/llama.dll")
+        set(_llama_imported_implib   "${LLAMA_INSTALL_DIR}/lib/llama.lib")
+    elseif(APPLE)
+        set(_llama_imported_location "${LLAMA_INSTALL_DIR}/lib/libllama.dylib")
+        unset(_llama_imported_implib)
+    else()
+        set(_llama_imported_location "${LLAMA_INSTALL_DIR}/lib/libllama.so")
+        unset(_llama_imported_implib)
+    endif()
+
+    ExternalProject_Add(llamacpp_external
+        PREFIX "${CMAKE_BINARY_DIR}/_deps/llamacpp"
+        SOURCE_DIR "${LLAMA_SOURCE_DIR}"
+        BINARY_DIR "${LLAMA_BINARY_DIR}"
+        INSTALL_DIR "${LLAMA_INSTALL_DIR}"
+        CMAKE_ARGS ${_llama_cmake_args}
+        DOWNLOAD_COMMAND ""
+        UPDATE_COMMAND ""
+        BUILD_BYPRODUCTS "${_llama_imported_location}"
+    )
+
+    add_library(AIPlayer_Llama SHARED IMPORTED GLOBAL)
+    set_target_properties(AIPlayer_Llama PROPERTIES
+        IMPORTED_LOCATION "${_llama_imported_location}"
+        INTERFACE_INCLUDE_DIRECTORIES "${LLAMA_SOURCE_DIR}/include;${LLAMA_SOURCE_DIR}/ggml/include"
+    )
+    if(WIN32)
+        set_target_properties(AIPlayer_Llama PROPERTIES
+            IMPORTED_IMPLIB "${_llama_imported_implib}"
+        )
+    endif()
+    add_library(AIPlayer::Llama ALIAS AIPlayer_Llama)
 endfunction()
 
 function(_aiplayer_try_mpv_root mpv_root)
@@ -183,6 +266,8 @@ function(aiplayer_resolve_dependencies)
         FetchContent_MakeAvailable(whispercpp)
     endif()
 
+    _aiplayer_setup_llama_external()
+
     if(WIN32)
         set(_default_mpv_root "${CMAKE_SOURCE_DIR}/.deps/mpv")
         if(DEFINED MPV_ROOT AND EXISTS "${MPV_ROOT}")
@@ -263,5 +348,13 @@ function(aiplayer_link_dependencies target_name)
         AIPlayer::FFmpeg
         AIPlayer::Torrent
         whisper
+    )
+endfunction()
+
+function(aiplayer_link_llama_helper target_name)
+    add_dependencies(${target_name} llamacpp_external)
+    target_link_libraries(${target_name} PRIVATE
+        Qt6::Core
+        AIPlayer::Llama
     )
 endfunction()

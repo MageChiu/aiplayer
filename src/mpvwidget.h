@@ -4,20 +4,20 @@
 #include <mpv/client.h>
 #include <mpv/render_gl.h>
 
-// whisper.cpp 头文件
-#include "whisper.h"
-
 #include <atomic>
 #include <fstream>
 #include <memory>
 #include <mutex>
 #include <queue>
+#include <unordered_set>
 #include <thread>
 
 class QOpenGLContext;
 class QTimer;
 class QNetworkAccessManager;
 class TorrentSessionController;
+class LocalTranslationEngine;
+struct whisper_context;
 
 class MpvWidget : public QOpenGLWidget {
     Q_OBJECT
@@ -76,6 +76,11 @@ private:
     void extractAudioWithFFmpeg(const QString &videoPath);
     void stopAudioExtraction();
     void stopTorrentStreaming();
+    void processNextLocalTranslation();
+    void emitCurrentSubtitleUpdate();
+    void applyTranslationResult(int index, const QString &translatedText);
+    void handleTranslationFailure(const QString &message);
+    void startOnlineTranslation(int index, const QString &text, const QString &sourceLang, const QString &targetLang);
 
     // --- mpv 播放相关 ---
     mpv_handle *m_mpv = nullptr;
@@ -103,6 +108,12 @@ private:
     std::mutex m_subtitleMutex;
     QNetworkAccessManager *m_networkManager = nullptr;
     std::unique_ptr<TorrentSessionController> m_torrentController;
+    std::unique_ptr<LocalTranslationEngine> m_localTranslationEngine;
+    std::queue<std::pair<int, QString>> m_localTranslationQueue;
+    std::unordered_set<int> m_localTranslationPendingIndices;
+    std::mutex m_localTranslationQueueMutex;
+    std::thread m_localTranslationThread;
+    bool m_localTranslationRunning = false;
 
     void updateAsrStatus(const QString &status);
     void runWhisper();

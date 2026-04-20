@@ -121,6 +121,11 @@ if (Test-Path $exePath) {
     $destExe = Join-Path $DistDir 'aiplayer.exe'
     Copy-Item $exePath $destExe -Force
 
+    $helperPath = Join-Path $BuildDir ("$Configuration/aiplayer-translate-helper.exe")
+    if (Test-Path $helperPath) {
+        Copy-Item $helperPath (Join-Path $DistDir 'aiplayer-translate-helper.exe') -Force
+    }
+
     Get-ChildItem -Path $BuildDir -Recurse -File -Filter '*.dll' -ErrorAction SilentlyContinue |
         Where-Object { $_.Name -notmatch '^(Qt|libmpv|mpv-2|vcruntime|msvcp|concrt|ucrtbase)' } |
         ForEach-Object {
