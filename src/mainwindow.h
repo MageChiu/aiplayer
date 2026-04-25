@@ -1,12 +1,14 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QString>
 
 class QLabel;
 class QPushButton;
 class QSlider;
 class QComboBox;
-class MpvWidget;
+class IPlayerController;
+class DesktopModelCoordinator;
 class QWidget;
 class QKeyEvent;
 class LogWindow;
@@ -15,7 +17,9 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(IPlayerController *playerController,
+                        DesktopModelCoordinator *desktopModelCoordinator,
+                        QWidget *parent = nullptr);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -46,7 +50,8 @@ private:
     void tryAutoLoadFromArgs();
     QString formatTime(double seconds);
 
-    MpvWidget *m_playerWidget = nullptr;
+    IPlayerController *m_playerController = nullptr;
+    DesktopModelCoordinator *m_desktopModelCoordinator = nullptr;
     QPushButton *m_playButton = nullptr;
     QPushButton *m_pauseButton = nullptr;
     QLabel *m_statusLabel = nullptr;

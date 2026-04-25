@@ -1,9 +1,7 @@
 #pragma once
 
 #include <QDialog>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QFile>
+#include <QString>
 
 class QComboBox;
 class QPushButton;
@@ -11,12 +9,19 @@ class QProgressBar;
 class QCheckBox;
 class QLabel;
 class QLineEdit;
+class QWidget;
+class DesktopModelCoordinator;
+class ModelDownloadService;
+struct DownloadTask;
+struct DownloadProgress;
+struct ModelDescriptor;
+enum class ModelKind;
 
 class SettingsDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit SettingsDialog(QWidget *parent = nullptr);
+    explicit SettingsDialog(DesktopModelCoordinator *desktopModelCoordinator, QWidget *parent = nullptr);
     ~SettingsDialog() override;
 
     QString getAsrModelPath() const;
@@ -30,9 +35,10 @@ private slots:
     void onTranslationDownloadClicked();
     void openAsrModelDirectory();
     void openTranslationModelDirectory();
-    void onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void onDownloadFinished();
-    void onDownloadError(QNetworkReply::NetworkError code);
+    void onDownloadProgress(const DownloadTask &task, const DownloadProgress &progress);
+    void onDownloadFinished(const DownloadTask &task);
+    void onDownloadFailed(const DownloadTask &task, const QString &message);
+    void onDownloadCancelled(const DownloadTask &task);
     void saveSettings();
     void onTranslationProviderChanged();
     void onTranslationModeChanged();
@@ -46,7 +52,7 @@ private:
 
     QString asrModelDirectory() const;
     QString translationModelDirectory() const;
-    void startModelDownload(QComboBox *combo, QLabel *statusLabel, QProgressBar *progressBar, QPushButton *button, const QString &directory, DownloadKind kind);
+    void startModelDownload(const ModelDescriptor &descriptor, DownloadKind kind);
     void loadSettings();
     void updateUIState();
     void applyTranslationPreset(const QString &provider, bool forceOverwrite);
@@ -76,8 +82,6 @@ private:
     QPushButton *m_okButton = nullptr;
     QPushButton *m_cancelButton = nullptr;
 
-    QNetworkAccessManager *m_networkManager = nullptr;
-    QNetworkReply *m_currentReply = nullptr;
-    QFile *m_outputFile = nullptr;
+    DesktopModelCoordinator *m_desktopModelCoordinator = nullptr;
     DownloadKind m_activeDownloadKind = DownloadKind::None;
 };
