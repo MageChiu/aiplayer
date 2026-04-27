@@ -1,0 +1,582 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04CBFEC18FC8D7675A3E44E0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953E7171AFE3855592408BF2 /* AppCoordinator.swift */; };
+		070B4F84C996A7B741BE1529 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD4A339F9803E5D02B611AE /* Typography.swift */; };
+		0D656ADC9566473B82C57FF3 /* StatusBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D0497496719282EFE95AD /* StatusBannerView.swift */; };
+		0E78866811280C7AD0D48075 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 774A71B3D662E31DED711BB8 /* README.md */; };
+		1239E96F1BE734E753E696B7 /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B012EFC223B27B34174FF5 /* PlayerControlsView.swift */; };
+		1D58D51D0314BB31A4E8AEFD /* PlayerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1DCA6C6D65E402E430C1876 /* PlayerScreen.swift */; };
+		2FB30390396DE024E70A6837 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7AABFDD8A2BDCD770469F /* PreviewData.swift */; };
+		3AB767488DB2AF4618CCD885 /* LibraryResourceViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AEF60E3C4F525C564077B9 /* LibraryResourceViewData.swift */; };
+		3DBB52B1AF096567FDBC55BF /* SubtitleStyleViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95239095C062BDF078CA57D0 /* SubtitleStyleViewData.swift */; };
+		40F5A17B384552123C3A8337 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C28015A41C6F2D2FA47EE8 /* Spacing.swift */; };
+		41BB8EBB8BD54BECAE2EF6D9 /* FileImportRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545ADDF32ED86BDC7EB342CD /* FileImportRequest.swift */; };
+		48A75986573A28C4E81619CC /* AIPlayerIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77570C1095837ACDFE49B95E /* AIPlayerIOSApp.swift */; };
+		5123BAEF0CBEE667709173E9 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C242F2BF15074AA373DE1502 /* SettingsScreen.swift */; };
+		6B0293F49C35F21DE8C7DAE6 /* TranslationOptionViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AF1CF0BAA52F051A62368D /* TranslationOptionViewData.swift */; };
+		725D85EF317E12EBE19B4C7B /* IOSFileImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A6B12D3C24485557566ACF /* IOSFileImportService.swift */; };
+		7601C00E0B82AC2D92C75495 /* IOSSandboxPathService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75568F74015DE6E77BF3B2F4 /* IOSSandboxPathService.swift */; };
+		898CD11590DDE9C2D37A200D /* ColorTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C0C6ABF747024AFD305376 /* ColorTokens.swift */; };
+		8C6B7DF60399DCAFD1148080 /* SubtitleOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB0BD13A964EDB084DABD7C7 /* SubtitleOverlayView.swift */; };
+		8F843C718270CB2A4C9099FC /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768832F2B3D36D5972D77A9C /* LibraryViewModel.swift */; };
+		9669869F1D8EC73E731526F5 /* IOSImportedResourceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BE61C1151DFB46EB7B52D5 /* IOSImportedResourceRepository.swift */; };
+		A99C110697336F6997C1545A /* PlaybackItemViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A87C07CAA3A26046A8331CD /* PlaybackItemViewData.swift */; };
+		B64431D6B1F328A64FC8F5EB /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2FD4CB93E06D5442DA129 /* SettingsViewModel.swift */; };
+		D27FC81C461774A56CA26137 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC9985D5F44E9DFB226D584 /* PlayerViewModel.swift */; };
+		D5A8E44B51967661441176D5 /* AVPlayerSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9911E39949300A4FDE16E41A /* AVPlayerSurfaceView.swift */; };
+		DC159907B3F45CDE1AC79137 /* IOSNavigationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1192DCE61D473EDA38809DC /* IOSNavigationService.swift */; };
+		E40280C541FB1A3F06A99472 /* ImportEntrySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD2CA57450C9CF63C9CF6E0 /* ImportEntrySheet.swift */; };
+		E67CCB252E912B28874E0A73 /* IOSPlaybackWorkspaceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328350C592D0E91A329414AA /* IOSPlaybackWorkspaceService.swift */; };
+		E6FC5C28F95D79A3F66CCB74 /* ResourceCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE69AC8A00ECF8AA063E1AE5 /* ResourceCardView.swift */; };
+		E986742710EB97226EF6B67F /* PlaybackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B758A689047F05A43464E8 /* PlaybackViewModel.swift */; };
+		EE896EEED6727DBDAA9B9275 /* PlaybackHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D13A942CD9C9564EC2D65 /* PlaybackHomeScreen.swift */; };
+		EEE21ABEB6BB0CADB6DD2CDB /* LibraryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545B5E4CF3CE7DEEF997298D /* LibraryScreen.swift */; };
+		F476A3EF90C815CE7307F619 /* CoreStateBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802651DC20F8DE2B3791945D /* CoreStateBridge.swift */; };
+		F75A15BD85B90C36BF95C9F5 /* ImportedResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8D404FABB4266282BA7947 /* ImportedResource.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		020CBBBEDBE25F355A70BD80 /* AIPlayerIOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AIPlayerIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		09AEF60E3C4F525C564077B9 /* LibraryResourceViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryResourceViewData.swift; sourceTree = "<group>"; };
+		27B012EFC223B27B34174FF5 /* PlayerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
+		328350C592D0E91A329414AA /* IOSPlaybackWorkspaceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSPlaybackWorkspaceService.swift; sourceTree = "<group>"; };
+		3F8D404FABB4266282BA7947 /* ImportedResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedResource.swift; sourceTree = "<group>"; };
+		4A87C07CAA3A26046A8331CD /* PlaybackItemViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackItemViewData.swift; sourceTree = "<group>"; };
+		545ADDF32ED86BDC7EB342CD /* FileImportRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImportRequest.swift; sourceTree = "<group>"; };
+		545B5E4CF3CE7DEEF997298D /* LibraryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryScreen.swift; sourceTree = "<group>"; };
+		6A3D13A942CD9C9564EC2D65 /* PlaybackHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackHomeScreen.swift; sourceTree = "<group>"; };
+		75568F74015DE6E77BF3B2F4 /* IOSSandboxPathService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSSandboxPathService.swift; sourceTree = "<group>"; };
+		768832F2B3D36D5972D77A9C /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
+		774A71B3D662E31DED711BB8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		77570C1095837ACDFE49B95E /* AIPlayerIOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayerIOSApp.swift; sourceTree = "<group>"; };
+		802651DC20F8DE2B3791945D /* CoreStateBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreStateBridge.swift; sourceTree = "<group>"; };
+		8BD2FD4CB93E06D5442DA129 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		8DD4A339F9803E5D02B611AE /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		95239095C062BDF078CA57D0 /* SubtitleStyleViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleStyleViewData.swift; sourceTree = "<group>"; };
+		953E7171AFE3855592408BF2 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		9911E39949300A4FDE16E41A /* AVPlayerSurfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerSurfaceView.swift; sourceTree = "<group>"; };
+		A7C28015A41C6F2D2FA47EE8 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
+		B1AF1CF0BAA52F051A62368D /* TranslationOptionViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationOptionViewData.swift; sourceTree = "<group>"; };
+		BEC9985D5F44E9DFB226D584 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
+		C242F2BF15074AA373DE1502 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		C2C0C6ABF747024AFD305376 /* ColorTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTokens.swift; sourceTree = "<group>"; };
+		C5A6B12D3C24485557566ACF /* IOSFileImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSFileImportService.swift; sourceTree = "<group>"; };
+		D06D0497496719282EFE95AD /* StatusBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBannerView.swift; sourceTree = "<group>"; };
+		D1192DCE61D473EDA38809DC /* IOSNavigationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSNavigationService.swift; sourceTree = "<group>"; };
+		D4B758A689047F05A43464E8 /* PlaybackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewModel.swift; sourceTree = "<group>"; };
+		D7BE61C1151DFB46EB7B52D5 /* IOSImportedResourceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSImportedResourceRepository.swift; sourceTree = "<group>"; };
+		DDD7AABFDD8A2BDCD770469F /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
+		DE69AC8A00ECF8AA063E1AE5 /* ResourceCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceCardView.swift; sourceTree = "<group>"; };
+		F1DCA6C6D65E402E430C1876 /* PlayerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerScreen.swift; sourceTree = "<group>"; };
+		FB0BD13A964EDB084DABD7C7 /* SubtitleOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleOverlayView.swift; sourceTree = "<group>"; };
+		FBD2CA57450C9CF63C9CF6E0 /* ImportEntrySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportEntrySheet.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		18607BDF4002A5FE41F057B3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				020CBBBEDBE25F355A70BD80 /* AIPlayerIOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1C0209CB1E043C2E74CEFD38 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				768832F2B3D36D5972D77A9C /* LibraryViewModel.swift */,
+				D4B758A689047F05A43464E8 /* PlaybackViewModel.swift */,
+				BEC9985D5F44E9DFB226D584 /* PlayerViewModel.swift */,
+				8BD2FD4CB93E06D5442DA129 /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		1E84C0BD951F951436744F80 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				DDD7AABFDD8A2BDCD770469F /* PreviewData.swift */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		2CD7208FB643EF5EFA92593E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				EB08D8B232C6586FFEB78A98 /* PlayerControls */,
+				F7FCC23C5857D140AFEA0423 /* PlayerSurface */,
+				DD79F86F6BE6E4AE72F5ED84 /* ResourceCard */,
+				40A979FD107146BFE3CBA7C2 /* StatusView */,
+				4870C7DF0CB2DC1DE8784232 /* SubtitleOverlay */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		3FB7F10C10E23D825A5DF32D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				545ADDF32ED86BDC7EB342CD /* FileImportRequest.swift */,
+				3F8D404FABB4266282BA7947 /* ImportedResource.swift */,
+				09AEF60E3C4F525C564077B9 /* LibraryResourceViewData.swift */,
+				4A87C07CAA3A26046A8331CD /* PlaybackItemViewData.swift */,
+				95239095C062BDF078CA57D0 /* SubtitleStyleViewData.swift */,
+				B1AF1CF0BAA52F051A62368D /* TranslationOptionViewData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		40A979FD107146BFE3CBA7C2 /* StatusView */ = {
+			isa = PBXGroup;
+			children = (
+				D06D0497496719282EFE95AD /* StatusBannerView.swift */,
+			);
+			path = StatusView;
+			sourceTree = "<group>";
+		};
+		436B59176D4282A57304DEB9 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				6FE71E17DAF691CC5DC8C4EF /* Import */,
+				8C82DB7D60E90D0298830FCD /* Library */,
+				4EB35D8A6D5B8D52712F342C /* Playback */,
+				976823D819ACC016E31442ED /* Settings */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		4870C7DF0CB2DC1DE8784232 /* SubtitleOverlay */ = {
+			isa = PBXGroup;
+			children = (
+				FB0BD13A964EDB084DABD7C7 /* SubtitleOverlayView.swift */,
+			);
+			path = SubtitleOverlay;
+			sourceTree = "<group>";
+		};
+		4EB35D8A6D5B8D52712F342C /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				6A3D13A942CD9C9564EC2D65 /* PlaybackHomeScreen.swift */,
+				F1DCA6C6D65E402E430C1876 /* PlayerScreen.swift */,
+			);
+			path = Playback;
+			sourceTree = "<group>";
+		};
+		5C8AA272AC3D74A297E2EB6A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				77570C1095837ACDFE49B95E /* AIPlayerIOSApp.swift */,
+				953E7171AFE3855592408BF2 /* AppCoordinator.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6FE71E17DAF691CC5DC8C4EF /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				FBD2CA57450C9CF63C9CF6E0 /* ImportEntrySheet.swift */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+		78CED2F847E5286FBB8CE5FD /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				774A71B3D662E31DED711BB8 /* README.md */,
+				2CD7208FB643EF5EFA92593E /* Components */,
+				3FB7F10C10E23D825A5DF32D /* Models */,
+				1E84C0BD951F951436744F80 /* Preview */,
+				436B59176D4282A57304DEB9 /* Screens */,
+				8F832F5E32979A14BBA176BE /* Services */,
+				D229F9F63B0CE032BB815FF8 /* Theme */,
+				1C0209CB1E043C2E74CEFD38 /* ViewModels */,
+			);
+			name = ios;
+			path = ../../../src/ui/mobile/ios;
+			sourceTree = "<group>";
+		};
+		8C82DB7D60E90D0298830FCD /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				545B5E4CF3CE7DEEF997298D /* LibraryScreen.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		8F832F5E32979A14BBA176BE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C5A6B12D3C24485557566ACF /* IOSFileImportService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		976823D819ACC016E31442ED /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C242F2BF15074AA373DE1502 /* SettingsScreen.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A5C3447A78475577163FD7F3 = {
+			isa = PBXGroup;
+			children = (
+				5C8AA272AC3D74A297E2EB6A /* App */,
+				C3AE4F04454F8EC7E69B48D8 /* ios */,
+				78CED2F847E5286FBB8CE5FD /* ios */,
+				18607BDF4002A5FE41F057B3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C3AE4F04454F8EC7E69B48D8 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				802651DC20F8DE2B3791945D /* CoreStateBridge.swift */,
+				D7BE61C1151DFB46EB7B52D5 /* IOSImportedResourceRepository.swift */,
+				D1192DCE61D473EDA38809DC /* IOSNavigationService.swift */,
+				328350C592D0E91A329414AA /* IOSPlaybackWorkspaceService.swift */,
+				75568F74015DE6E77BF3B2F4 /* IOSSandboxPathService.swift */,
+			);
+			name = ios;
+			path = ../../../src/platform/ios;
+			sourceTree = "<group>";
+		};
+		D229F9F63B0CE032BB815FF8 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				C2C0C6ABF747024AFD305376 /* ColorTokens.swift */,
+				A7C28015A41C6F2D2FA47EE8 /* Spacing.swift */,
+				8DD4A339F9803E5D02B611AE /* Typography.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		DD79F86F6BE6E4AE72F5ED84 /* ResourceCard */ = {
+			isa = PBXGroup;
+			children = (
+				DE69AC8A00ECF8AA063E1AE5 /* ResourceCardView.swift */,
+			);
+			path = ResourceCard;
+			sourceTree = "<group>";
+		};
+		EB08D8B232C6586FFEB78A98 /* PlayerControls */ = {
+			isa = PBXGroup;
+			children = (
+				27B012EFC223B27B34174FF5 /* PlayerControlsView.swift */,
+			);
+			path = PlayerControls;
+			sourceTree = "<group>";
+		};
+		F7FCC23C5857D140AFEA0423 /* PlayerSurface */ = {
+			isa = PBXGroup;
+			children = (
+				9911E39949300A4FDE16E41A /* AVPlayerSurfaceView.swift */,
+			);
+			path = PlayerSurface;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		49F1B6EA1ACE53AE68FDB3B0 /* AIPlayerIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC46492988D5DE63752234E7 /* Build configuration list for PBXNativeTarget "AIPlayerIOS" */;
+			buildPhases = (
+				753F3166F4BD7EE73F037127 /* Sources */,
+				18A662430FD2139F2789568E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AIPlayerIOS;
+			packageProductDependencies = (
+			);
+			productName = AIPlayerIOS;
+			productReference = 020CBBBEDBE25F355A70BD80 /* AIPlayerIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F0D6A9C8DA06FA79BBB987BC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					49F1B6EA1ACE53AE68FDB3B0 = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = F3D6B6AEB9E22FA05F52B197 /* Build configuration list for PBXProject "AIPlayerIOS" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A5C3447A78475577163FD7F3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 18607BDF4002A5FE41F057B3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				49F1B6EA1ACE53AE68FDB3B0 /* AIPlayerIOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		18A662430FD2139F2789568E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E78866811280C7AD0D48075 /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		753F3166F4BD7EE73F037127 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48A75986573A28C4E81619CC /* AIPlayerIOSApp.swift in Sources */,
+				D5A8E44B51967661441176D5 /* AVPlayerSurfaceView.swift in Sources */,
+				04CBFEC18FC8D7675A3E44E0 /* AppCoordinator.swift in Sources */,
+				898CD11590DDE9C2D37A200D /* ColorTokens.swift in Sources */,
+				F476A3EF90C815CE7307F619 /* CoreStateBridge.swift in Sources */,
+				41BB8EBB8BD54BECAE2EF6D9 /* FileImportRequest.swift in Sources */,
+				725D85EF317E12EBE19B4C7B /* IOSFileImportService.swift in Sources */,
+				9669869F1D8EC73E731526F5 /* IOSImportedResourceRepository.swift in Sources */,
+				DC159907B3F45CDE1AC79137 /* IOSNavigationService.swift in Sources */,
+				E67CCB252E912B28874E0A73 /* IOSPlaybackWorkspaceService.swift in Sources */,
+				7601C00E0B82AC2D92C75495 /* IOSSandboxPathService.swift in Sources */,
+				E40280C541FB1A3F06A99472 /* ImportEntrySheet.swift in Sources */,
+				F75A15BD85B90C36BF95C9F5 /* ImportedResource.swift in Sources */,
+				3AB767488DB2AF4618CCD885 /* LibraryResourceViewData.swift in Sources */,
+				EEE21ABEB6BB0CADB6DD2CDB /* LibraryScreen.swift in Sources */,
+				8F843C718270CB2A4C9099FC /* LibraryViewModel.swift in Sources */,
+				EE896EEED6727DBDAA9B9275 /* PlaybackHomeScreen.swift in Sources */,
+				A99C110697336F6997C1545A /* PlaybackItemViewData.swift in Sources */,
+				E986742710EB97226EF6B67F /* PlaybackViewModel.swift in Sources */,
+				1239E96F1BE734E753E696B7 /* PlayerControlsView.swift in Sources */,
+				1D58D51D0314BB31A4E8AEFD /* PlayerScreen.swift in Sources */,
+				D27FC81C461774A56CA26137 /* PlayerViewModel.swift in Sources */,
+				2FB30390396DE024E70A6837 /* PreviewData.swift in Sources */,
+				E6FC5C28F95D79A3F66CCB74 /* ResourceCardView.swift in Sources */,
+				5123BAEF0CBEE667709173E9 /* SettingsScreen.swift in Sources */,
+				B64431D6B1F328A64FC8F5EB /* SettingsViewModel.swift in Sources */,
+				40F5A17B384552123C3A8337 /* Spacing.swift in Sources */,
+				0D656ADC9566473B82C57FF3 /* StatusBannerView.swift in Sources */,
+				8C6B7DF60399DCAFD1148080 /* SubtitleOverlayView.swift in Sources */,
+				3DBB52B1AF096567FDBC55BF /* SubtitleStyleViewData.swift in Sources */,
+				6B0293F49C35F21DE8C7DAE6 /* TranslationOptionViewData.swift in Sources */,
+				070B4F84C996A7B741BE1529 /* Typography.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0583DE483869CBD879477C0A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		646CE14286D6B34EE1F0D870 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = AIPlayer;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIFileSharingEnabled = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.magechiu.aiplayerios;
+				PRODUCT_NAME = AIPlayerIOS;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B22AEC0B94D711B5E87671A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		D04EA8F932C8B992E3363930 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = AIPlayer;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIFileSharingEnabled = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.magechiu.aiplayerios;
+				PRODUCT_NAME = AIPlayerIOS;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DC46492988D5DE63752234E7 /* Build configuration list for PBXNativeTarget "AIPlayerIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B22AEC0B94D711B5E87671A8 /* Debug */,
+				0583DE483869CBD879477C0A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F3D6B6AEB9E22FA05F52B197 /* Build configuration list for PBXProject "AIPlayerIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D04EA8F932C8B992E3363930 /* Debug */,
+				646CE14286D6B34EE1F0D870 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F0D6A9C8DA06FA79BBB987BC /* Project object */;
+}

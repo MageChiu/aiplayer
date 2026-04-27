@@ -1,13 +1,15 @@
 #include "mainwindow.h"
 
-#include "mpvwidget.h"
-
 #include "settingsdialog.h"
-#include "helpdialog.h"
-#include "logcenter.h"
-#include "logwindow.h"
+#include "libs/logging/include/logcenter.h"
+#include "core/player/iplayercontroller.h"
+#include "platform/desktop/desktopmodelcoordinator.h"
+#include "apps/desktop/src/dialogs/helpdialog.h"
+#include "apps/desktop/src/widgets/logwindow.h"
 
 #include <QCoreApplication>
+#include <QApplication>
+#include <QDateTime>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QHBoxLayout>
@@ -22,6 +24,7 @@
 #include <QKeyEvent>
 
 #include <QInputDialog>
+#include <QLineEdit>
 
 #include <QGraphicsDropShadowEffect>
 #include <QJsonDocument>
@@ -69,17 +72,28 @@ void reportTranslationDisplayDebug(const QString &hypothesisId, const QString &l
 }
 }
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent) {
+MainWindow::MainWindow(IPlayerController *playerController,
+                       DesktopModelCoordinator *desktopModelCoordinator,
+                       QWidget *parent)
+    : QMainWindow(parent),
+      m_playerController(playerController),
+      m_desktopModelCoordinator(desktopModelCoordinator) {
     setWindowTitle(QStringLiteral("AIPlayer - Phase 1"));
     resize(1100, 720);
+
+    Q_ASSERT(m_playerController != nullptr);
+    Q_ASSERT(m_desktopModelCoordinator != nullptr);
+    if (m_playerController && !m_playerController->parent()) {
+        m_playerController->setParent(this);
+    }
+    if (m_desktopModelCoordinator && !m_desktopModelCoordinator->parent()) {
+        m_desktopModelCoordinator->setParent(this);
+    }
 
     auto *central = new QWidget(this);
     auto *layout = new QVBoxLayout(central);
     layout->setContentsMargins(16, 16, 16, 16);
     layout->setSpacing(12);
-
-    m_playerWidget = new MpvWidget(central);
 
     // 用容器承载播放器 + 字幕 overlay
     auto *videoContainer = new QWidget(central);
@@ -88,7 +102,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto *videoLayout = new QVBoxLayout(videoContainer);
     videoLayout->setContentsMargins(0, 0, 0, 0);
     videoLayout->setSpacing(0);
-    videoLayout->addWidget(m_playerWidget, 1);
+    videoLayout->addWidget(m_playerController->videoOutputWidget(), 1);
 
     // 字幕 overlay（透明，置底部）
     m_subtitleOverlay = new QWidget(videoContainer);
@@ -196,14 +210,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_pauseButton, &QPushButton::clicked, this, &MainWindow::pause);
     connect(stopButton, &QPushButton::clicked, this, &MainWindow::stop);
     connect(replayButton, &QPushButton::clicked, this, &MainWindow::replay);
-    connect(m_playerWidget, &MpvWidget::playbackStateChanged, this, &MainWindow::updatePlaybackState);
-    connect(m_playerWidget, &MpvWidget::timePosChanged, this, &MainWindow::onTimePosChanged);
-    connect(m_playerWidget, &MpvWidget::durationChanged, this, &MainWindow::onDurationChanged);
-    connect(m_playerWidget, &MpvWidget::volumeChanged, this, &MainWindow::onVolumeChanged);
-    connect(m_playerWidget, &MpvWidget::muteStateChanged, this, &MainWindow::onMuteStateChanged);
-    connect(m_playerWidget, &MpvWidget::fileLoaded, this, &MainWindow::updateLoadedFile);
-    connect(m_playerWidget, &MpvWidget::errorOccurred, this, &MainWindow::showError);
-    connect(m_playerWidget, &MpvWidget::errorOccurred, this, [](const QString &message) {
+    connect(m_playerController, &IPlayerController::playbackStateChanged, this, &MainWindow::updatePlaybackState);
+    connect(m_playerController, &IPlayerController::timePosChanged, this, &MainWindow::onTimePosChanged);
+    connect(m_playerController, &IPlayerController::durationChanged, this, &MainWindow::onDurationChanged);
+    connect(m_playerController, &IPlayerController::volumeChanged, this, &MainWindow::onVolumeChanged);
+    connect(m_playerController, &IPlayerController::muteStateChanged, this, &MainWindow::onMuteStateChanged);
+    connect(m_playerController, &IPlayerController::fileLoaded, this, &MainWindow::updateLoadedFile);
+    connect(m_playerController, &IPlayerController::errorOccurred, this, &MainWindow::showError);
+    connect(m_playerController, &IPlayerController::errorOccurred, this, [](const QString &message) {
         LogCenter::instance().appendLog(QStringLiteral("error"), message);
         LogCenter::instance().setStatus(QStringLiteral("最近错误"), message);
     });
@@ -211,7 +225,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_seekSlider, &QSlider::sliderPressed, this, [this]() { m_isSeeking = true; });
     connect(m_seekSlider, &QSlider::sliderReleased, this, [this]() {
         if (m_duration > 0.0) {
-            m_playerWidget->seek(m_seekSlider->value() / 1000.0 * m_duration);
+            m_playerController->seek(m_seekSlider->value() / 1000.0 * m_duration);
         }
         m_isSeeking = false;
     });
@@ -221,7 +235,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_logButton, &QPushButton::clicked, this, &MainWindow::openLogWindow);
     connect(m_helpButton, &QPushButton::clicked, this, &MainWindow::openHelp);
     connect(m_muteButton, &QPushButton::clicked, this, &MainWindow::toggleMute);
-    connect(m_volumeSlider, &QSlider::valueChanged, m_playerWidget, &MpvWidget::setVolume);
+    connect(m_volumeSlider, &QSlider::valueChanged, this, [this](int volume) {
+        if (m_playerController) {
+            m_playerController->setVolume(volume);
+        }
+    });
     connect(m_fullscreenButton, &QPushButton::clicked, this, &MainWindow::toggleFullscreen);
 
     // Prevent focus stealing for spacebar playback toggling
@@ -235,7 +253,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_speedComboBox->setFocusPolicy(Qt::NoFocus);
 
     // 订阅 ASR 文本更新，更新字幕 overlay
-    connect(m_playerWidget, &MpvWidget::asrTextUpdated, this, [this](const QString &original, const QString &translated) {
+    connect(m_playerController, &IPlayerController::asrTextUpdated, this, [this](const QString &original, const QString &translated) {
         LogCenter::instance().setStatus(QStringLiteral("当前原文"), original.left(120));
         LogCenter::instance().setStatus(QStringLiteral("当前译文"), translated.left(120));
         if (!m_subtitleLabel) {
@@ -266,8 +284,8 @@ MainWindow::MainWindow(QWidget *parent)
         m_subtitleLabel->setText(html);
 
         // 简单布局：始终放在底部居中
-        if (m_subtitleOverlay && m_playerWidget) {
-            const QRect videoRect = m_playerWidget->geometry();
+        if (m_subtitleOverlay && m_playerController && m_playerController->videoOutputWidget()) {
+            const QRect videoRect = m_playerController->videoOutputWidget()->geometry();
             const int marginBottom = 32;
             const int overlayHeight = 90; // slightly taller to fit two lines
             m_subtitleOverlay->setGeometry(videoRect.adjusted(0, videoRect.height() - overlayHeight - marginBottom, 0, -marginBottom));
@@ -298,7 +316,7 @@ void MainWindow::openFile() {
         {QStringLiteral("size"), QString::number(QFileInfo(filePath).size())}
     });
     // #endregion
-    m_playerWidget->loadFile(filePath);
+    m_playerController->loadFile(filePath);
 }
 
 void MainWindow::openUrl() {
@@ -310,7 +328,7 @@ void MainWindow::openUrl() {
                                         QString(),
                                         &ok);
     if (ok && !url.isEmpty()) {
-        m_playerWidget->loadFile(url);
+        m_playerController->loadFile(url);
     }
 }
 
@@ -326,25 +344,25 @@ void MainWindow::tryAutoLoadFromArgs() {
         return;
     }
 
-    m_playerWidget->loadFile(filePath);
+    m_playerController->loadFile(filePath);
 }
 
 void MainWindow::play() {
-    m_playerWidget->play();
+    m_playerController->play();
 }
 
 void MainWindow::pause() {
-    m_playerWidget->pause();
+    m_playerController->pause();
 }
 
 void MainWindow::stop() {
-    m_playerWidget->stop();
+    m_playerController->stop();
     m_seekSlider->setValue(0);
     m_timeLabel->setText(QStringLiteral("00:00 / %1").arg(formatTime(m_duration)));
 }
 
 void MainWindow::replay() {
-    m_playerWidget->replay();
+    m_playerController->replay();
 }
 
 void MainWindow::updatePlaybackState(bool paused) {
@@ -390,11 +408,11 @@ void MainWindow::onSeekSliderMoved(int value) {
 
 void MainWindow::onSpeedChanged(int index) {
     double speed = m_speedComboBox->itemData(index).toDouble();
-    m_playerWidget->setPlaybackSpeed(speed);
+    m_playerController->setPlaybackSpeed(speed);
 }
 
 void MainWindow::toggleMute() {
-    m_playerWidget->setMute(!m_isMuted);
+    m_playerController->setMute(!m_isMuted);
 }
 
 void MainWindow::toggleFullscreen() {
@@ -419,23 +437,23 @@ void MainWindow::onMuteStateChanged(bool mute) {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-    if (!m_playerWidget) {
+    if (!m_playerController) {
         QMainWindow::keyPressEvent(event);
         return;
     }
 
     if (event->key() == Qt::Key_Space) {
-        m_playerWidget->togglePause();
+        m_playerController->togglePause();
     } else if (event->key() == Qt::Key_Left) {
-        m_playerWidget->seekRelative(-5.0);
+        m_playerController->seekRelative(-5.0);
     } else if (event->key() == Qt::Key_Right) {
-        m_playerWidget->seekRelative(5.0);
+        m_playerController->seekRelative(5.0);
     } else if (event->key() == Qt::Key_Up) {
         int newVol = std::min(100, m_volumeSlider->value() + 5);
-        m_playerWidget->setVolume(newVol);
+        m_playerController->setVolume(newVol);
     } else if (event->key() == Qt::Key_Down) {
         int newVol = std::max(0, m_volumeSlider->value() - 5);
-        m_playerWidget->setVolume(newVol);
+        m_playerController->setVolume(newVol);
     } else if (event->key() == Qt::Key_F) {
         toggleFullscreen();
     } else if (event->key() == Qt::Key_Escape && isFullScreen()) {
@@ -446,12 +464,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::openSettings() {
-    SettingsDialog dialog(this);
+    if (!m_desktopModelCoordinator) {
+        showError(QStringLiteral("桌面设置协调器不可用"));
+        return;
+    }
+
+    SettingsDialog dialog(m_desktopModelCoordinator, this);
     if (dialog.exec() == QDialog::Accepted) {
         // Settings are saved via QSettings inside the dialog
         // Trigger re-translation for existing subtitles using the new config
-        if (m_playerWidget) {
-            m_playerWidget->reTranslateAll();
+        if (m_playerController) {
+            m_playerController->reTranslateAll();
         }
     }
 }

@@ -1,5 +1,9 @@
 #include "settingsdialog.h"
 
+#include "libs/model/include/modeldownloadservice.h"
+#include "shared/models/translation/translationsettings.h"
+#include "platform/desktop/desktopmodelcoordinator.h"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -8,18 +12,13 @@
 #include <QProgressBar>
 #include <QCheckBox>
 #include <QSettings>
-#include <QNetworkRequest>
-#include <QUrl>
-#include <QFileInfo>
 #include <QLineEdit>
-#include <QDir>
-#include <QCoreApplication>
-#include <QDesktopServices>
 #include <QMessageBox>
-#include <QStandardPaths>
+#include <QtGlobal>
 
-SettingsDialog::SettingsDialog(QWidget *parent)
-    : QDialog(parent), m_networkManager(new QNetworkAccessManager(this)) {
+SettingsDialog::SettingsDialog(DesktopModelCoordinator *desktopModelCoordinator, QWidget *parent)
+    : QDialog(parent), m_desktopModelCoordinator(desktopModelCoordinator) {
+    Q_ASSERT(m_desktopModelCoordinator != nullptr);
     setWindowTitle(QStringLiteral("设置"));
     setMinimumWidth(400);
 
@@ -28,11 +27,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     // Whisper Model Group
     auto *modelLabel = new QLabel(QStringLiteral("Whisper 模型:"));
     m_modelCombo = new QComboBox();
-    m_modelCombo->addItem(QStringLiteral("Tiny (ggml-tiny.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin");
-    m_modelCombo->addItem(QStringLiteral("Base (ggml-base.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin");
-    m_modelCombo->addItem(QStringLiteral("Small (ggml-small.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin");
-    m_modelCombo->addItem(QStringLiteral("Medium (ggml-medium.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin");
-    m_modelCombo->addItem(QStringLiteral("Large V3 (ggml-large-v3.bin)"), "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3.bin");
+    for (const ModelDescriptor &descriptor : m_desktopModelCoordinator->modelManager().asrModels()) {
+        m_modelCombo->addItem(descriptor.displayName, descriptor.downloadUrl);
+    }
 
     m_downloadButton = new QPushButton(QStringLiteral("下载模型"));
     connect(m_downloadButton, &QPushButton::clicked, this, &SettingsDialog::onAsrDownloadClicked);
@@ -129,9 +126,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     auto *translationModelLabel = new QLabel(QStringLiteral("翻译模型:"));
     m_translationModelCombo = new QComboBox();
-    m_translationModelCombo->addItem(QStringLiteral("Qwen2.5 1.5B Instruct Q4_K_M"), "https://huggingface.co/bartowski/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf");
-    m_translationModelCombo->addItem(QStringLiteral("Qwen2.5 3B Instruct Q4_K_M"), "https://huggingface.co/bartowski/Qwen2.5-3B-Instruct-GGUF/resolve/main/Qwen2.5-3B-Instruct-Q4_K_M.gguf");
-    m_translationModelCombo->addItem(QStringLiteral("Llama 3.2 3B Instruct Q4_K_M"), "https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q4_K_M.gguf");
+    for (const ModelDescriptor &descriptor : m_desktopModelCoordinator->modelManager().translationModels()) {
+        m_translationModelCombo->addItem(descriptor.displayName, descriptor.downloadUrl);
+    }
     m_translationDownloadButton = new QPushButton(QStringLiteral("下载模型"));
     connect(m_translationDownloadButton, &QPushButton::clicked, this, &SettingsDialog::onTranslationDownloadClicked);
     m_openTranslationModelDirButton = new QPushButton(QStringLiteral("打开翻译模型目录"));
@@ -190,21 +187,17 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     connect(m_enableTranslationCheck, &QCheckBox::toggled, this, &SettingsDialog::updateUIState);
     connect(m_translationProviderCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsDialog::onTranslationProviderChanged);
     connect(m_translationModeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsDialog::onTranslationModeChanged);
+    connect(m_desktopModelCoordinator->downloadService(), &ModelDownloadService::downloadProgress, this, &SettingsDialog::onDownloadProgress);
+    connect(m_desktopModelCoordinator->downloadService(), &ModelDownloadService::downloadFinished, this, &SettingsDialog::onDownloadFinished);
+    connect(m_desktopModelCoordinator->downloadService(), &ModelDownloadService::downloadFailed, this, &SettingsDialog::onDownloadFailed);
+    connect(m_desktopModelCoordinator->downloadService(), &ModelDownloadService::downloadCancelled, this, &SettingsDialog::onDownloadCancelled);
 }
 
-SettingsDialog::~SettingsDialog() {
-    if (m_currentReply) {
-        m_currentReply->abort();
-        m_currentReply->deleteLater();
-    }
-    if (m_outputFile) {
-        m_outputFile->close();
-        delete m_outputFile;
-    }
-}
+SettingsDialog::~SettingsDialog() = default;
 
 void SettingsDialog::loadSettings() {
     QSettings settings("AIPlayer", "Settings");
+    const TranslationSettings translationSettings = TranslationSettings::load(settings);
     int modelIndex = settings.value("model_index", 0).toInt();
     if (modelIndex >= 0 && modelIndex < m_modelCombo->count()) {
         m_modelCombo->setCurrentIndex(modelIndex);
@@ -216,31 +209,31 @@ void SettingsDialog::loadSettings() {
         m_sourceLangCombo->setCurrentIndex(sourceIndex);
     }
 
-    m_enableTranslationCheck->setChecked(settings.value("translation_enabled", false).toBool());
+    m_enableTranslationCheck->setChecked(translationSettings.translationEnabled);
     
-    QString targetLang = settings.value("target_lang", "zh-CN").toString();
+    QString targetLang = translationSettings.targetLanguage;
     int langIndex = m_targetLangCombo->findData(targetLang);
     if (langIndex >= 0) {
         m_targetLangCombo->setCurrentIndex(langIndex);
     }
 
-    const QString translationMode = settings.value("translation_mode", "online").toString();
+    const QString translationMode = translationSettings.translationMode;
     const int translationModeIndex = m_translationModeCombo->findData(translationMode);
     if (translationModeIndex >= 0) {
         m_translationModeCombo->setCurrentIndex(translationModeIndex);
     }
 
-    const QString provider = settings.value("translation_provider", "google").toString();
+    const QString provider = translationSettings.provider;
     const int providerIndex = m_translationProviderCombo->findData(provider);
     if (providerIndex >= 0) {
         m_translationProviderCombo->setCurrentIndex(providerIndex);
     }
     applyTranslationPreset(m_translationProviderCombo->currentData().toString(), false);
 
-    m_translationBaseUrlEdit->setText(settings.value("translation_base_url", m_translationBaseUrlEdit->text()).toString());
-    m_translationEndpointEdit->setText(settings.value("translation_endpoint", m_translationEndpointEdit->text()).toString());
-    m_translationApiKeyEdit->setText(settings.value("translation_api_key", "").toString());
-    const int translationModelIndex = settings.value("translation_local_model_index", 0).toInt();
+    m_translationBaseUrlEdit->setText(translationSettings.baseUrl.isEmpty() ? m_translationBaseUrlEdit->text() : translationSettings.baseUrl);
+    m_translationEndpointEdit->setText(translationSettings.endpoint.isEmpty() ? m_translationEndpointEdit->text() : translationSettings.endpoint);
+    m_translationApiKeyEdit->setText(translationSettings.apiKey);
+    const int translationModelIndex = translationSettings.localModelIndex;
     if (translationModelIndex >= 0 && translationModelIndex < m_translationModelCombo->count()) {
         m_translationModelCombo->setCurrentIndex(translationModelIndex);
     }
@@ -251,42 +244,33 @@ void SettingsDialog::loadSettings() {
 void SettingsDialog::saveSettings() {
     QSettings settings("AIPlayer", "Settings");
     settings.setValue("model_index", m_modelCombo->currentIndex());
-    settings.setValue("source_lang", m_sourceLangCombo->currentData().toString());
-    settings.setValue("translation_enabled", m_enableTranslationCheck->isChecked());
-    settings.setValue("target_lang", m_targetLangCombo->currentData().toString());
-    settings.setValue("translation_mode", m_translationModeCombo->currentData().toString());
-    settings.setValue("translation_provider", m_translationProviderCombo->currentData().toString());
-    settings.setValue("translation_base_url", m_translationBaseUrlEdit->text().trimmed());
-    settings.setValue("translation_endpoint", m_translationEndpointEdit->text().trimmed());
-    settings.setValue("translation_api_key", m_translationApiKeyEdit->text().trimmed());
-    settings.setValue("translation_local_model_index", m_translationModelCombo->currentIndex());
-    settings.setValue("translation_local_model_url", m_translationModelCombo->currentData().toString());
-    settings.setValue("translation_local_model_path", getTranslationModelPath());
+    TranslationSettings translationSettings;
+    translationSettings.sourceLanguage = m_sourceLangCombo->currentData().toString();
+    translationSettings.translationEnabled = m_enableTranslationCheck->isChecked();
+    translationSettings.targetLanguage = m_targetLangCombo->currentData().toString();
+    translationSettings.translationMode = m_translationModeCombo->currentData().toString();
+    translationSettings.provider = m_translationProviderCombo->currentData().toString();
+    translationSettings.baseUrl = m_translationBaseUrlEdit->text().trimmed();
+    translationSettings.endpoint = m_translationEndpointEdit->text().trimmed();
+    translationSettings.apiKey = m_translationApiKeyEdit->text().trimmed();
+    translationSettings.localModelIndex = m_translationModelCombo->currentIndex();
+    translationSettings.localModelUrl = m_translationModelCombo->currentData().toString();
+    translationSettings.localModelPath = getTranslationModelPath();
+    translationSettings.save(settings);
     accept();
 }
 
 QString SettingsDialog::asrModelDirectory() const {
-    const QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    if (baseDir.isEmpty()) {
-        return QDir::homePath() + QStringLiteral("/.aiplayer/models/asr");
-    }
-    return QDir(baseDir).absoluteFilePath(QStringLiteral("models/asr"));
+    return m_desktopModelCoordinator->directoryFor(ModelKind::Asr);
 }
 
 QString SettingsDialog::translationModelDirectory() const {
-    const QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    if (baseDir.isEmpty()) {
-        return QDir::homePath() + QStringLiteral("/.aiplayer/models/translation");
-    }
-    return QDir(baseDir).absoluteFilePath(QStringLiteral("models/translation"));
+    return m_desktopModelCoordinator->directoryFor(ModelKind::Translation);
 }
 
 void SettingsDialog::updateUIState() {
-    QString urlStr = m_modelCombo->currentData().toString();
-    QString fileName = QUrl(urlStr).fileName();
-    QString filePath = QDir(asrModelDirectory()).absoluteFilePath(fileName);
-
-    if (QFile::exists(filePath)) {
+    const ModelDescriptor asrDescriptor = m_desktopModelCoordinator->modelManager().asrModelByUrl(m_modelCombo->currentData().toString());
+    if (m_desktopModelCoordinator->isInstalled(asrDescriptor)) {
         m_statusLabel->setText(QStringLiteral("状态: 已存在 (目录: %1)").arg(asrModelDirectory()));
         m_downloadButton->setText(QStringLiteral("重新下载"));
     } else {
@@ -294,10 +278,8 @@ void SettingsDialog::updateUIState() {
         m_downloadButton->setText(QStringLiteral("下载模型"));
     }
 
-    const QString translationUrl = m_translationModelCombo->currentData().toString();
-    const QString translationFileName = QUrl(translationUrl).fileName();
-    const QString translationFilePath = QDir(translationModelDirectory()).absoluteFilePath(translationFileName);
-    if (QFile::exists(translationFilePath)) {
+    const ModelDescriptor translationDescriptor = m_desktopModelCoordinator->modelManager().translationModelByUrl(m_translationModelCombo->currentData().toString());
+    if (m_desktopModelCoordinator->isInstalled(translationDescriptor)) {
         m_translationModelStatusLabel->setText(QStringLiteral("翻译模型状态: 已存在 (目录: %1)").arg(translationModelDirectory()));
         m_translationDownloadButton->setText(QStringLiteral("重新下载"));
     } else {
@@ -306,6 +288,7 @@ void SettingsDialog::updateUIState() {
     }
 
     const bool translationEnabled = m_enableTranslationCheck->isChecked();
+    m_modelCombo->setEnabled(!m_desktopModelCoordinator->downloadService()->isDownloading() || m_activeDownloadKind != DownloadKind::AsrModel);
     m_targetLangCombo->setEnabled(translationEnabled);
     m_translationModeCombo->setEnabled(translationEnabled);
     const bool onlineMode = translationEnabled && m_translationModeCombo->currentData().toString() == QStringLiteral("online");
@@ -314,7 +297,7 @@ void SettingsDialog::updateUIState() {
     m_translationBaseUrlEdit->setEnabled(onlineMode);
     m_translationEndpointEdit->setEnabled(onlineMode);
     m_translationApiKeyEdit->setEnabled(onlineMode);
-    m_translationModelCombo->setEnabled(localMode && !m_currentReply);
+    m_translationModelCombo->setEnabled(localMode && !m_desktopModelCoordinator->downloadService()->isDownloading());
     m_translationDownloadButton->setEnabled(localMode);
     m_openTranslationModelDirButton->setEnabled(localMode);
     m_translationProgressBar->setEnabled(localMode);
@@ -368,45 +351,27 @@ void SettingsDialog::onTranslationModeChanged() {
     updateUIState();
 }
 
-void SettingsDialog::startModelDownload(QComboBox *combo, QLabel *statusLabel, QProgressBar *progressBar, QPushButton *button, const QString &directory, DownloadKind kind) {
-    if (m_currentReply) {
-        m_currentReply->abort();
-        return;
-    }
-
-    QString urlStr = combo->currentData().toString();
-    QUrl url(urlStr);
-    QString fileName = url.fileName();
-    QString dirPath = directory;
-    QDir().mkpath(dirPath);
-    QString filePath = QDir(dirPath).absoluteFilePath(fileName);
-
-    m_outputFile = new QFile(filePath, this);
-    if (!m_outputFile->open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(this, QStringLiteral("错误"), QStringLiteral("无法创建文件: %1").arg(filePath));
-        delete m_outputFile;
-        m_outputFile = nullptr;
-        return;
-    }
-
-    QNetworkRequest request(url);
-    // Allow redirects
-    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
-
-    m_currentReply = m_networkManager->get(request);
+void SettingsDialog::startModelDownload(const ModelDescriptor &descriptor, DownloadKind kind) {
     m_activeDownloadKind = kind;
+    if (m_desktopModelCoordinator->downloadService()->isDownloading()) {
+        m_desktopModelCoordinator->downloadService()->cancelDownload();
+        return;
+    }
 
-    connect(m_currentReply, &QNetworkReply::readyRead, this, [this]() {
-        if (m_outputFile) m_outputFile->write(m_currentReply->readAll());
-    });
-    connect(m_currentReply, &QNetworkReply::downloadProgress, this, &SettingsDialog::onDownloadProgress);
-    connect(m_currentReply, &QNetworkReply::finished, this, &SettingsDialog::onDownloadFinished);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    connect(m_currentReply, &QNetworkReply::errorOccurred, this, &SettingsDialog::onDownloadError);
-#else
-    connect(m_currentReply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), this, &SettingsDialog::onDownloadError);
-#endif
+    const DownloadTask task{
+        descriptor.downloadUrl,
+        m_desktopModelCoordinator->filePathFor(descriptor),
+        descriptor.displayName
+    };
+    if (!m_desktopModelCoordinator->downloadService()->startDownload(task)) {
+        QMessageBox::critical(this, QStringLiteral("错误"), QStringLiteral("无法启动模型下载：%1").arg(descriptor.displayName));
+        return;
+    }
 
+    QComboBox *combo = kind == DownloadKind::AsrModel ? m_modelCombo : m_translationModelCombo;
+    QProgressBar *progressBar = kind == DownloadKind::AsrModel ? m_progressBar : m_translationProgressBar;
+    QPushButton *button = kind == DownloadKind::AsrModel ? m_downloadButton : m_translationDownloadButton;
+    QLabel *statusLabel = kind == DownloadKind::AsrModel ? m_statusLabel : m_translationModelStatusLabel;
     button->setText(QStringLiteral("取消下载"));
     combo->setEnabled(false);
     progressBar->setValue(0);
@@ -415,59 +380,34 @@ void SettingsDialog::startModelDownload(QComboBox *combo, QLabel *statusLabel, Q
 }
 
 void SettingsDialog::onAsrDownloadClicked() {
-    startModelDownload(m_modelCombo, m_statusLabel, m_progressBar, m_downloadButton, asrModelDirectory(), DownloadKind::AsrModel);
+    startModelDownload(m_desktopModelCoordinator->modelManager().asrModelByUrl(m_modelCombo->currentData().toString()), DownloadKind::AsrModel);
 }
 
 void SettingsDialog::onTranslationDownloadClicked() {
-    startModelDownload(m_translationModelCombo, m_translationModelStatusLabel, m_translationProgressBar, m_translationDownloadButton, translationModelDirectory(), DownloadKind::TranslationModel);
+    startModelDownload(m_desktopModelCoordinator->modelManager().translationModelByUrl(m_translationModelCombo->currentData().toString()), DownloadKind::TranslationModel);
 }
 
-void SettingsDialog::onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
+void SettingsDialog::onDownloadProgress(const DownloadTask &, const DownloadProgress &progress) {
     QProgressBar *progressBar = m_activeDownloadKind == DownloadKind::TranslationModel ? m_translationProgressBar : m_progressBar;
     QLabel *statusLabel = m_activeDownloadKind == DownloadKind::TranslationModel ? m_translationModelStatusLabel : m_statusLabel;
-    if (bytesTotal > 0) {
+    if (progress.bytesTotal > 0) {
         progressBar->setMaximum(100);
-        progressBar->setValue(static_cast<int>((bytesReceived * 100) / bytesTotal));
-        statusLabel->setText((m_activeDownloadKind == DownloadKind::TranslationModel ? QStringLiteral("翻译模型状态: 下载中 %1%") : QStringLiteral("状态: 下载中 %1%")).arg((bytesReceived * 100) / bytesTotal));
+        progressBar->setValue(progress.percentage());
+        statusLabel->setText((m_activeDownloadKind == DownloadKind::TranslationModel ? QStringLiteral("翻译模型状态: 下载中 %1%") : QStringLiteral("状态: 下载中 %1%")).arg(progress.percentage()));
     } else {
         progressBar->setMaximum(0);
-        statusLabel->setText((m_activeDownloadKind == DownloadKind::TranslationModel ? QStringLiteral("翻译模型状态: 下载中... %1 KB") : QStringLiteral("状态: 下载中... %1 KB")).arg(bytesReceived / 1024));
+        statusLabel->setText((m_activeDownloadKind == DownloadKind::TranslationModel ? QStringLiteral("翻译模型状态: 下载中... %1 KB") : QStringLiteral("状态: 下载中... %1 KB")).arg(progress.bytesReceived / 1024));
     }
 }
 
-void SettingsDialog::onDownloadFinished() {
-    if (!m_currentReply) return;
-
-    if (m_outputFile) {
-        m_outputFile->write(m_currentReply->readAll());
-        m_outputFile->close();
-        delete m_outputFile;
-        m_outputFile = nullptr;
-    }
-
-    if (m_currentReply->error() == QNetworkReply::NoError) {
-        if (m_activeDownloadKind == DownloadKind::TranslationModel) {
-            m_translationModelStatusLabel->setText(QStringLiteral("翻译模型状态: 下载完成"));
-        } else {
-            m_statusLabel->setText(QStringLiteral("状态: 下载完成"));
-        }
-        QMessageBox::information(this, QStringLiteral("成功"), QStringLiteral("模型下载完成！"));
+void SettingsDialog::onDownloadFinished(const DownloadTask &) {
+    if (m_activeDownloadKind == DownloadKind::TranslationModel) {
+        m_translationModelStatusLabel->setText(QStringLiteral("翻译模型状态: 下载完成"));
     } else {
-        if (m_activeDownloadKind == DownloadKind::TranslationModel) {
-            m_translationModelStatusLabel->setText(QStringLiteral("翻译模型状态: 下载失败/取消"));
-        } else {
-            m_statusLabel->setText(QStringLiteral("状态: 下载失败/取消"));
-        }
-        const QString dir = m_activeDownloadKind == DownloadKind::TranslationModel ? translationModelDirectory() : asrModelDirectory();
-        const QString url = m_activeDownloadKind == DownloadKind::TranslationModel ? m_translationModelCombo->currentData().toString() : m_modelCombo->currentData().toString();
-        QString filePath = QDir(dir).absoluteFilePath(QUrl(url).fileName());
-        QFile::remove(filePath); // Remove partial file
+        m_statusLabel->setText(QStringLiteral("状态: 下载完成"));
     }
-
-    m_currentReply->deleteLater();
-    m_currentReply = nullptr;
+    QMessageBox::information(this, QStringLiteral("成功"), QStringLiteral("模型下载完成！"));
     m_activeDownloadKind = DownloadKind::None;
-
     m_downloadButton->setText(QStringLiteral("下载模型"));
     m_modelCombo->setEnabled(true);
     m_progressBar->hide();
@@ -477,41 +417,63 @@ void SettingsDialog::onDownloadFinished() {
     updateUIState();
 }
 
-void SettingsDialog::onDownloadError(QNetworkReply::NetworkError code) {
-    if (code == QNetworkReply::OperationCanceledError) {
-        return; // Handled in finished
+void SettingsDialog::onDownloadFailed(const DownloadTask &, const QString &message) {
+    if (m_activeDownloadKind == DownloadKind::TranslationModel) {
+        m_translationModelStatusLabel->setText(QStringLiteral("翻译模型状态: 下载失败"));
+    } else {
+        m_statusLabel->setText(QStringLiteral("状态: 下载失败"));
     }
-    QMessageBox::critical(this, QStringLiteral("下载错误"), m_currentReply->errorString());
+    QMessageBox::critical(this, QStringLiteral("下载错误"), message);
+    m_activeDownloadKind = DownloadKind::None;
+    m_downloadButton->setText(QStringLiteral("下载模型"));
+    m_modelCombo->setEnabled(true);
+    m_progressBar->hide();
+    m_translationDownloadButton->setText(QStringLiteral("下载模型"));
+    m_translationModelCombo->setEnabled(true);
+    m_translationProgressBar->hide();
+    updateUIState();
+}
+
+void SettingsDialog::onDownloadCancelled(const DownloadTask &) {
+    if (m_activeDownloadKind == DownloadKind::TranslationModel) {
+        m_translationModelStatusLabel->setText(QStringLiteral("翻译模型状态: 下载已取消"));
+    } else {
+        m_statusLabel->setText(QStringLiteral("状态: 下载已取消"));
+    }
+    m_activeDownloadKind = DownloadKind::None;
+    m_downloadButton->setText(QStringLiteral("下载模型"));
+    m_modelCombo->setEnabled(true);
+    m_progressBar->hide();
+    m_translationDownloadButton->setText(QStringLiteral("下载模型"));
+    m_translationModelCombo->setEnabled(true);
+    m_translationProgressBar->hide();
+    updateUIState();
 }
 
 void SettingsDialog::openAsrModelDirectory() {
-    const QString dirPath = asrModelDirectory();
-    QDir().mkpath(dirPath);
-    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(dirPath))) {
+    QString errorMessage;
+    if (!m_desktopModelCoordinator->openDirectory(ModelKind::Asr, &errorMessage)) {
         QMessageBox::warning(this, QStringLiteral("打开目录失败"),
-                             QStringLiteral("无法打开模型目录：%1").arg(dirPath));
+                             errorMessage);
     }
 }
 
 void SettingsDialog::openTranslationModelDirectory() {
-    const QString dirPath = translationModelDirectory();
-    QDir().mkpath(dirPath);
-    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(dirPath))) {
+    QString errorMessage;
+    if (!m_desktopModelCoordinator->openDirectory(ModelKind::Translation, &errorMessage)) {
         QMessageBox::warning(this, QStringLiteral("打开目录失败"),
-                             QStringLiteral("无法打开翻译模型目录：%1").arg(dirPath));
+                             errorMessage);
     }
 }
 
 QString SettingsDialog::getAsrModelPath() const {
-    QString urlStr = m_modelCombo->currentData().toString();
-    QString fileName = QUrl(urlStr).fileName();
-    return QDir(asrModelDirectory()).absoluteFilePath(fileName);
+    return m_desktopModelCoordinator->filePathFor(
+        m_desktopModelCoordinator->modelManager().asrModelByUrl(m_modelCombo->currentData().toString()));
 }
 
 QString SettingsDialog::getTranslationModelPath() const {
-    QString urlStr = m_translationModelCombo->currentData().toString();
-    QString fileName = QUrl(urlStr).fileName();
-    return QDir(translationModelDirectory()).absoluteFilePath(fileName);
+    return m_desktopModelCoordinator->filePathFor(
+        m_desktopModelCoordinator->modelManager().translationModelByUrl(m_translationModelCombo->currentData().toString()));
 }
 
 QString SettingsDialog::getSourceLanguage() const {

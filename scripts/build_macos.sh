@@ -4,12 +4,25 @@ set -euo pipefail
 PROJECT_NAME="aiplayer"
 BUILD_TYPE="Release"
 
+usage() {
+  cat <<'EOF'
+用法: scripts/build_macos.sh [--release|--debug]
+
+说明:
+  --release    构建 Release 产物（默认）
+  --debug      构建 Debug 产物
+EOF
+}
+
 if [[ "${1-}" == "--debug" ]]; then
   BUILD_TYPE="Debug"
 elif [[ "${1-}" == "--release" || -z "${1-}" ]]; then
   BUILD_TYPE="Release"
+elif [[ "${1-}" == "-h" || "${1-}" == "--help" ]]; then
+  usage
+  exit 0
 else
-  echo "用法: $0 [--release|--debug]" >&2
+  usage >&2
   exit 1
 fi
 
@@ -18,6 +31,7 @@ command_exists() {
 }
 
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DESKTOP_APP_DIR="${SRC_DIR}/apps/desktop"
 DEPS_DIR="${SRC_DIR}/.deps"
 VCPKG_ROOT="${VCPKG_ROOT:-${DEPS_DIR}/vcpkg}"
 
@@ -48,6 +62,11 @@ fi
 echo "[macOS] 检查依赖..."
 MISSING=()
 
+if [[ ! -d "${DESKTOP_APP_DIR}" ]]; then
+  echo "[macOS] 未找到桌面应用入口目录: ${DESKTOP_APP_DIR}" >&2
+  exit 1
+fi
+
 if ! command_exists cmake; then
   MISSING+=("cmake")
 fi
@@ -71,6 +90,7 @@ if ((${#MISSING[@]} > 0)); then
   exit 1
 fi
 
+echo "[macOS] 桌面入口: ${DESKTOP_APP_DIR}"
 echo "[macOS] 准备项目内依赖..."
 "${SRC_DIR}/scripts/bootstrap_deps.sh"
 

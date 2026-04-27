@@ -1,5 +1,8 @@
 #pragma once
 
+#include "shared/models/state/appstate.h"
+#include "shared/models/subtitle/subtitlesegment.h"
+
 #include <QOpenGLWidget>
 #include <mpv/client.h>
 #include <mpv/render_gl.h>
@@ -14,10 +17,11 @@
 
 class QOpenGLContext;
 class QTimer;
-class QNetworkAccessManager;
+#if AIPLAYER_ENABLE_TORRENT
 class TorrentSessionController;
-class LocalTranslationEngine;
-struct whisper_context;
+#endif
+class AsrService;
+class TranslationService;
 
 class MpvWidget : public QOpenGLWidget {
     Q_OBJECT
@@ -76,11 +80,9 @@ private:
     void extractAudioWithFFmpeg(const QString &videoPath);
     void stopAudioExtraction();
     void stopTorrentStreaming();
-    void processNextLocalTranslation();
     void emitCurrentSubtitleUpdate();
     void applyTranslationResult(int index, const QString &translatedText);
     void handleTranslationFailure(const QString &message);
-    void startOnlineTranslation(int index, const QString &text, const QString &sourceLang, const QString &targetLang);
 
     // --- mpv 播放相关 ---
     mpv_handle *m_mpv = nullptr;
@@ -91,12 +93,6 @@ private:
     std::mutex m_logMutex;
 
     // --- ASR / Whisper 相关 ---
-    struct SubtitleSegment {
-        qint64 startMs;
-        qint64 endMs;
-        QString text;
-        QString translatedText;
-    };
     std::vector<SubtitleSegment> m_subtitles;
     
     std::thread m_asrThread;
@@ -106,17 +102,16 @@ private:
     QString m_wavPath;
     QString m_asrStatus;
     std::mutex m_subtitleMutex;
-    QNetworkAccessManager *m_networkManager = nullptr;
+#if AIPLAYER_ENABLE_TORRENT
     std::unique_ptr<TorrentSessionController> m_torrentController;
-    std::unique_ptr<LocalTranslationEngine> m_localTranslationEngine;
-    std::queue<std::pair<int, QString>> m_localTranslationQueue;
-    std::unordered_set<int> m_localTranslationPendingIndices;
-    std::mutex m_localTranslationQueueMutex;
-    std::thread m_localTranslationThread;
-    bool m_localTranslationRunning = false;
+#endif
+    std::unique_ptr<AsrService> m_asrService;
+    std::unique_ptr<TranslationService> m_translationService;
+    PlaybackState m_playbackState;
+    SubtitleState m_subtitleState;
+    TranslationState m_translationState;
 
     void updateAsrStatus(const QString &status);
     void runWhisper();
-    bool readWavAndProcess(const QString &wavPath, struct whisper_context *ctx, const std::string &language);
     void translateSegment(int index, const QString &text);
 };

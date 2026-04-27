@@ -1,4 +1,4 @@
-/Users/zhaopeng.charles/code/magechiu/aiplayer/build/macos/aiplayer.app/Contents/Frameworks/libmpv.2.dylib:
+/Users/zhaopeng.charles/code/magechiu/aiplayer/build/aiplayer.app/Contents/Frameworks/libmpv.2.dylib:
 	@rpath/libmpv.2.dylib (compatibility version 2.0.0, current version 2.0.0)
 	@rpath/libass.9.dylib (compatibility version 14.0.0, current version 14.1.0)
 	@rpath/libavcodec.62.dylib (compatibility version 62.0.0, current version 62.28.100)

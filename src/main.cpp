@@ -1,4 +1,8 @@
 #include "mainwindow.h"
+#include "core/path/apppaths.h"
+#include "platform/desktop/desktopmodelcoordinator.h"
+#include "platform/desktop/desktoppathprovider.h"
+#include "platform/desktop/desktopplayercontroller.h"
 
 #include <QApplication>
 #include <QDir>
@@ -8,6 +12,7 @@
 
 #include <clocale>
 #include <cstdio>
+#include <memory>
 
 int main(int argc, char *argv[]) {
     setlocale(LC_NUMERIC, "C");
@@ -27,8 +32,9 @@ int main(int argc, char *argv[]) {
     app.setApplicationName(QStringLiteral("AIPlayer"));
     app.setOrganizationName(QStringLiteral("MageChiu"));
     app.setWindowIcon(QIcon(QStringLiteral(":/icons/player.png")));
+    AppPaths::setPathProvider(std::make_shared<DesktopPathProvider>());
 
-    MainWindow window;
+    MainWindow window(new DesktopPlayerController(), new DesktopModelCoordinator());
     window.setWindowIcon(app.windowIcon());
     window.show();
     return app.exec();

@@ -93,6 +93,15 @@ qrc_*.cpp
 *.swo
 
 # =========================
+# Android / Gradle
+# =========================
+.gradle/
+local.properties
+captures/
+*.apk
+*.aab
+
+# =========================
 # Logs & Test Media
 # =========================
 *.log
